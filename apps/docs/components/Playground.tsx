@@ -343,7 +343,7 @@ export function Playground({ builder = false }: { builder?: boolean }) {
     setOutput(
       previewOutput(
         selectedValue,
-        adapter as CalendarAdapter,
+        adapter,
         locale,
         config.outputFormat,
         includesTime ? "yyyy-MM-dd HH:mm" : "yyyy-MM-dd",
