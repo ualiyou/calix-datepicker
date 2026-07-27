@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "calix-ui/calix-datepicker" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "ualiyou/calix-datepicker" }],
   "commit": false,
   "fixed": [["@calix/*"]],
   "linked": [],
