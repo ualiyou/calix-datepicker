@@ -83,12 +83,12 @@ importers:
       '@alydev/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@alydev/datepicker':
+        specifier: workspace:*
+        version: link:../../packages/react
       '@alydev/icons':
         specifier: workspace:*
         version: link:../../packages/icons
-      '@alydev/react':
-        specifier: workspace:*
-        version: link:../../packages/react
       '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
@@ -147,12 +147,12 @@ importers:
       '@alydev/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@alydev/datepicker':
+        specifier: workspace:*
+        version: link:../../packages/react
       '@alydev/icons':
         specifier: workspace:*
         version: link:../../packages/icons
-      '@alydev/react':
-        specifier: workspace:*
-        version: link:../../packages/react
       '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
@@ -196,7 +196,7 @@ importers:
       '@alydev/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@alydev/react':
+      '@alydev/datepicker':
         specifier: workspace:*
         version: link:../../packages/react
       '@alydev/themes':
@@ -254,7 +254,7 @@ importers:
       '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@alydev/react':
+      '@alydev/datepicker':
         specifier: workspace:*
         version: link:../../packages/react
       '@alydev/themes':
@@ -288,7 +288,7 @@ importers:
       '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@alydev/react':
+      '@alydev/datepicker':
         specifier: workspace:*
         version: link:../../packages/react
       '@alydev/themes':
@@ -334,7 +334,7 @@ importers:
       '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@alydev/react':
+      '@alydev/datepicker':
         specifier: workspace:*
         version: link:../../packages/react
       '@alydev/themes':
@@ -377,7 +377,7 @@ importers:
       '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@alydev/react':
+      '@alydev/datepicker':
         specifier: workspace:*
         version: link:../../packages/react
       '@alydev/themes':

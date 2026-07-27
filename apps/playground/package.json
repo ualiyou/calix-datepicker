@@ -16,7 +16,7 @@
     "@alydev/adapter-jalali": "workspace:*",
     "@alydev/core": "workspace:*",
     "@alydev/icons": "workspace:*",
-    "@alydev/react": "workspace:*",
+    "@alydev/datepicker": "workspace:*",
     "@alydev/themes": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

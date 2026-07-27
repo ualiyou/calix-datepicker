@@ -4,11 +4,11 @@ The Gregorian calendar adapter for [Calix](https://github.com/calix-ui/calix-dat
 backed by [date-fns](https://date-fns.org/).
 
 ```bash
-pnpm add @alydev/react @alydev/adapter-gregorian
+pnpm add @alydev/datepicker @alydev/adapter-gregorian
 ```
 
 ```tsx
-import { DatePicker } from "@alydev/react";
+import { DatePicker } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 
 <DatePicker adapter={gregorian} locale="en-US" />;

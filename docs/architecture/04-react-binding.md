@@ -1,6 +1,6 @@
 # 04 — React binding
 
-`@alydev/react` turns the core into idiomatic React without leaking React into
+`@alydev/datepicker` turns the core into idiomatic React without leaking React into
 the core.
 
 ## Split context

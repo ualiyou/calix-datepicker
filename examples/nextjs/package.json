@@ -10,7 +10,7 @@
   "dependencies": {
     "@alydev/adapter-gregorian": "workspace:*",
     "@alydev/adapter-jalali": "workspace:*",
-    "@alydev/react": "workspace:*",
+    "@alydev/datepicker": "workspace:*",
     "@alydev/themes": "workspace:*",
     "next": "^15.1.3",
     "react": "^19.0.0",

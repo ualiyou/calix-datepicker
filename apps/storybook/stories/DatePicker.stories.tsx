@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, userEvent, screen } from "@storybook/test";
-import { DatePicker } from "@alydev/react";
+import { DatePicker } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 import { jalali } from "@alydev/adapter-jalali";
 

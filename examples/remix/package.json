@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@alydev/adapter-gregorian": "workspace:*",
-    "@alydev/react": "workspace:*",
+    "@alydev/datepicker": "workspace:*",
     "@alydev/themes": "workspace:*",
     "@remix-run/node": "^2.15.0",
     "@remix-run/react": "^2.15.0",

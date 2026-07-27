@@ -32,8 +32,8 @@
     "paths": {
       "@alydev/core": ["./packages/core/src/index.ts"],
       "@alydev/core/*": ["./packages/core/src/*"],
-      "@alydev/react": ["./packages/react/src/index.ts"],
-      "@alydev/react/*": ["./packages/react/src/*"],
+      "@alydev/datepicker": ["./packages/react/src/index.ts"],
+      "@alydev/datepicker/*": ["./packages/react/src/*"],
       "@alydev/adapter-gregorian": ["./packages/adapters/gregorian/src/index.ts"],
       "@alydev/adapter-jalali": ["./packages/adapters/jalali/src/index.ts"],
       "@alydev/icons": ["./packages/icons/src/index.tsx"],

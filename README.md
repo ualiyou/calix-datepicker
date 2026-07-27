@@ -7,7 +7,7 @@
 Gregorian & Jalali out of the box · RTL/LTR · fully typed · tree-shakeable · SSR/RSC-safe · zero styling dependencies.
 
 [![CI](https://github.com/calix-ui/calix-datepicker/actions/workflows/ci.yml/badge.svg)](https://github.com/calix-ui/calix-datepicker/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@alydev/react.svg)](https://www.npmjs.com/package/@alydev/react)
+[![npm](https://img.shields.io/npm/v/@alydev/datepicker.svg)](https://www.npmjs.com/package/@alydev/datepicker)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 </div>
@@ -46,20 +46,20 @@ Documentation: https://ualiyou.github.io/calix-datepicker/
 | [`@alydev/core`](./packages/core) | Framework-agnostic engine: types, `CalendarAdapter`, selection strategies, validation, format/parse. Zero runtime deps. |
 | [`@alydev/adapter-gregorian`](./packages/adapters/gregorian) | Gregorian calendar adapter (date-fns). |
 | [`@alydev/adapter-jalali`](./packages/adapters/jalali) | Jalali / Persian calendar adapter (date-fns-jalali). |
-| [`@alydev/react`](./packages/react) | Headless hooks + compound components. |
+| [`@alydev/datepicker`](./packages/react) | Headless hooks + compound components. |
 | [`@alydev/themes`](./packages/themes) | Optional CSS-variable stylesheets (default, minimal). |
 | [`@alydev/icons`](./packages/icons) | Tree-shakeable SVG icon set. |
 
 ## Quick start
 
 ```bash
-pnpm add @alydev/react @alydev/adapter-gregorian
+pnpm add @alydev/datepicker @alydev/adapter-gregorian
 # optional default styling
 pnpm add @alydev/themes
 ```
 
 ```tsx
-import { DatePicker } from "@alydev/react";
+import { DatePicker } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 import "@alydev/themes/default.css";
 
@@ -77,7 +77,7 @@ import { jalali } from "@alydev/adapter-jalali";
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```
 
-Or go fully headless with hooks — see [`@alydev/react`](./packages/react) and the docs.
+Or go fully headless with hooks — see [`@alydev/datepicker`](./packages/react) and the docs.
 
 ## Development
 

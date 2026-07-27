@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, DatePicker, TimeField, type CalixValue, type RangeValue } from "@alydev/react";
+import { Calendar, DatePicker, TimeField, type CalixValue, type RangeValue } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 import { jalali } from "@alydev/adapter-jalali";
 import type { Time } from "@alydev/core";

@@ -5,11 +5,11 @@ The Jalali (Persian/Shamsi) calendar adapter for
 [date-fns-jalali](https://github.com/date-fns-jalali/date-fns-jalali).
 
 ```bash
-pnpm add @alydev/react @alydev/adapter-jalali
+pnpm add @alydev/datepicker @alydev/adapter-jalali
 ```
 
 ```tsx
-import { DatePicker } from "@alydev/react";
+import { DatePicker } from "@alydev/datepicker";
 import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;

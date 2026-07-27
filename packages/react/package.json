@@ -1,5 +1,5 @@
 {
-  "name": "@alydev/react",
+  "name": "@alydev/datepicker",
   "version": "1.0.0",
   "description": "Headless hooks and compound components for building date pickers with Calix in React.",
   "license": "MIT",

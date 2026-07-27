@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@alydev/adapter-gregorian": "workspace:*",
-    "@alydev/react": "workspace:*",
+    "@alydev/datepicker": "workspace:*",
     "@alydev/themes": "workspace:*",
     "@tanstack/react-router": "^1.87.0",
     "@tanstack/react-start": "^1.87.0",

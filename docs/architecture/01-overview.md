@@ -9,7 +9,7 @@ without cascading changes.
 ├──────────────────────────────────────────────────────────────┤
 │  @alydev/themes (optional CSS)      @alydev/icons (optional SVG)  │
 ├──────────────────────────────────────────────────────────────┤
-│  @alydev/react                                                  │
+│  @alydev/datepicker                                             │
 │    components (compound + convenience)                         │
 │    hooks (useDatePicker / useCalendar / useSelection / input)  │
 │    context (split: config · state · dispatch)                  │

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DatePicker } from "@alydev/react";
+import { DatePicker } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 
 export default function Index() {

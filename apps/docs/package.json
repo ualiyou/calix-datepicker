@@ -17,7 +17,7 @@
     "@alydev/adapter-jalali": "workspace:*",
     "@alydev/core": "workspace:*",
     "@alydev/icons": "workspace:*",
-    "@alydev/react": "workspace:*",
+    "@alydev/datepicker": "workspace:*",
     "@alydev/themes": "workspace:*",
     "fumadocs-core": "^14.7.0",
     "fumadocs-mdx": "^11.2.0",

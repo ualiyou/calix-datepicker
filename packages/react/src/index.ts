@@ -1,6 +1,6 @@
 "use client";
 /**
- * @alydev/react — headless hooks and compound components for building date
+ * @alydev/datepicker — headless hooks and compound components for building date
  * pickers on top of `@alydev/core`.
  */
 

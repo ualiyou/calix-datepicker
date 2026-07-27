@@ -30,7 +30,7 @@ pnpm test
 
 1. Create a branch off `main`.
 2. Make your change. Keep business logic in `@alydev/core`; keep React-specific
-   concerns in `@alydev/react`. UI code must never depend on a concrete calendar.
+   concerns in `@alydev/datepicker`. UI code must never depend on a concrete calendar.
 3. Add or update tests. New behavior needs unit tests; user-facing behavior needs
    integration/e2e coverage.
 4. Run the full check locally:
