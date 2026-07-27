@@ -7,7 +7,7 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/calix-ui/calix-datepicker.git",
+    "url": "https://github.com/ualiyou/calix-datepicker.git",
     "directory": "packages/react"
   },
   "keywords": [
