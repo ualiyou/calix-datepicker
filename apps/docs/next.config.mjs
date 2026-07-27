@@ -9,6 +9,7 @@ const config = {
   output: "export",
   reactStrictMode: true,
   trailingSlash: true,
+  typescript: { tsconfigPath: "./tsconfig.build.json" },
 };
 
 export default withMDX(config);
