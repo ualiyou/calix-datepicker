@@ -1,5 +1,12 @@
 # @alydev/adapter-jalali
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @alydev/core@1.0.1
+
 ## 1.0.0
 
 ### Major Changes
