@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.next
+storybook-static
+coverage
+playwright-report
+pnpm-lock.yaml
+*.tsbuildinfo
+CHANGELOG.md

@@ -1,0 +1,123 @@
+@import "tailwindcss";
+@import "@calix/themes/default.css";
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background: #f7f7f5;
+  color: #202124;
+}
+
+button,
+output {
+  font: inherit;
+}
+
+.playground {
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.playground-header {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 38rem;
+}
+
+.eyebrow {
+  color: #5b5bd6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.playground h1,
+.playground h2,
+.playground p {
+  margin: 0;
+}
+
+.playground h1 {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.playground-header p {
+  color: #6b6b73;
+  line-height: 1.6;
+}
+
+.calendar-switch {
+  display: inline-flex;
+  width: fit-content;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid #e6e5e1;
+  border-radius: 0.75rem;
+  background: #eeece8;
+}
+
+.calendar-switch button {
+  border: 0;
+  border-radius: 0.55rem;
+  padding: 0.45rem 0.75rem;
+  background: transparent;
+  color: #686870;
+  cursor: pointer;
+}
+
+.calendar-switch button[data-active] {
+  background: #fff;
+  color: #24242a;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+.demo-section {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid #e7e6e2;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 32px -28px rgb(20 20 25 / 0.35);
+}
+
+.demo-section h2 {
+  font-size: 0.875rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.demo-section-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.demo-section output {
+  align-self: center;
+  color: #74747b;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .playground { padding: 2.5rem 1rem; }
+  .demo-section { overflow-x: auto; }
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #f4f4f5;
+  }
+  .calendar-switch { background: #252525; border-color: #383838; }
+  .calendar-switch button[data-active],
+  .demo-section { background: #1b1b1d; color: #f4f4f5; border-color: #333337; }
+  .playground-header p, .demo-section output { color: #a1a1aa; }
+}

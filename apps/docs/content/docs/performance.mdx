@@ -1,0 +1,30 @@
+---
+title: Performance
+description: How Calix stays fast and small.
+---
+
+## Principles
+
+- **Calendar-agnostic values.** Storing `{ year, month, day }` avoids `Date`
+  allocation churn and timezone recomputation.
+- **Lazy grid generation.** Grids are computed per visible month and memoized by
+  `adapter + view + locale + weekStartsOn`.
+- **Split contexts.** Config, state, and dispatch are separate contexts, so a day
+  cell that only dispatches never re-renders when the focused date changes.
+- **Stable references.** Prop-getters and callbacks are stable; the code is
+  React-Compiler-friendly and never relies on referential identity for
+  correctness.
+- **Tree-shakeable & side-effect free.** Every package declares
+  `"sideEffects": false` and externalizes its dependencies.
+
+## Bundle size
+
+`@calix/core` has **zero runtime dependencies**. Adapters pull in `date-fns` /
+`date-fns-jalali` only when imported, so an app that never uses Jalali never
+ships it.
+
+## Benchmarks
+
+The repository includes a benchmark harness comparing render counts and bundle
+size against react-day-picker, react-aria, MUI X, Mantine, and Ant Design. Run
+`pnpm --filter @calix/react bench` (see the repo `bench/` directory).

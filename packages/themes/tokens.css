@@ -1,0 +1,58 @@
+/**
+ * Calix design tokens. Override any variable to theme the picker. These are the
+ * single source of truth consumed by default.css and minimal.css.
+ */
+:where(.calix-calendar, .calix-popover) {
+  --calix-accent: #625bf6;
+  --calix-on-accent: #ffffff;
+  --calix-surface: #ffffff;
+  --calix-surface-raised: #ffffff;
+  --calix-text: #1a1a22;
+  --calix-muted: #6d6c78;
+  --calix-border: #e9e8ef;
+  --calix-hover: #f3f2ff;
+  --calix-today-ring: var(--calix-accent);
+  --calix-range-bg: color-mix(in srgb, var(--calix-accent) 14%, transparent);
+  --calix-disabled: #d4d4d8;
+
+  --calix-radius: 20px;
+  --calix-radius-sm: 12px;
+  --calix-cell-size: 2.5rem;
+  --calix-gap: 4px;
+  --calix-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Vazirmatn", sans-serif;
+  --calix-transition: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Automatic dark mode. */
+@media (prefers-color-scheme: dark) {
+  :where(.calix-calendar, .calix-popover) {
+    --calix-surface: #1c1c1f;
+    --calix-surface-raised: #232327;
+    --calix-text: #f4f4f5;
+    --calix-muted: #a1a1aa;
+    --calix-border: #2e2e33;
+    --calix-hover: #2a2a2f;
+    --calix-disabled: #3f3f46;
+  }
+}
+
+/* Explicit theme override via [data-theme]. */
+:where([data-theme="dark"]) :where(.calix-calendar, .calix-popover),
+:where(.calix-calendar[data-theme="dark"], .calix-popover[data-theme="dark"]) {
+  --calix-surface: #1c1c1f;
+  --calix-surface-raised: #232327;
+  --calix-text: #f4f4f5;
+  --calix-muted: #a1a1aa;
+  --calix-border: #2e2e33;
+  --calix-hover: #2a2a2f;
+  --calix-disabled: #3f3f46;
+}
+
+/* High-contrast users get stronger borders and no translucency. */
+@media (prefers-contrast: more) {
+  :where(.calix-calendar, .calix-popover) {
+    --calix-border: currentColor;
+    --calix-range-bg: color-mix(in srgb, var(--calix-accent) 30%, transparent);
+  }
+}

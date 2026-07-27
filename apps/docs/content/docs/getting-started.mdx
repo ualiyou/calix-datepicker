@@ -1,0 +1,60 @@
+---
+title: Getting Started
+description: Render your first Calix date picker.
+---
+
+## A single-date popup
+
+```tsx
+import { useState } from "react";
+import { DatePicker } from "@calix/react";
+import { gregorian } from "@calix/adapter-gregorian";
+import "@calix/themes/default.css";
+
+export function Example() {
+  const [value, setValue] = useState<Date | null>(null);
+  return (
+    <DatePicker
+      adapter={gregorian}
+      locale="en-US"
+      value={value}
+      onChange={(v) => setValue(v as Date | null)}
+    />
+  );
+}
+```
+
+<Playground />
+
+## An inline calendar
+
+```tsx
+import { Calendar } from "@calix/react";
+import { gregorian } from "@calix/adapter-gregorian";
+
+<Calendar adapter={gregorian} locale="en-US" />;
+```
+
+<Playground inline />
+
+## Switch calendars
+
+The same component renders any calendar — just pass a different adapter and locale:
+
+```tsx
+import { jalali } from "@calix/adapter-jalali";
+
+<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
+```
+
+## Controlled vs uncontrolled
+
+Provide `value` + `onChange` for controlled usage, or `defaultValue` for
+uncontrolled. Both fire `onChange`.
+
+```tsx
+// uncontrolled
+<Calendar adapter={gregorian} defaultValue={new Date()} onChange={console.log} />
+```
+
+Next: explore [Picker modes](/docs/picker-modes) or go [fully headless with hooks](/docs/hooks).

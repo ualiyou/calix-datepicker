@@ -1,0 +1,27 @@
+{
+  "name": "@calix/themes",
+  "version": "0.0.0",
+  "description": "Optional CSS-variable themes for Calix. No JavaScript, no Tailwind.",
+  "license": "MIT",
+  "sideEffects": ["*.css"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calix-ui/calix-datepicker.git",
+    "directory": "packages/themes"
+  },
+  "keywords": ["datepicker", "calendar", "theme", "css", "calix"],
+  "files": ["*.css"],
+  "exports": {
+    "./default.css": "./default.css",
+    "./minimal.css": "./minimal.css",
+    "./tokens.css": "./tokens.css",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node -e \"process.exit(0)\"",
+    "typecheck": "node -e \"process.exit(0)\"",
+    "lint": "node -e \"process.exit(0)\"",
+    "test": "node -e \"process.exit(0)\"",
+    "clean": "rimraf .turbo"
+  }
+}

@@ -1,0 +1,37 @@
+---
+title: Accessibility
+description: Keyboard, ARIA, focus, and motion — built in.
+---
+
+Accessibility is a core feature, not a layer. Calix targets **WCAG 2.1 AA**.
+
+## Grid semantics
+
+The calendar is a `role="grid"` of `role="row"` weeks and `role="gridcell"` day
+buttons, each labeled with its full localized date. The heading is `aria-live`
+so month changes are announced. Selected/disabled map to `aria-selected` /
+`aria-disabled`; today is `aria-current="date"`.
+
+## Keyboard model
+
+| Key | Action |
+| --- | --- |
+| Arrow keys | Move focus by day/week (mirrored in RTL). |
+| Home / End | Start / end of the week. |
+| PageUp / PageDown | Previous / next month. |
+| Shift+PageUp / PageDown | Previous / next year. |
+| Enter / Space | Select the focused day. |
+| Escape | Close the popover, restore focus to the trigger. |
+
+Focus uses a roving `tabIndex`, and the popover traps focus while open and
+restores it on close.
+
+## Motion & contrast
+
+All transitions honor `prefers-reduced-motion`. Themes provide a high-contrast
+variant and never rely on color alone to convey state.
+
+## Verification
+
+Accessibility is checked in CI with `axe` via Playwright, plus Storybook
+interaction tests for the keyboard model.

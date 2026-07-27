@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/calix-ui/calix-datepicker/discussions
+    about: Ask questions and share ideas with the community.
+  - name: 📖 Documentation
+    url: https://calix.dev
+    about: Guides, API reference, and live examples.

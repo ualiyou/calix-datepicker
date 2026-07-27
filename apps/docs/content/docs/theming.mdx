@@ -1,0 +1,67 @@
+---
+title: Theming & customization
+description: Style Calix with any technology — no lock-in.
+---
+
+Calix ships **no styling dependency**. Every element exposes a stable class name
+and its state via `data-*` attributes. Style with whatever you like.
+
+## The state contract
+
+| Attribute | Meaning |
+| --- | --- |
+| `data-selected` | The day is selected. |
+| `data-today` | The day is today. |
+| `data-disabled` | The day cannot be selected. |
+| `data-outside-month` | Belongs to an adjacent month. |
+| `data-range-start` / `-end` / `-in-range` | Range boundaries and interior. |
+| `data-focused` | Currently focused (roving tabindex). |
+| `data-weekend` | Saturday/Sunday. |
+
+## CSS variables
+
+`@calix/themes` implements the contract against variables. Override any of them:
+
+```css
+:root {
+  --calix-accent: #6d28d9;
+  --calix-radius: 10px;
+  --calix-cell-size: 2.5rem;
+}
+```
+
+Dark mode is automatic via `prefers-color-scheme` and forceable with
+`[data-theme="dark"]`. A high-contrast variant activates under
+`prefers-contrast: more`.
+
+## Tailwind
+
+```tsx
+<DatePicker
+  adapter={gregorian}
+  classNames={{
+    day: "rounded-md data-[selected]:bg-blue-600 data-[today]:font-bold data-[disabled]:opacity-40",
+  }}
+/>
+```
+
+## Custom day renderer
+
+```tsx
+<Calendar
+  adapter={gregorian}
+  renderDay={(date, label) => <span>{label}</span>}
+/>
+```
+
+## Custom compound layout
+
+Use the primitives for full control over structure:
+
+```tsx
+<DatePicker.Root adapter={gregorian}>
+  <DatePicker.Input />
+  <DatePicker.Trigger>📅</DatePicker.Trigger>
+  <DatePicker.Content />
+</DatePicker.Root>
+```

@@ -1,0 +1,37 @@
+---
+title: Introduction
+description: A production-grade, headless, multi-calendar DatePicker for React.
+---
+
+**Calix** is a from-scratch, modern React date picker built around a
+framework-agnostic calendar engine. The UI never knows which calendar system is
+active — everything flows through a `CalendarAdapter`, so Gregorian and Jalali
+are interchangeable with a single prop, and new calendars are new packages, not
+UI rewrites.
+
+## Highlights
+
+- **Headless-first.** Calix owns state, behavior, and accessibility; you own the
+  markup. A default theme is available when you want one.
+- **Multi-calendar.** Gregorian and Jalali (Persian) today, both interchangeable.
+- **No styling lock-in.** No Tailwind or shadcn dependency in the library. Styling
+  is a contract of class names, `data-*` attributes, and CSS variables.
+- **Modern React.** React 19, React-Compiler-friendly, SSR and RSC safe,
+  tree-shakeable, side-effect free.
+- **Accessible.** WCAG AA target, full keyboard model, focus management, screen
+  reader announcements, reduced-motion and high-contrast support.
+
+<Playground />
+
+## Packages
+
+| Package | Purpose |
+| --- | --- |
+| `@calix/core` | Framework-agnostic engine. Zero runtime deps. |
+| `@calix/react` | Headless hooks + compound components. |
+| `@calix/adapter-gregorian` | Gregorian adapter (date-fns). |
+| `@calix/adapter-jalali` | Jalali adapter (date-fns-jalali). |
+| `@calix/themes` | Optional CSS-variable themes. |
+| `@calix/icons` | Tree-shakeable SVG icons. |
+
+Continue to [Installation](/docs/installation).

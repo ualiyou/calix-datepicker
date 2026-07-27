@@ -1,0 +1,51 @@
+---
+title: Calendar systems
+description: How Calix stays calendar-agnostic, and how to add your own.
+---
+
+Calix stores dates as calendar-agnostic parts, never as a JS `Date`:
+
+```ts
+interface CalendarDate {
+  year: number;
+  month: number; // 1-based
+  day: number;
+}
+```
+
+All calendar math flows through a `CalendarAdapter`. The UI depends only on the
+interface, so Gregorian, Jalali, and any future calendar are peers.
+
+## Built-in adapters
+
+```tsx
+import { gregorian } from "@calix/adapter-gregorian";
+import { jalali } from "@calix/adapter-jalali";
+
+<DatePicker adapter={gregorian} locale="en-US" />
+<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />
+```
+
+Adapters are **stateless singletons** — share one instance everywhere. Locale is
+always a parameter, never adapter state, so the same Gregorian adapter serves
+`en-US`, `en-GB`, `fr-FR`, and more.
+
+## Writing a custom adapter
+
+Implement the `CalendarAdapter` interface from `@calix/core`. The shared
+`generateMonthGrid` helper builds the month grid from your primitives, so you
+only implement calendar-specific logic (`startOfMonth`, `addDays`, `daysInMonth`,
+`getWeekday`, `format`, `parse`, …).
+
+```ts
+import { generateMonthGrid, type CalendarAdapter } from "@calix/core";
+
+export const myCalendar: CalendarAdapter = {
+  id: "my-calendar",
+  defaultLocale: "en-US",
+  // ...implement the interface
+  getMonthGrid: (view, options) => generateMonthGrid(myCalendar, view, options),
+};
+```
+
+See the [API Reference](/docs/api-reference) for the full interface.

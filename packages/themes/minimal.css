@@ -1,0 +1,81 @@
+/**
+ * Calix minimal theme. Structural layout only — grid, sizing, and focus rings —
+ * with almost no decoration, so you can layer your own visual design on top via
+ * the `data-*` state attributes. Import:
+ *   import "@calix/themes/minimal.css";
+ */
+@import "./tokens.css";
+
+.calix-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: var(--calix-font);
+  color: var(--calix-text);
+}
+
+.calix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calix-months {
+  display: flex;
+  gap: 1rem;
+}
+
+.calix-weekdays,
+.calix-week {
+  display: grid;
+  grid-template-columns: repeat(7, var(--calix-cell-size));
+  gap: var(--calix-gap);
+}
+
+.calix-weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--calix-muted);
+  font-size: 0.75rem;
+}
+
+.calix-nav-button,
+.calix-day {
+  width: var(--calix-cell-size);
+  height: var(--calix-cell-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.calix-day:focus-visible,
+.calix-nav-button:focus-visible {
+  outline: 2px solid var(--calix-accent);
+  outline-offset: 1px;
+}
+
+.calix-day[data-selected] {
+  color: var(--calix-on-accent);
+  background: var(--calix-accent);
+}
+.calix-day[data-in-range] {
+  background: var(--calix-range-bg);
+}
+.calix-day[data-disabled] {
+  color: var(--calix-disabled);
+  cursor: not-allowed;
+}
+.calix-day[data-outside-month] {
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calix-calendar * {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,361 @@
+/**
+ * Calix default theme. Full-featured styling built on the token layer. Import
+ * this for a polished look out of the box:
+ *   import "@calix/themes/default.css";
+ */
+@import "./tokens.css";
+
+.calix-calendar,
+.calix-popover {
+  box-sizing: border-box;
+  font-family: var(--calix-font);
+  color: var(--calix-text);
+}
+
+.calix-calendar *,
+.calix-popover * {
+  box-sizing: border-box;
+}
+
+.calix-popover {
+  background: var(--calix-surface-raised);
+  border: 1px solid var(--calix-border);
+  border-radius: var(--calix-radius);
+  padding: 1rem;
+  z-index: 50;
+  animation: calix-popover-in 160ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+@keyframes calix-popover-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.calix-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: max-content;
+}
+
+.calix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.5rem;
+  padding: 0 0.125rem;
+}
+
+.calix-heading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
+}
+.calix-heading-button {
+  border: 0;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--calix-radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.calix-heading-button:hover {
+  color: var(--calix-accent);
+  background: color-mix(in srgb, var(--calix-accent) 9%, transparent);
+}
+.calix-heading-button:focus-visible {
+  outline: 2px solid var(--calix-accent);
+  outline-offset: 2px;
+}
+.calix-monthgrid,
+.calix-yeargrid {
+  animation: calix-picker-in 140ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+@keyframes calix-picker-in {
+  from { opacity: 0; transform: translateY(0.2rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.calix-nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--calix-hover);
+  color: var(--calix-text);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background var(--calix-transition), border-color var(--calix-transition);
+}
+.calix-nav-button:hover {
+  border-color: color-mix(in srgb, var(--calix-accent) 18%, var(--calix-border));
+  background: var(--calix-hover);
+  color: var(--calix-accent);
+  transform: translateY(-1px);
+}
+.calix-nav-button:focus-visible {
+  outline: 2px solid var(--calix-accent);
+  outline-offset: 2px;
+}
+
+.calix-months {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.calix-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--calix-gap);
+  animation: calix-month-in 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes calix-month-in {
+  from { opacity: 0; transform: translateY(0.375rem) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.calix-weekdays,
+.calix-week {
+  animation: calix-row-in 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.calix-weekdays { animation-delay: 35ms; }
+.calix-week:nth-child(2) { animation-delay: 65ms; }
+.calix-week:nth-child(3) { animation-delay: 95ms; }
+.calix-week:nth-child(4) { animation-delay: 125ms; }
+.calix-week:nth-child(5) { animation-delay: 155ms; }
+.calix-week:nth-child(6) { animation-delay: 185ms; }
+.calix-week:nth-child(7) { animation-delay: 215ms; }
+
+@keyframes calix-row-in {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.calix-weekdays,
+.calix-week {
+  display: grid;
+  grid-template-columns: repeat(7, var(--calix-cell-size));
+  gap: var(--calix-gap);
+}
+
+.calix-weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.75rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--calix-muted);
+}
+
+.calix-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--calix-cell-size);
+  height: var(--calix-cell-size);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--calix-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--calix-transition), color var(--calix-transition), transform var(--calix-transition);
+}
+.calix-day:hover:not([data-disabled]) {
+  background: var(--calix-hover);
+  color: var(--calix-accent);
+  transform: scale(1.08);
+}
+.calix-day:focus-visible {
+  outline: 2px solid var(--calix-accent);
+  outline-offset: 1px;
+  z-index: 1;
+}
+.calix-day[data-outside-month] {
+  color: var(--calix-muted);
+}
+.calix-day[data-weekend]:not([data-selected]) {
+  color: color-mix(in srgb, var(--calix-text) 70%, var(--calix-accent));
+}
+.calix-day[data-today] {
+  color: var(--calix-accent);
+  font-weight: 800;
+  outline: 1.5px solid var(--calix-today-ring);
+  outline-offset: -2px;
+}
+.calix-day[data-in-range] {
+  background: color-mix(in srgb, var(--calix-accent) 12%, transparent);
+  border-radius: 0.5rem;
+}
+.calix-day[data-selected],
+.calix-day[data-range-start],
+.calix-day[data-range-end] {
+  background: var(--calix-accent);
+  color: var(--calix-on-accent);
+  font-weight: 700;
+}
+.calix-day[data-range-start] {
+  border-start-start-radius: var(--calix-radius-sm);
+  border-end-start-radius: var(--calix-radius-sm);
+}
+.calix-day[data-range-end] {
+  border-start-end-radius: var(--calix-radius-sm);
+  border-end-end-radius: var(--calix-radius-sm);
+}
+.calix-day[data-disabled] {
+  color: var(--calix-disabled);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.calix-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 13rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--calix-border);
+  border-radius: var(--calix-radius-sm);
+  background: var(--calix-surface);
+  color: var(--calix-text);
+  font-family: var(--calix-font);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color var(--calix-transition);
+}
+.calix-trigger:hover {
+  border-color: color-mix(in srgb, var(--calix-accent) 50%, var(--calix-border));
+}
+.calix-trigger:focus-visible {
+  outline: 2px solid var(--calix-accent);
+  outline-offset: 2px;
+}
+.calix-trigger[data-empty] {
+  color: var(--calix-muted);
+}
+.calix-input {
+  min-width: 13rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--calix-border);
+  border-radius: var(--calix-radius-sm);
+  background: var(--calix-surface);
+  color: var(--calix-text);
+  font: inherit;
+  transition: border-color var(--calix-transition), outline-color var(--calix-transition);
+}
+.calix-input::placeholder {
+  color: var(--calix-muted);
+}
+.calix-input:focus {
+  outline: 0;
+  border-color: var(--calix-accent);
+  outline: 3px solid color-mix(in srgb, var(--calix-accent) 18%, transparent);
+  outline-offset: 0;
+}
+.calix-input:hover:not(:focus) {
+  border-color: color-mix(in srgb, var(--calix-accent) 28%, var(--calix-border));
+}
+
+/* Time field */
+.calix-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--calix-border);
+  border-radius: var(--calix-radius-sm);
+  background: var(--calix-surface);
+}
+.calix-time-segment {
+  width: 2ch;
+  border: 0;
+  background: transparent;
+  color: var(--calix-text);
+  font: inherit;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.calix-time-segment:focus-visible {
+  outline: 2px solid var(--calix-accent);
+  outline-offset: 1px;
+  border-radius: 3px;
+}
+.calix-time-separator {
+  color: var(--calix-muted);
+}
+.calix-time-meridiem {
+  margin-inline-start: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  border: 1px solid var(--calix-border);
+  border-radius: var(--calix-radius-sm);
+  background: var(--calix-hover);
+  color: var(--calix-text);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+/* Month & year grids */
+.calix-monthgrid,
+.calix-yeargrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 16rem;
+}
+.calix-monthgrid-body,
+.calix-yeargrid-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--calix-gap);
+}
+.calix-month,
+.calix-year {
+  min-height: 2.5rem;
+  padding: 0.625rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--calix-radius-sm);
+  background: transparent;
+  color: var(--calix-text);
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--calix-transition);
+}
+.calix-month:hover,
+.calix-year:hover {
+  background: var(--calix-hover);
+  color: var(--calix-accent);
+}
+.calix-month[data-selected],
+.calix-year[data-selected] {
+  background: var(--calix-accent);
+  color: var(--calix-on-accent);
+}
+.calix-month:disabled,
+.calix-year:disabled {
+  color: var(--calix-disabled);
+  cursor: not-allowed;
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  .calix-calendar *,
+  .calix-popover * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

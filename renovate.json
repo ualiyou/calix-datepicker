@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    "group:allNonMajor",
+    "schedule:weekly"
+  ],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "Auto-merge non-major dev dependencies once CI passes",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Pin GitHub Action digests",
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
+    }
+  ],
+  "ignorePaths": ["**/node_modules/**", "**/examples/**"],
+  "rangeStrategy": "bump"
+}

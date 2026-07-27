@@ -1,0 +1,64 @@
+---
+title: Hooks
+description: Go fully headless — bring your own markup.
+---
+
+Every component is built on hooks. Drop down to them for total control over the
+DOM while keeping Calix's state, behavior, and accessibility.
+
+## `useCalendar`
+
+The workhorse. Owns the visible month, roving focus, selection, and prop-getters.
+
+```tsx
+import { useCalendar } from "@calix/react";
+import { gregorian } from "@calix/adapter-gregorian";
+
+function MyCalendar() {
+  const cal = useCalendar({ adapter: gregorian, locale: "en-US" });
+
+  return (
+    <div {...cal.getGridProps()}>
+      <div className="row">
+        {cal.weekdays.map((d) => (
+          <span key={d}>{d}</span>
+        ))}
+      </div>
+      {cal.grids[0].weeks.map((week, i) => (
+        <div key={i} className="row">
+          {week.days.map((cell) => (
+            <button key={cell.date.day} {...cal.getDayProps(cell.date)} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+`getDayProps` returns accessible attributes plus `data-selected`, `data-today`,
+`data-in-range`, `data-disabled`, and more — style against these.
+
+## `useDatePicker`
+
+Composes `useCalendar` with a Floating UI popover and open-state management.
+Returns `getReferenceProps`, `getFloatingProps`, and the floating refs.
+
+## `useDateInput`
+
+Masked, auto-formatting text input with parsing, paste, and IME support.
+
+```tsx
+const { getInputProps } = useDateInput({
+  adapter: gregorian,
+  pattern: "yyyy/MM/dd",
+  value: selected,
+  onCommit: setSelected,
+});
+<input {...getInputProps()} />;
+```
+
+## `useTime`
+
+Controlled/uncontrolled clock-time state with hour-cycle awareness, powering
+`TimeField`.

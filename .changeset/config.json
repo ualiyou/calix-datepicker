@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "calix-ui/calix-datepicker" }],
+  "commit": false,
+  "fixed": [["@calix/*"]],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@calix/docs", "@calix/storybook", "@calix/playground", "example-*"]
+}

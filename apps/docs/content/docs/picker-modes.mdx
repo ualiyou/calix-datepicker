@@ -1,0 +1,56 @@
+---
+title: Picker modes
+description: Single, range, multiple, week, month, quarter, and year selection.
+---
+
+Set the `mode` prop. Selection logic is pluggable — each mode is a strategy in
+`@calix/core`.
+
+| Mode | Value shape | Notes |
+| --- | --- | --- |
+| `single` | `Date \| null` | Default. |
+| `multiple` | `Date[]` | Toggles; supports `max`. |
+| `range` | `{ start, end }` | Ordered automatically; hover preview. |
+| `week` | `{ start, end }` | Selects the whole week. |
+| `month` | `{ start, end }` | Selects the whole month. |
+| `quarter` | `{ start, end }` | Selects the three-month quarter. |
+| `year` | `{ start, end }` | Selects the whole year. |
+
+## Range
+
+```tsx
+const [range, setRange] = useState({ start: null, end: null });
+
+<Calendar
+  adapter={gregorian}
+  mode="range"
+  numberOfMonths={2}
+  value={range}
+  onChange={setRange}
+/>;
+```
+
+<Playground mode="range" inline />
+
+## Multiple with a max
+
+```tsx
+<Calendar adapter={gregorian} mode="multiple" max={3} />
+```
+
+## Month & year pickers
+
+```tsx
+import { MonthPicker, YearPicker } from "@calix/react";
+
+<MonthPicker adapter={gregorian} locale="en-US" />
+<YearPicker adapter={gregorian} locale="en-US" />
+```
+
+## Time
+
+```tsx
+import { TimeField } from "@calix/react";
+
+<TimeField hourCycle={12} withSeconds defaultValue={{ hour: 9, minute: 30, second: 0, millisecond: 0 }} />
+```

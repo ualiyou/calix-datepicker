@@ -1,0 +1,35 @@
+---
+title: Migration
+description: Moving to Calix from other date pickers.
+---
+
+## From react-day-picker
+
+| react-day-picker | Calix |
+| --- | --- |
+| `<DayPicker mode="single" />` | `<Calendar mode="single" />` |
+| `selected` / `onSelect` | `value` / `onChange` |
+| `disabled={matchers}` | `disabledDates`, `disabledWeekdays`, `minDate`, `maxDate`, `isDateDisabled` |
+| `numberOfMonths` | `numberOfMonths` |
+| CSS modules / `classNames` | `classNames` + `data-*` contract |
+
+Calix additionally provides Jalali support, a popup `DatePicker`, and headless
+hooks.
+
+## From MUI X / Ant Design / Mantine
+
+Those pickers couple styling to their design systems. Calix is headless: import
+`@calix/themes/default.css` for a batteries-included look, or style the `data-*`
+contract yourself with any technology. Values are plain `Date`s (or `{ start,
+end }` for ranges), so wiring into forms is straightforward.
+
+## Jalali migration
+
+If you previously used a Persian-only picker, switch by passing the Jalali
+adapter — no separate component, no forked styling:
+
+```tsx
+import { jalali } from "@calix/adapter-jalali";
+
+<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
+```

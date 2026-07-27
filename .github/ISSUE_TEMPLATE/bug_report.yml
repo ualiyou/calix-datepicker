@@ -1,0 +1,48 @@
+name: 🐛 Bug report
+description: Report a problem with Calix
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to file a bug! Please provide a minimal reproduction.
+  - type: input
+    id: version
+    attributes:
+      label: Calix version
+      placeholder: "@calix/react@0.x.x"
+    validations:
+      required: true
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which package(s)?
+      multiple: true
+      options:
+        - "@calix/core"
+        - "@calix/react"
+        - "@calix/adapter-gregorian"
+        - "@calix/adapter-jalali"
+        - "@calix/themes"
+        - "@calix/icons"
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: A StackBlitz/CodeSandbox link or a minimal code snippet / failing test.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser, React version, bundler, SSR framework (if any).
+    validations:
+      required: false

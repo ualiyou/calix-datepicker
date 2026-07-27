@@ -1,0 +1,58 @@
+---
+title: API Reference
+description: Components, hooks, and core types.
+---
+
+## `<DatePicker>`
+
+Convenience popup picker. Also exposes `DatePicker.Root`, `.Trigger`, `.Input`,
+`.Content`.
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `adapter` | `CalendarAdapter` | — (required) |
+| `mode` | `SelectionMode` | `"single"` |
+| `value` / `defaultValue` | `CalixValue` | — |
+| `onChange` | `(value: CalixValue) => void` | — |
+| `locale` | `string` | adapter default |
+| `dir` | `"ltr" \| "rtl"` | from locale |
+| `weekStartsOn` | `0–6` | locale-based |
+| `numberOfMonths` | `number` | `1` |
+| `minDate` / `maxDate` | `Date` | — |
+| `disabledDates` / `enabledDates` | `Date[]` | — |
+| `disabledWeekdays` | `Weekday[]` | — |
+| `disabledMonths` / `disabledYears` | `number[]` | — |
+| `businessDaysOnly` | `boolean` | `false` |
+| `holidays` | `Date[]` | — |
+| `isDateDisabled` | `(date, adapter) => boolean` | — |
+| `max` | `number` | — (multiple mode) |
+| `placement` | Floating UI `Placement` | `"bottom-start"` |
+| `closeOnSelect` | `boolean` | `true` |
+
+## `<Calendar>`
+
+Inline calendar. Same options as above, plus `classNames`, `renderDay`,
+`header`, and `footer`.
+
+## Components
+
+`Calendar`, `CalendarView`, `DatePicker` (+ compound parts), `TimeField`,
+`MonthPicker`, `YearPicker`.
+
+## Hooks
+
+`useCalendar`, `useDatePicker`, `useDateInput`, `useTime`, `useControllableState`.
+
+## `CalendarAdapter` (from `@calix/core`)
+
+The interface every calendar implements: `today`, `toDate`/`fromDate`,
+`addDays`/`addMonths`/`addYears`, `startOfMonth`/`endOfMonth`, `daysInMonth`,
+`monthsInYear`, `isLeapYear`, `getWeekday`, `getMonthGrid`, `getYearRange`,
+`getWeek`, `compare`/`isSameDay`/`isSameMonth`/`isSameYear`, `format`/`parse`,
+`getMonthNames`/`getWeekdayNames`/`getEraNames`, `isRTL`.
+
+## Core exports
+
+`generateMonthGrid`, `buildDisabledPredicate`, `getSelectionStrategy`,
+`registerSelectionStrategy`, `formatTokens`, `parseTokens`, `toLocaleDigits`,
+`toLatinDigits`, `directionForLocale`, and the calendar/date/selection types.

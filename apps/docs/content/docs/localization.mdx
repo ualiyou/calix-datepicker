@@ -1,0 +1,48 @@
+---
+title: Localization
+description: Locales, RTL/LTR, digits, and runtime switching.
+---
+
+Locale and calendar are **orthogonal**. Pass a BCP-47 `locale`; Calix derives
+month/weekday names, first day of week, direction, and digit system from it.
+
+```tsx
+<Calendar adapter={gregorian} locale="en-GB" /> {/* week starts Monday */}
+<Calendar adapter={jalali} locale="fa-IR" />    {/* RTL, Persian digits, Saturday start */}
+```
+
+## Direction
+
+Direction defaults from the locale (`fa`, `ar`, `he`, … → RTL) but can be forced:
+
+```tsx
+<DatePicker adapter={gregorian} locale="en-US" dir="rtl" />
+```
+
+Keyboard arrows are automatically mirrored in RTL so "next" is always later in time.
+
+## Digits
+
+Persian and Arabic-Indic digits are rendered automatically for the matching
+locales. Manual input accepts either digit system — Calix normalizes it before
+parsing.
+
+```ts
+import { toLocaleDigits, toLatinDigits } from "@calix/core";
+
+toLocaleDigits("2026", "fa-IR"); // "۲۰۲۶"
+toLatinDigits("۲۰۲۶"); // "2026"
+```
+
+## Week start
+
+Override the first column with `weekStartsOn` (0 = Sunday … 6 = Saturday):
+
+```tsx
+<Calendar adapter={gregorian} locale="en-US" weekStartsOn={1} />
+```
+
+## Runtime switching
+
+Because locale is just a prop, switching at runtime is a re-render — no provider
+juggling required.
