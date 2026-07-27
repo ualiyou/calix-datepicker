@@ -1,4 +1,4 @@
-import { toLatinDigits, type CalendarAdapter, type CalendarDate } from "@calix/core";
+import { toLatinDigits, type CalendarAdapter, type CalendarDate } from "@alydev/core";
 import {
   useCallback,
   useEffect,

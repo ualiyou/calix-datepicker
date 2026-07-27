@@ -2,7 +2,7 @@
  * Calix minimal theme. Structural layout only — grid, sizing, and focus rings —
  * with almost no decoration, so you can layer your own visual design on top via
  * the `data-*` state attributes. Import:
- *   import "@calix/themes/minimal.css";
+ *   import "@alydev/themes/minimal.css";
  */
 @import "./tokens.css";
 

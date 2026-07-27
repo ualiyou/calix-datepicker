@@ -8,9 +8,9 @@
     "start": "vinxi start"
   },
   "dependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/react": "workspace:*",
-    "@calix/themes": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/react": "workspace:*",
+    "@alydev/themes": "workspace:*",
     "@tanstack/react-router": "^1.87.0",
     "@tanstack/react-start": "^1.87.0",
     "react": "^19.0.0",

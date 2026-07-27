@@ -9,15 +9,15 @@ theme package for default styling.
 <Tabs items={["pnpm", "npm", "yarn"]}>
 
 ```bash tab="pnpm"
-pnpm add @calix/react @calix/adapter-gregorian @calix/themes
+pnpm add @alydev/react @alydev/adapter-gregorian @alydev/themes
 ```
 
 ```bash tab="npm"
-npm install @calix/react @calix/adapter-gregorian @calix/themes
+npm install @alydev/react @alydev/adapter-gregorian @alydev/themes
 ```
 
 ```bash tab="yarn"
-yarn add @calix/react @calix/adapter-gregorian @calix/themes
+yarn add @alydev/react @alydev/adapter-gregorian @alydev/themes
 ```
 
 </Tabs>
@@ -25,21 +25,21 @@ yarn add @calix/react @calix/adapter-gregorian @calix/themes
 Need the Persian calendar too?
 
 ```bash
-pnpm add @calix/adapter-jalali
+pnpm add @alydev/adapter-jalali
 ```
 
 ## Peer dependencies
 
-`@calix/react` expects **React 18.3+ or 19** (`react` and `react-dom`). The
+`@alydev/react` expects **React 18.3+ or 19** (`react` and `react-dom`). The
 Gregorian adapter depends on `date-fns`; the Jalali adapter on `date-fns-jalali`.
 These are pulled in automatically.
 
 ## Import the theme (optional)
 
 ```ts
-import "@calix/themes/default.css"; // full theme
+import "@alydev/themes/default.css"; // full theme
 // or
-import "@calix/themes/minimal.css"; // structural only
+import "@alydev/themes/minimal.css"; // structural only
 ```
 
 The library works completely unstyled too — see the [Theming guide](/docs/theming).

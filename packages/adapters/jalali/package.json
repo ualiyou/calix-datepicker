@@ -1,5 +1,5 @@
 {
-  "name": "@calix/adapter-jalali",
+  "name": "@alydev/adapter-jalali",
   "version": "1.0.0",
   "description": "Jalali (Persian/Shamsi) calendar adapter for Calix, powered by date-fns-jalali.",
   "license": "MIT",
@@ -43,14 +43,14 @@
     "clean": "rimraf dist .turbo *.tsbuildinfo"
   },
   "peerDependencies": {
-    "@calix/core": "workspace:*"
+    "@alydev/core": "workspace:*"
   },
   "dependencies": {
     "date-fns-jalali": "^4.1.0-0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^2.1.8",
-    "@calix/core": "workspace:*",
+    "@alydev/core": "workspace:*",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
     "vite-plugin-dts": "^4.4.0",

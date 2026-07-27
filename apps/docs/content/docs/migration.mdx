@@ -19,7 +19,7 @@ hooks.
 ## From MUI X / Ant Design / Mantine
 
 Those pickers couple styling to their design systems. Calix is headless: import
-`@calix/themes/default.css` for a batteries-included look, or style the `data-*`
+`@alydev/themes/default.css` for a batteries-included look, or style the `data-*`
 contract yourself with any technology. Values are plain `Date`s (or `{ start,
 end }` for ranges), so wiring into forms is straightforward.
 
@@ -29,7 +29,7 @@ If you previously used a Persian-only picker, switch by passing the Jalali
 adapter — no separate component, no forked styling:
 
 ```tsx
-import { jalali } from "@calix/adapter-jalali";
+import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```

@@ -1,4 +1,4 @@
-import type { CalendarDate, CalendarGrid } from "@calix/core";
+import type { CalendarDate, CalendarGrid } from "@alydev/core";
 import { useState, type ReactNode } from "react";
 import type { CalendarClassNames } from "../types.js";
 import type { UseCalendarReturn } from "../hooks/useCalendar.js";

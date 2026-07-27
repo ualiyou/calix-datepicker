@@ -26,7 +26,7 @@ Consumers style with any technology:
 <DatePicker classNames={{ day: "data-[selected]:bg-blue-600 data-[today]:font-bold" }} />
 ```
 
-`@calix/themes` is just a stylesheet that implements this contract against CSS
+`@alydev/themes` is just a stylesheet that implements this contract against CSS
 variables (`--calix-accent`, `--calix-surface`, `--calix-radius`, …). Import it
 or don't; override any variable to theme.
 

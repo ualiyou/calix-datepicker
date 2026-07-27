@@ -1,5 +1,5 @@
 "use client";
-import type { Time } from "@calix/core";
+import type { Time } from "@alydev/core";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import { useTime, type UseTimeOptions } from "../hooks/useTime.js";
 

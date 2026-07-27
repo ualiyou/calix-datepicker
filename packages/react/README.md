@@ -1,16 +1,16 @@
-# @calix/react
+# @alydev/react
 
 Headless hooks and compound components for building date pickers with
 [Calix](https://github.com/calix-ui/calix-datepicker).
 
 ```bash
-pnpm add @calix/react @calix/adapter-gregorian @calix/themes
+pnpm add @alydev/react @alydev/adapter-gregorian @alydev/themes
 ```
 
 ```tsx
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import "@calix/themes/default.css";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import "@alydev/themes/default.css";
 
 <DatePicker adapter={gregorian} locale="en-US" />;
 ```

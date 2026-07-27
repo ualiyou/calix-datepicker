@@ -9,6 +9,6 @@ each package directory.
 ### Added
 - Initial monorepo scaffolding: pnpm + Turborepo workspace, strict TypeScript
   project references, ESLint/Prettier, Vitest/Playwright configuration, Changesets,
-  CI/CD workflows, and package skeletons for `@calix/core`, `@calix/react`,
-  `@calix/adapter-gregorian`, `@calix/adapter-jalali`, `@calix/themes`, and
-  `@calix/icons`.
+  CI/CD workflows, and package skeletons for `@alydev/core`, `@alydev/react`,
+  `@alydev/adapter-gregorian`, `@alydev/adapter-jalali`, `@alydev/themes`, and
+  `@alydev/icons`.

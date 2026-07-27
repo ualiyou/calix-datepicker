@@ -33,7 +33,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - run: pnpm install --frozen-lockfile
       - name: Build Docs
-        run: pnpm turbo run build --filter=@calix/docs...
+        run: pnpm turbo run build --filter=@alydev/docs...
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
       - uses: actions/upload-pages-artifact@v4

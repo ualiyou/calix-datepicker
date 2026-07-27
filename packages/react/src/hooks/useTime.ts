@@ -1,4 +1,4 @@
-import type { Time } from "@calix/core";
+import type { Time } from "@alydev/core";
 import { useCallback, useMemo } from "react";
 import { useControllableState } from "../utils/useControllableState.js";
 

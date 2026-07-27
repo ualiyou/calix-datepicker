@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import { jalali } from "@calix/adapter-jalali";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import { jalali } from "@alydev/adapter-jalali";
 
 export default function Page() {
   const [value, setValue] = useState<Date | null>(null);

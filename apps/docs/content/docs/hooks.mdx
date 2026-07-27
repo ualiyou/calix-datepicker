@@ -11,8 +11,8 @@ DOM while keeping Calix's state, behavior, and accessibility.
 The workhorse. Owns the visible month, roving focus, selection, and prop-getters.
 
 ```tsx
-import { useCalendar } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
+import { useCalendar } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
 
 function MyCalendar() {
   const cal = useCalendar({ adapter: gregorian, locale: "en-US" });

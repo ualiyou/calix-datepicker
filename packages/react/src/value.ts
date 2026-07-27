@@ -1,4 +1,4 @@
-import type { CalendarAdapter, CalendarDate, DateRange, SelectionMode, SelectionValue } from "@calix/core";
+import type { CalendarAdapter, CalendarDate, DateRange, SelectionMode, SelectionValue } from "@alydev/core";
 
 /** A range of JS `Date`s at the public boundary. */
 export interface RangeValue {

@@ -7,7 +7,7 @@
 Gregorian & Jalali out of the box · RTL/LTR · fully typed · tree-shakeable · SSR/RSC-safe · zero styling dependencies.
 
 [![CI](https://github.com/calix-ui/calix-datepicker/actions/workflows/ci.yml/badge.svg)](https://github.com/calix-ui/calix-datepicker/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@calix/react.svg)](https://www.npmjs.com/package/@calix/react)
+[![npm](https://img.shields.io/npm/v/@alydev/react.svg)](https://www.npmjs.com/package/@alydev/react)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 </div>
@@ -43,25 +43,25 @@ Documentation: https://ualiyou.github.io/calix-datepicker/
 
 | Package | Description |
 | --- | --- |
-| [`@calix/core`](./packages/core) | Framework-agnostic engine: types, `CalendarAdapter`, selection strategies, validation, format/parse. Zero runtime deps. |
-| [`@calix/adapter-gregorian`](./packages/adapters/gregorian) | Gregorian calendar adapter (date-fns). |
-| [`@calix/adapter-jalali`](./packages/adapters/jalali) | Jalali / Persian calendar adapter (date-fns-jalali). |
-| [`@calix/react`](./packages/react) | Headless hooks + compound components. |
-| [`@calix/themes`](./packages/themes) | Optional CSS-variable stylesheets (default, minimal). |
-| [`@calix/icons`](./packages/icons) | Tree-shakeable SVG icon set. |
+| [`@alydev/core`](./packages/core) | Framework-agnostic engine: types, `CalendarAdapter`, selection strategies, validation, format/parse. Zero runtime deps. |
+| [`@alydev/adapter-gregorian`](./packages/adapters/gregorian) | Gregorian calendar adapter (date-fns). |
+| [`@alydev/adapter-jalali`](./packages/adapters/jalali) | Jalali / Persian calendar adapter (date-fns-jalali). |
+| [`@alydev/react`](./packages/react) | Headless hooks + compound components. |
+| [`@alydev/themes`](./packages/themes) | Optional CSS-variable stylesheets (default, minimal). |
+| [`@alydev/icons`](./packages/icons) | Tree-shakeable SVG icon set. |
 
 ## Quick start
 
 ```bash
-pnpm add @calix/react @calix/adapter-gregorian
+pnpm add @alydev/react @alydev/adapter-gregorian
 # optional default styling
-pnpm add @calix/themes
+pnpm add @alydev/themes
 ```
 
 ```tsx
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import "@calix/themes/default.css";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import "@alydev/themes/default.css";
 
 export function Example() {
   const [value, setValue] = React.useState<Date | null>(null);
@@ -72,12 +72,12 @@ export function Example() {
 Switch calendars with a single prop:
 
 ```tsx
-import { jalali } from "@calix/adapter-jalali";
+import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```
 
-Or go fully headless with hooks — see [`@calix/react`](./packages/react) and the docs.
+Or go fully headless with hooks — see [`@alydev/react`](./packages/react) and the docs.
 
 ## Development
 

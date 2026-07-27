@@ -1,6 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-import calixTheme from "@calix/themes/default.css?url";
+import calixTheme from "@alydev/themes/default.css?url";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: calixTheme }];
 

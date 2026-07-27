@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react";
-import "@calix/themes/default.css";
+import "@alydev/themes/default.css";
 
 const preview: Preview = {
   parameters: {

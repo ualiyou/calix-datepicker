@@ -1,7 +1,7 @@
 /**
  * Calix default theme. Full-featured styling built on the token layer. Import
  * this for a polished look out of the box:
- *   import "@calix/themes/default.css";
+ *   import "@alydev/themes/default.css";
  */
 @import "./tokens.css";
 

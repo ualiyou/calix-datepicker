@@ -1,5 +1,5 @@
 {
-  "name": "@calix/storybook",
+  "name": "@alydev/storybook",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,11 +11,11 @@
     "clean": "rimraf storybook-static .turbo"
   },
   "dependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/adapter-jalali": "workspace:*",
-    "@calix/core": "workspace:*",
-    "@calix/react": "workspace:*",
-    "@calix/themes": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/adapter-jalali": "workspace:*",
+    "@alydev/core": "workspace:*",
+    "@alydev/react": "workspace:*",
+    "@alydev/themes": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

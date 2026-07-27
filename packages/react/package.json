@@ -1,5 +1,5 @@
 {
-  "name": "@calix/react",
+  "name": "@alydev/react",
   "version": "1.0.0",
   "description": "Headless hooks and compound components for building date pickers with Calix in React.",
   "license": "MIT",
@@ -44,7 +44,7 @@
     "clean": "rimraf dist .turbo *.tsbuildinfo"
   },
   "peerDependencies": {
-    "@calix/core": "workspace:*",
+    "@alydev/core": "workspace:*",
     "react": "^18.3.0 || ^19.0.0",
     "react-dom": "^18.3.0 || ^19.0.0"
   },
@@ -53,9 +53,9 @@
     "motion": "^11.15.0"
   },
   "devDependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/adapter-jalali": "workspace:*",
-    "@calix/core": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/adapter-jalali": "workspace:*",
+    "@alydev/core": "workspace:*",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",

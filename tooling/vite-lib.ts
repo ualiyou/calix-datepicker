@@ -13,7 +13,7 @@ export interface LibOptions {
 }
 
 /**
- * Shared Vite library build config for every `@calix/*` package.
+ * Shared Vite library build config for every `@alydev/*` package.
  *
  * - ESM + CJS output, `preserveModules` so consumers tree-shake cleanly.
  * - `.d.ts` emitted via vite-plugin-dts.

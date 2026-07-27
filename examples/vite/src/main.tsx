@@ -1,8 +1,8 @@
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import "@calix/themes/default.css";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import "@alydev/themes/default.css";
 
 function App() {
   const [value, setValue] = useState<Date | null>(null);

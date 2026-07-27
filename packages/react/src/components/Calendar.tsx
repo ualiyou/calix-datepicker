@@ -1,5 +1,5 @@
 "use client";
-import type { CalendarDate } from "@calix/core";
+import type { CalendarDate } from "@alydev/core";
 import type { ReactNode } from "react";
 import { useCalendar } from "../hooks/useCalendar.js";
 import type { CalendarClassNames, UseCalendarOptions } from "../types.js";

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Calendar, DatePicker, TimeField, type CalixValue, type RangeValue } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import { jalali } from "@calix/adapter-jalali";
-import type { Time } from "@calix/core";
+import { Calendar, DatePicker, TimeField, type CalixValue, type RangeValue } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import { jalali } from "@alydev/adapter-jalali";
+import type { Time } from "@alydev/core";
 
 type Cal = "gregorian" | "jalali";
 

@@ -1,5 +1,5 @@
 {
-  "name": "@calix/playground",
+  "name": "@alydev/playground",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,12 +12,12 @@
     "clean": "rimraf dist .turbo"
   },
   "dependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/adapter-jalali": "workspace:*",
-    "@calix/core": "workspace:*",
-    "@calix/icons": "workspace:*",
-    "@calix/react": "workspace:*",
-    "@calix/themes": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/adapter-jalali": "workspace:*",
+    "@alydev/core": "workspace:*",
+    "@alydev/icons": "workspace:*",
+    "@alydev/react": "workspace:*",
+    "@alydev/themes": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

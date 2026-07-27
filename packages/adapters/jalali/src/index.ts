@@ -28,7 +28,7 @@ import {
   type NameWidth,
   type Time,
   type Weekday,
-} from "@calix/core";
+} from "@alydev/core";
 
 const CAL = "persian";
 

@@ -1,5 +1,5 @@
 /**
- * @calix/core — framework-agnostic calendar engine.
+ * @alydev/core — framework-agnostic calendar engine.
  *
  * This package has zero runtime dependencies and knows nothing about any
  * concrete calendar system or UI framework.

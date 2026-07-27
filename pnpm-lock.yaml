@@ -74,22 +74,22 @@ importers:
 
   apps/docs:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/adapter-jalali':
+      '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@calix/core':
+      '@alydev/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@calix/icons':
+      '@alydev/icons':
         specifier: workspace:*
         version: link:../../packages/icons
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       fumadocs-core:
@@ -138,22 +138,22 @@ importers:
 
   apps/playground:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/adapter-jalali':
+      '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@calix/core':
+      '@alydev/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@calix/icons':
+      '@alydev/icons':
         specifier: workspace:*
         version: link:../../packages/icons
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       react:
@@ -187,19 +187,19 @@ importers:
 
   apps/storybook:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/adapter-jalali':
+      '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@calix/core':
+      '@alydev/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       react:
@@ -248,16 +248,16 @@ importers:
 
   examples/nextjs:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/adapter-jalali':
+      '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       next:
@@ -285,13 +285,13 @@ importers:
 
   examples/remix:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       '@remix-run/node':
@@ -331,13 +331,13 @@ importers:
 
   examples/tanstack-start:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       '@tanstack/react-router':
@@ -371,16 +371,16 @@ importers:
 
   examples/vite:
     dependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
-      '@calix/adapter-jalali':
+      '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali
-      '@calix/react':
+      '@alydev/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@calix/themes':
+      '@alydev/themes':
         specifier: workspace:*
         version: link:../../packages/themes
       react:
@@ -412,7 +412,7 @@ importers:
         specifier: ^4.1.0
         version: 4.4.0
     devDependencies:
-      '@calix/core':
+      '@alydev/core':
         specifier: workspace:*
         version: link:../../core
       '@vitest/coverage-v8':
@@ -437,7 +437,7 @@ importers:
         specifier: ^4.1.0-0
         version: 4.1.0-0
     devDependencies:
-      '@calix/core':
+      '@alydev/core':
         specifier: workspace:*
         version: link:../../core
       '@vitest/coverage-v8':
@@ -504,13 +504,13 @@ importers:
         specifier: ^11.15.0
         version: 11.18.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     devDependencies:
-      '@calix/adapter-gregorian':
+      '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../adapters/gregorian
-      '@calix/adapter-jalali':
+      '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../adapters/jalali
-      '@calix/core':
+      '@alydev/core':
         specifier: workspace:*
         version: link:../core
       '@testing-library/dom':

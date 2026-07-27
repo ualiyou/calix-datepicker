@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { Calendar, DatePicker, type CalixValue, type RangeValue } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import { jalali } from "@calix/adapter-jalali";
-import type { SelectionMode } from "@calix/core";
+import { Calendar, DatePicker, type CalixValue, type RangeValue } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import { jalali } from "@alydev/adapter-jalali";
+import type { SelectionMode } from "@alydev/core";
 
 type Cal = "gregorian" | "jalali";
 

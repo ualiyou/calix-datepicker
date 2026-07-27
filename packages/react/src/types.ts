@@ -4,7 +4,7 @@ import type {
   Direction,
   SelectionMode,
   Weekday,
-} from "@calix/core";
+} from "@alydev/core";
 import type { ButtonHTMLAttributes, HTMLAttributes, Ref } from "react";
 import type { CalixValue } from "./value.js";
 

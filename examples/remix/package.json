@@ -9,9 +9,9 @@
     "start": "remix-serve ./build/server/index.js"
   },
   "dependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/react": "workspace:*",
-    "@calix/themes": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/react": "workspace:*",
+    "@alydev/themes": "workspace:*",
     "@remix-run/node": "^2.15.0",
     "@remix-run/react": "^2.15.0",
     "@remix-run/serve": "^2.15.0",

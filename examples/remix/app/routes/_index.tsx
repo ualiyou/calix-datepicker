@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
 
 export default function Index() {
   const [value, setValue] = useState<Date | null>(null);

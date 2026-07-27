@@ -30,14 +30,14 @@
     "sourceMap": true,
 
     "paths": {
-      "@calix/core": ["./packages/core/src/index.ts"],
-      "@calix/core/*": ["./packages/core/src/*"],
-      "@calix/react": ["./packages/react/src/index.ts"],
-      "@calix/react/*": ["./packages/react/src/*"],
-      "@calix/adapter-gregorian": ["./packages/adapters/gregorian/src/index.ts"],
-      "@calix/adapter-jalali": ["./packages/adapters/jalali/src/index.ts"],
-      "@calix/icons": ["./packages/icons/src/index.tsx"],
-      "@calix/icons/*": ["./packages/icons/src/*"]
+      "@alydev/core": ["./packages/core/src/index.ts"],
+      "@alydev/core/*": ["./packages/core/src/*"],
+      "@alydev/react": ["./packages/react/src/index.ts"],
+      "@alydev/react/*": ["./packages/react/src/*"],
+      "@alydev/adapter-gregorian": ["./packages/adapters/gregorian/src/index.ts"],
+      "@alydev/adapter-jalali": ["./packages/adapters/jalali/src/index.ts"],
+      "@alydev/icons": ["./packages/icons/src/index.tsx"],
+      "@alydev/icons/*": ["./packages/icons/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build", ".next", "coverage"]

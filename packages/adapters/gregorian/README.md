@@ -1,15 +1,15 @@
-# @calix/adapter-gregorian
+# @alydev/adapter-gregorian
 
 The Gregorian calendar adapter for [Calix](https://github.com/calix-ui/calix-datepicker),
 backed by [date-fns](https://date-fns.org/).
 
 ```bash
-pnpm add @calix/react @calix/adapter-gregorian
+pnpm add @alydev/react @alydev/adapter-gregorian
 ```
 
 ```tsx
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
 
 <DatePicker adapter={gregorian} locale="en-US" />;
 ```

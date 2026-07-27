@@ -9,10 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/adapter-jalali": "workspace:*",
-    "@calix/react": "workspace:*",
-    "@calix/themes": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/adapter-jalali": "workspace:*",
+    "@alydev/react": "workspace:*",
+    "@alydev/themes": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

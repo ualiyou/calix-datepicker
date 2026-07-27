@@ -7,9 +7,9 @@ description: Render your first Calix date picker.
 
 ```tsx
 import { useState } from "react";
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import "@calix/themes/default.css";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import "@alydev/themes/default.css";
 
 export function Example() {
   const [value, setValue] = useState<Date | null>(null);
@@ -29,8 +29,8 @@ export function Example() {
 ## An inline calendar
 
 ```tsx
-import { Calendar } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
+import { Calendar } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
 
 <Calendar adapter={gregorian} locale="en-US" />;
 ```
@@ -42,7 +42,7 @@ import { gregorian } from "@calix/adapter-gregorian";
 The same component renders any calendar — just pass a different adapter and locale:
 
 ```tsx
-import { jalali } from "@calix/adapter-jalali";
+import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```

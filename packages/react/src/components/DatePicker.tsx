@@ -1,6 +1,6 @@
 "use client";
 import { FloatingFocusManager, FloatingPortal } from "@floating-ui/react";
-import type { CalendarDate } from "@calix/core";
+import type { CalendarDate } from "@alydev/core";
 import {
   useMemo,
   type ButtonHTMLAttributes,

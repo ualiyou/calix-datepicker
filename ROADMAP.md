@@ -9,7 +9,7 @@ Vitest/Playwright base config, Changesets, CI/CD, issue/PR templates, Dependabot
 Renovate, architecture docs, package skeletons.
 
 ### Phase 2 — Core engine & adapters
-`@calix/core` types, `CalendarAdapter` interface, month/year generation, validation
+`@alydev/core` types, `CalendarAdapter` interface, month/year generation, validation
 (min/max, disabled/enabled dates, weekdays, months, years, business days, holidays),
 selection strategies, format/parse. Gregorian + Jalali adapters. Unit tests.
 
@@ -26,7 +26,7 @@ DateTime + Time (digital/analog), month/year/quarter/week pickers, dual & multi-
 infinite scrolling, today/clear, masked input, touch gestures, RTL + Persian digits.
 
 ### Phase 6 — Themes & icons
-`@calix/themes` default + minimal, dark/light, high-contrast; `@calix/icons`.
+`@alydev/themes` default + minimal, dark/light, high-contrast; `@alydev/icons`.
 
 ### Phase 7 — Documentation website
 Next.js + Fumadocs + Tailwind v4 + shadcn + MDX; live editable playground; full guides
@@ -45,4 +45,4 @@ semantic versioning, final polish.
 
 ## Beyond 1.0 (ideas)
 Additional calendars (Hijri, Hebrew, Buddhist, Japanese), presets/shortcuts panel,
-timezone-aware values, `@calix/vue` and `@calix/solid` bindings, Tempo/Temporal support.
+timezone-aware values, `@alydev/vue` and `@alydev/solid` bindings, Tempo/Temporal support.

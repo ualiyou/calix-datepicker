@@ -19,7 +19,7 @@ description: How Calix stays fast and small.
 
 ## Bundle size
 
-`@calix/core` has **zero runtime dependencies**. Adapters pull in `date-fns` /
+`@alydev/core` has **zero runtime dependencies**. Adapters pull in `date-fns` /
 `date-fns-jalali` only when imported, so an app that never uses Jalali never
 ships it.
 
@@ -27,4 +27,4 @@ ships it.
 
 The repository includes a benchmark harness comparing render counts and bundle
 size against react-day-picker, react-aria, MUI X, Mantine, and Ant Design. Run
-`pnpm --filter @calix/react bench` (see the repo `bench/` directory).
+`pnpm --filter @alydev/react bench` (see the repo `bench/` directory).

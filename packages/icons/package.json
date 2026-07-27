@@ -1,5 +1,5 @@
 {
-  "name": "@calix/icons",
+  "name": "@alydev/icons",
   "version": "1.0.0",
   "description": "Tree-shakeable SVG icon components used by Calix. Bring your own or use these.",
   "license": "MIT",

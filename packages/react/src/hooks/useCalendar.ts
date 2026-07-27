@@ -11,7 +11,7 @@ import {
   type MonthView,
   type SelectionContext,
   type Weekday,
-} from "@calix/core";
+} from "@alydev/core";
 import {
   useCallback,
   useEffect,

@@ -1,5 +1,5 @@
 {
-  "name": "@calix/core",
+  "name": "@alydev/core",
   "version": "1.0.0",
   "description": "Framework-agnostic calendar engine, adapter interface, and selection strategies for Calix.",
   "license": "MIT",

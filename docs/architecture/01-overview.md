@@ -7,18 +7,18 @@ without cascading changes.
 ┌──────────────────────────────────────────────────────────────┐
 │  Consumer app (Tailwind / CSS Modules / Emotion / vanilla CSS) │
 ├──────────────────────────────────────────────────────────────┤
-│  @calix/themes (optional CSS)      @calix/icons (optional SVG)  │
+│  @alydev/themes (optional CSS)      @alydev/icons (optional SVG)  │
 ├──────────────────────────────────────────────────────────────┤
-│  @calix/react                                                  │
+│  @alydev/react                                                  │
 │    components (compound + convenience)                         │
 │    hooks (useDatePicker / useCalendar / useSelection / input)  │
 │    context (split: config · state · dispatch)                  │
 ├──────────────────────────────────────────────────────────────┤
-│  @calix/core  (framework-agnostic, zero runtime deps)          │
+│  @alydev/core  (framework-agnostic, zero runtime deps)          │
 │    types · CalendarAdapter interface · selection strategies    │
 │    validation · formatting orchestration · date algebra        │
 ├──────────────────────────────────────────────────────────────┤
-│  @calix/adapter-gregorian   @calix/adapter-jalali   (…future)  │
+│  @alydev/adapter-gregorian   @alydev/adapter-jalali   (…future)  │
 │    concrete CalendarAdapter implementations                    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -27,7 +27,7 @@ without cascading changes.
 
 - **Testability.** The hardest logic (calendar math, selection, validation)
   is pure and unit-tested without a DOM.
-- **Reuse.** A future `@calix/vue` or `@calix/solid` reuses `@calix/core`
+- **Reuse.** A future `@alydev/vue` or `@alydev/solid` reuses `@alydev/core`
   untouched.
 - **Bundle hygiene.** Core has zero runtime dependencies; adapters pull in
   `date-fns`/`date-fns-jalali` only when used.
@@ -49,7 +49,7 @@ predictable tree-shaking and dual-format compatibility.
 ## Trade-offs
 
 - **More packages = more release coordination.** Mitigated with Changesets
-  `fixed` versioning across `@calix/*` so the surface versions move together.
+  `fixed` versioning across `@alydev/*` so the surface versions move together.
 - **Indirection via the adapter interface** costs a little ceremony, but it is
   the single most important boundary in the project — it is what makes "multiple
   calendars, one UI" true rather than aspirational.

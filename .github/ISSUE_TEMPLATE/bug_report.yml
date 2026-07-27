@@ -9,7 +9,7 @@ body:
     id: version
     attributes:
       label: Calix version
-      placeholder: "@calix/react@0.x.x"
+      placeholder: "@alydev/react@0.x.x"
     validations:
       required: true
   - type: dropdown
@@ -18,12 +18,12 @@ body:
       label: Which package(s)?
       multiple: true
       options:
-        - "@calix/core"
-        - "@calix/react"
-        - "@calix/adapter-gregorian"
-        - "@calix/adapter-jalali"
-        - "@calix/themes"
-        - "@calix/icons"
+        - "@alydev/core"
+        - "@alydev/react"
+        - "@alydev/adapter-gregorian"
+        - "@alydev/adapter-jalali"
+        - "@alydev/themes"
+        - "@alydev/icons"
     validations:
       required: true
   - type: textarea

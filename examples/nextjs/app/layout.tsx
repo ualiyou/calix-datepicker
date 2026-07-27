@@ -1,4 +1,4 @@
-import "@calix/themes/default.css";
+import "@alydev/themes/default.css";
 import type { ReactNode } from "react";
 
 export const metadata = { title: "Calix + Next.js" };

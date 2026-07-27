@@ -1,16 +1,16 @@
-# @calix/themes
+# @alydev/themes
 
 Optional, framework-free stylesheets for [Calix](https://github.com/calix-ui/calix-datepicker).
 Pure CSS driven by custom properties — **no JavaScript, no Tailwind, no shadcn**.
 
 ```bash
-pnpm add @calix/themes
+pnpm add @alydev/themes
 ```
 
 ```ts
-import "@calix/themes/default.css"; // full-featured default theme
+import "@alydev/themes/default.css"; // full-featured default theme
 // or
-import "@calix/themes/minimal.css"; // lean, structural styling only
+import "@alydev/themes/minimal.css"; // lean, structural styling only
 ```
 
 Theme by overriding variables (see `tokens.css`):

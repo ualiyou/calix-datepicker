@@ -24,7 +24,7 @@ This directory holds performance comparisons between Calix and other pickers.
 ```bash
 pnpm build            # build packages first
 pnpm size             # bundle-size budgets
-pnpm --filter @calix/core bench   # engine micro-benchmarks
+pnpm --filter @alydev/core bench   # engine micro-benchmarks
 ```
 
 > Render-count harnesses live in `bench/render/` and use React's Profiler to

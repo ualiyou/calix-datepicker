@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "fumadocs-ui/style.css";
-@import "@calix/themes/default.css";
+@import "@alydev/themes/default.css";
 
 @source "../node_modules/fumadocs-ui/dist/**/*.js";
 

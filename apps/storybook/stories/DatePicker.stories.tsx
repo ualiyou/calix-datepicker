@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, userEvent, screen } from "@storybook/test";
-import { DatePicker } from "@calix/react";
-import { gregorian } from "@calix/adapter-gregorian";
-import { jalali } from "@calix/adapter-jalali";
+import { DatePicker } from "@alydev/react";
+import { gregorian } from "@alydev/adapter-gregorian";
+import { jalali } from "@alydev/adapter-jalali";
 
 const meta: Meta<typeof DatePicker> = {
   title: "DatePicker",

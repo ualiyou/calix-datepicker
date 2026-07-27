@@ -19,8 +19,8 @@ interface, so Gregorian, Jalali, and any future calendar are peers.
 ## Built-in adapters
 
 ```tsx
-import { gregorian } from "@calix/adapter-gregorian";
-import { jalali } from "@calix/adapter-jalali";
+import { gregorian } from "@alydev/adapter-gregorian";
+import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={gregorian} locale="en-US" />
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />
@@ -32,13 +32,13 @@ always a parameter, never adapter state, so the same Gregorian adapter serves
 
 ## Writing a custom adapter
 
-Implement the `CalendarAdapter` interface from `@calix/core`. The shared
+Implement the `CalendarAdapter` interface from `@alydev/core`. The shared
 `generateMonthGrid` helper builds the month grid from your primitives, so you
 only implement calendar-specific logic (`startOfMonth`, `addDays`, `daysInMonth`,
 `getWeekday`, `format`, `parse`, …).
 
 ```ts
-import { generateMonthGrid, type CalendarAdapter } from "@calix/core";
+import { generateMonthGrid, type CalendarAdapter } from "@alydev/core";
 
 export const myCalendar: CalendarAdapter = {
   id: "my-calendar",

@@ -1,5 +1,5 @@
 {
-  "name": "@calix/docs",
+  "name": "@alydev/docs",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,12 +13,12 @@
     "clean": "rimraf .next .turbo .source"
   },
   "dependencies": {
-    "@calix/adapter-gregorian": "workspace:*",
-    "@calix/adapter-jalali": "workspace:*",
-    "@calix/core": "workspace:*",
-    "@calix/icons": "workspace:*",
-    "@calix/react": "workspace:*",
-    "@calix/themes": "workspace:*",
+    "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/adapter-jalali": "workspace:*",
+    "@alydev/core": "workspace:*",
+    "@alydev/icons": "workspace:*",
+    "@alydev/react": "workspace:*",
+    "@alydev/themes": "workspace:*",
     "fumadocs-core": "^14.7.0",
     "fumadocs-mdx": "^11.2.0",
     "fumadocs-ui": "^14.7.0",

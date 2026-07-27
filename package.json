@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "build:release": "turbo run build --filter=./packages/* --filter=@calix/playground",
+    "build:release": "turbo run build --filter=./packages/* --filter=@alydev/playground",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

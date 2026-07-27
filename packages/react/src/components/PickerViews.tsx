@@ -1,5 +1,5 @@
 "use client";
-import type { CalendarDate } from "@calix/core";
+import type { CalendarDate } from "@alydev/core";
 import { useMemo, useState } from "react";
 import { useCalendar } from "../hooks/useCalendar.js";
 import type { UseCalendarOptions } from "../types.js";

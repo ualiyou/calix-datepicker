@@ -1,7 +1,7 @@
 "use client";
 /**
- * @calix/react — headless hooks and compound components for building date
- * pickers on top of `@calix/core`.
+ * @alydev/react — headless hooks and compound components for building date
+ * pickers on top of `@alydev/core`.
  */
 
 // Hooks
@@ -60,4 +60,4 @@ export type {
   SelectionMode,
   Weekday,
   Direction,
-} from "@calix/core";
+} from "@alydev/core";

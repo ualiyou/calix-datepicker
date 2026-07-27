@@ -13,7 +13,7 @@ considered. It is the reference for contributors and the rationale for reviewers
 ## First principles
 
 1. **Business logic is framework-agnostic.** Everything that can live without
-   React lives in `@calix/core`. React is a thin binding.
+   React lives in `@alydev/core`. React is a thin binding.
 2. **The UI never knows the calendar.** All calendar math goes through a
    `CalendarAdapter`. Gregorian and Jalali are peers; neither is special-cased in UI.
 3. **Headless-first.** Behavior and accessibility are the product; markup and

@@ -19,7 +19,7 @@ pnpm test
 
 ## Repository layout
 
-- `packages/*` — publishable `@calix/*` libraries.
+- `packages/*` — publishable `@alydev/*` libraries.
 - `packages/adapters/*` — calendar adapters.
 - `apps/*` — docs site, Storybook, playground (not published).
 - `examples/*` — framework integration examples (not published).
@@ -29,8 +29,8 @@ pnpm test
 ## Development workflow
 
 1. Create a branch off `main`.
-2. Make your change. Keep business logic in `@calix/core`; keep React-specific
-   concerns in `@calix/react`. UI code must never depend on a concrete calendar.
+2. Make your change. Keep business logic in `@alydev/core`; keep React-specific
+   concerns in `@alydev/react`. UI code must never depend on a concrete calendar.
 3. Add or update tests. New behavior needs unit tests; user-facing behavior needs
    integration/e2e coverage.
 4. Run the full check locally:

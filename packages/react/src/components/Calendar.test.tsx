@@ -4,8 +4,8 @@ import userEvent from "@testing-library/user-event";
 import { Calendar } from "./Calendar.js";
 import { DatePicker } from "./DatePicker.js";
 import { TimeField } from "./TimeField.js";
-import { gregorian } from "@calix/adapter-gregorian";
-import { jalali } from "@calix/adapter-jalali";
+import { gregorian } from "@alydev/adapter-gregorian";
+import { jalali } from "@alydev/adapter-jalali";
 
 describe("<Calendar>", () => {
   it("renders a grid with weekday headers", () => {

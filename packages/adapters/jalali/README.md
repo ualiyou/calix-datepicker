@@ -1,16 +1,16 @@
-# @calix/adapter-jalali
+# @alydev/adapter-jalali
 
 The Jalali (Persian/Shamsi) calendar adapter for
 [Calix](https://github.com/calix-ui/calix-datepicker), backed by
 [date-fns-jalali](https://github.com/date-fns-jalali/date-fns-jalali).
 
 ```bash
-pnpm add @calix/react @calix/adapter-jalali
+pnpm add @alydev/react @alydev/adapter-jalali
 ```
 
 ```tsx
-import { DatePicker } from "@calix/react";
-import { jalali } from "@calix/adapter-jalali";
+import { DatePicker } from "@alydev/react";
+import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```
