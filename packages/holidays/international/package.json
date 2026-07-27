@@ -1,6 +1,6 @@
 {
   "name": "@alydev/holidays-international",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fixed international holiday data for Calix.",
   "license": "MIT",
   "type": "module",
@@ -10,7 +10,9 @@
     "url": "https://github.com/ualiyou/calix-datepicker.git",
     "directory": "packages/holidays/international"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
   "main": "./dist/index.cjs",

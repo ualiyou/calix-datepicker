@@ -1,5 +1,14 @@
 # @alydev/react
 
+## 1.0.1
+
+### Patch Changes
+
+- [`e4fd323`](https://github.com/ualiyou/calix-datepicker/commit/e4fd3235dfc312adb441168f5c20f52aa3c62196) Thanks [@ualiyou](https://github.com/ualiyou)! - Add a complete npm package README and improve npm metadata.
+
+- Updated dependencies []:
+  - @alydev/core@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "@alydev/datepicker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Accessible, headless React date picker with Gregorian and Jalali calendars, RTL, time, ranges, and TypeScript.",
   "license": "MIT",
   "type": "module",
