@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
-    "build": "vinxi build",
     "start": "vinxi start"
   },
   "dependencies": {
