@@ -1,6 +1,6 @@
 {
   "name": "@calix/react",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Headless hooks and compound components for building date pickers with Calix in React.",
   "license": "MIT",
   "type": "module",
