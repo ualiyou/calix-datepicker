@@ -28,7 +28,6 @@
     "dev": "vite build --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "vitest run",
     "clean": "rimraf dist .turbo *.tsbuildinfo"
   },
   "peerDependencies": {
