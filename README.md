@@ -19,6 +19,8 @@ calendar engine** wrapped in a **thin, headless React binding**. The UI never kn
 which calendar system is active — everything flows through a `CalendarAdapter`, so
 adding a new calendar is a new package, not a UI rewrite.
 
+Documentation: https://ualiyou.github.io/calix-datepicker/
+
 > **Status:** early development. The public API is stabilizing across the phased
 > roadmap in [`ROADMAP.md`](./ROADMAP.md).
 
