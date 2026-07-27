@@ -11,6 +11,7 @@ export default tseslint.config(
     ignores: [
       "**/dist/**",
       "**/build/**",
+      "**/out/**",
       "**/.next/**",
       "**/.source/**",
       "**/storybook-static/**",
