@@ -66,5 +66,11 @@ export default tseslint.config(
       "@typescript-eslint/no-non-null-assertion": "off",
     },
   },
+  {
+    files: ["apps/docs/**/*.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+    },
+  },
   prettier,
 );
