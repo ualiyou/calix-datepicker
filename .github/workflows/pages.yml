@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "apps/docs/**"
+      - "README.md"
       - "packages/**"
       - "pnpm-lock.yaml"
       - ".github/workflows/pages.yml"
