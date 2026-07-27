@@ -25,11 +25,12 @@ npm-debug.log*
 pnpm-debug.log*
 
 # env
-.env
-.env.local
-.env.*.local
+.env*
+!.env.example
+!.env.*.example
 
 # editor / os
+.agents/
 .DS_Store
 .idea
 .vscode/*
