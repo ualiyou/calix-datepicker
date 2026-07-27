@@ -1,6 +1,6 @@
 {
   "name": "@calix/adapter-gregorian",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Gregorian calendar adapter for Calix, powered by date-fns.",
   "license": "MIT",
   "type": "module",
@@ -10,8 +10,16 @@
     "url": "https://github.com/calix-ui/calix-datepicker.git",
     "directory": "packages/adapters/gregorian"
   },
-  "keywords": ["calendar", "datepicker", "gregorian", "date-fns", "calix"],
-  "files": ["dist"],
+  "keywords": [
+    "calendar",
+    "datepicker",
+    "gregorian",
+    "date-fns",
+    "calix"
+  ],
+  "files": [
+    "dist"
+  ],
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
   "main": "./dist/index.cjs",

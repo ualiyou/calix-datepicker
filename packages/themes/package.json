@@ -1,16 +1,26 @@
 {
   "name": "@calix/themes",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Optional CSS-variable themes for Calix. No JavaScript, no Tailwind.",
   "license": "MIT",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/calix-ui/calix-datepicker.git",
     "directory": "packages/themes"
   },
-  "keywords": ["datepicker", "calendar", "theme", "css", "calix"],
-  "files": ["*.css"],
+  "keywords": [
+    "datepicker",
+    "calendar",
+    "theme",
+    "css",
+    "calix"
+  ],
+  "files": [
+    "*.css"
+  ],
   "exports": {
     "./default.css": "./default.css",
     "./minimal.css": "./minimal.css",
