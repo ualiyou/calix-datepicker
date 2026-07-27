@@ -22,6 +22,8 @@ export interface UseDateInputOptions {
   /** Called when the text cannot be parsed. */
   onInvalid?: (raw: string) => void;
   disabled?: boolean;
+  /** Insert pattern separators while typing. */
+  mask?: boolean;
 }
 
 export interface UseDateInputReturn {
@@ -80,7 +82,7 @@ export function useDateInput(options: UseDateInputOptions): UseDateInputReturn {
       spellCheck: false,
       role: "combobox",
       "aria-label": "Date",
-      onChange: (event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value),
+      onChange: (event: ChangeEvent<HTMLInputElement>) => setInputValue(options.mask ? maskDateInput(event.target.value, pattern) : event.target.value),
       onFocus: () => {
         focusedRef.current = true;
       },
@@ -101,8 +103,24 @@ export function useDateInput(options: UseDateInputOptions): UseDateInputReturn {
         composingRef.current = false;
       },
     }),
-    [inputValue, commit, options.disabled],
+    [inputValue, commit, options.disabled, options.mask, pattern],
   );
 
   return { inputValue, setInputValue, getInputProps };
+}
+
+function maskDateInput(raw: string, pattern: string): string {
+  const digits = toLatinDigits(raw).replace(/\D/g, "");
+  const parts = pattern.match(/[yMd]+|[^yMd]+/g) ?? [];
+  let cursor = 0;
+  let output = "";
+  for (const part of parts) {
+    if (/^[yMd]+$/.test(part)) {
+      const value = digits.slice(cursor, cursor + part.length);
+      output += value;
+      cursor += value.length;
+      if (value.length < part.length) break;
+    } else if (cursor < digits.length) output += part;
+  }
+  return output;
 }

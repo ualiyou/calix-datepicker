@@ -55,7 +55,7 @@
 
 .calix-day:focus-visible,
 .calix-nav-button:focus-visible {
-  outline: 2px solid var(--calix-accent);
+  outline: 2px solid var(--calix-focus-ring);
   outline-offset: 1px;
 }
 
@@ -68,10 +68,12 @@
 }
 .calix-day[data-disabled] {
   color: var(--calix-disabled);
+  opacity: var(--calix-disabled-opacity);
   cursor: not-allowed;
 }
 .calix-day[data-outside-month] {
-  opacity: 0.5;
+  color: var(--calix-outside-month);
+  opacity: var(--calix-disabled-opacity);
 }
 
 @media (prefers-reduced-motion: reduce) {

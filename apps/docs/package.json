@@ -8,6 +8,9 @@
     "build": "next build",
     "start": "next start",
     "postinstall": "fumadocs-mdx",
+    "predev": "fumadocs-mdx",
+    "prebuild": "fumadocs-mdx",
+    "pretypecheck": "fumadocs-mdx",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "clean": "rimraf .next .turbo .source"
@@ -18,6 +21,8 @@
     "@alydev/core": "workspace:*",
     "@alydev/icons": "workspace:*",
     "@alydev/datepicker": "workspace:*",
+    "@alydev/holidays-international": "workspace:*",
+    "@alydev/holidays-iran": "workspace:*",
     "@alydev/themes": "workspace:*",
     "fumadocs-core": "^14.7.0",
     "fumadocs-mdx": "^11.2.0",

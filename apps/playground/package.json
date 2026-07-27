@@ -17,6 +17,8 @@
     "@alydev/core": "workspace:*",
     "@alydev/icons": "workspace:*",
     "@alydev/datepicker": "workspace:*",
+    "@alydev/holidays-international": "workspace:*",
+    "@alydev/holidays-iran": "workspace:*",
     "@alydev/themes": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

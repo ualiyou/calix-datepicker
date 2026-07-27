@@ -8,6 +8,7 @@ import {
   type CalendarGrid,
   type DateConstraints,
   type Direction,
+  type Holiday,
   type MonthView,
   type SelectionContext,
   type Weekday,
@@ -21,10 +22,19 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
-import type { DayProps, GridProps, NavButtonProps, UseCalendarOptions } from "../types.js";
+import {
+  defaultPickerLabels,
+  type ColorTheme,
+  type DayProps,
+  type GridProps,
+  type NavButtonProps,
+  type PickerLabels,
+  type UseCalendarOptions,
+} from "../types.js";
 import { useControllableState } from "../utils/useControllableState.js";
 import {
   emptyPublicValue,
+  formatCalixValue,
   toInternalValue,
   toPublicValue,
   type CalixValue,
@@ -34,6 +44,8 @@ export interface UseCalendarReturn {
   adapter: UseCalendarOptions["adapter"];
   locale: string;
   dir: Direction;
+  theme: ColorTheme;
+  labels: PickerLabels;
   weekStartsOn: Weekday;
   /** Visible month grids (one per `numberOfMonths`). */
   grids: CalendarGrid[];
@@ -49,6 +61,7 @@ export interface UseCalendarReturn {
   goToNextYear: () => void;
   goToPrevYear: () => void;
   goToMonth: (view: MonthView) => void;
+  /** Navigate to and select today. */
   goToToday: () => void;
   select: (date: CalendarDate) => void;
   clear: () => void;
@@ -57,8 +70,9 @@ export interface UseCalendarReturn {
   isRangeEnd: (date: CalendarDate) => boolean;
   isInRange: (date: CalendarDate) => boolean;
   isDisabled: (date: CalendarDate) => boolean;
+  getHoliday: (date: CalendarDate) => Holiday | undefined;
   setPreview: (date: CalendarDate | null) => void;
-  getDayProps: (date: CalendarDate) => DayProps;
+  getDayProps: (date: CalendarDate, view?: MonthView) => DayProps;
   getGridProps: () => GridProps;
   getPrevButtonProps: () => NavButtonProps;
   getNextButtonProps: () => NavButtonProps;
@@ -84,12 +98,29 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
   } = options;
 
   const dir: Direction = options.dir ?? (adapter.isRTL(locale) ? "rtl" : "ltr");
+  const theme = options.theme ?? "dark";
+  const labels = useMemo(
+    () => ({ ...defaultPickerLabels(locale), ...options.labels }),
+    [locale, options.labels],
+  );
   const weekStartsOn = options.weekStartsOn ?? defaultWeekStart(locale);
 
   const [value, setValue] = useControllableState<CalixValue>({
     value: options.value,
     defaultValue: options.defaultValue ?? emptyPublicValue(mode),
-    onChange: options.onChange,
+    onChange: (next) => {
+      options.onChange?.(next);
+      if (options.onOutputChange) {
+        const output = formatCalixValue(
+          next,
+          adapter,
+          locale,
+          options.outputPattern ?? "yyyy-MM-dd",
+          options.outputFormat,
+        );
+        options.onOutputChange(output);
+      }
+    },
   });
 
   const strategy = useMemo(() => getSelectionStrategy(mode), [mode]);
@@ -99,7 +130,7 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
   );
 
   // Compile declarative constraints into a fast predicate.
-  const isDisabled = useMemo(() => {
+  const baseIsDisabled = useMemo(() => {
     const c: DateConstraints = {
       ...(options.minDate ? { min: adapter.fromDate(options.minDate) } : {}),
       ...(options.maxDate ? { max: adapter.fromDate(options.maxDate) } : {}),
@@ -118,6 +149,25 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     };
     return buildDisabledPredicate(c, adapter);
   }, [adapter, options]);
+
+  const holidaysByDate = useMemo(() => {
+    const holidays = new Map<string, Holiday>();
+    for (const holiday of options.holidayData ?? []) {
+      holidays.set(dateKey(adapter.fromDate(holiday.date)), holiday);
+    }
+    return holidays;
+  }, [adapter, options.holidayData]);
+  const getHoliday = useCallback(
+    (date: CalendarDate) => holidaysByDate.get(dateKey(date)),
+    [holidaysByDate],
+  );
+  const showHolidays = options.showHolidays ?? false;
+  const holidaysSelectable = options.holidaysSelectable ?? true;
+  const isDisabled = useCallback(
+    (date: CalendarDate) =>
+      baseIsDisabled(date) || (!holidaysSelectable && getHoliday(date) != null),
+    [baseIsDisabled, getHoliday, holidaysSelectable],
+  );
 
   const initialAnchor = useMemo<CalendarDate>(() => {
     if (options.defaultMonth) return adapter.startOfMonth(adapter.fromDate(options.defaultMonth));
@@ -223,21 +273,16 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     (view: MonthView) => setViewDate({ year: view.year, month: view.month, day: 1 }),
     [],
   );
-  const goToNextMonth = useCallback(
-    () => setViewDate((v) => adapter.addMonths(v, 1)),
-    [adapter],
-  );
-  const goToPrevMonth = useCallback(
-    () => setViewDate((v) => adapter.addMonths(v, -1)),
-    [adapter],
-  );
+  const goToNextMonth = useCallback(() => setViewDate((v) => adapter.addMonths(v, 1)), [adapter]);
+  const goToPrevMonth = useCallback(() => setViewDate((v) => adapter.addMonths(v, -1)), [adapter]);
   const goToNextYear = useCallback(() => setViewDate((v) => adapter.addYears(v, 1)), [adapter]);
   const goToPrevYear = useCallback(() => setViewDate((v) => adapter.addYears(v, -1)), [adapter]);
   const goToToday = useCallback(() => {
     const today = adapter.today();
     setViewDate(adapter.startOfMonth(today));
     moveFocus(today);
-  }, [adapter, moveFocus]);
+    select(today);
+  }, [adapter, moveFocus, select]);
 
   const handleDayKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>, date: CalendarDate) => {
@@ -299,15 +344,17 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
   );
 
   const getDayProps = useCallback(
-    (date: CalendarDate): DayProps => {
-      const disabled = isDisabled(date);
+    (date: CalendarDate, view: MonthView = viewDate): DayProps => {
+      const outside = !adapter.isSameMonth(date, { ...view, day: 1 });
+      const disabled = outside || isDisabled(date);
       const selected = isSelected(date);
       const focused = adapter.isSameDay(date, focusedDate);
       const today = adapter.isSameDay(date, adapter.today());
-      const outside = !adapter.isSameMonth(date, viewDate) && numberOfMonths === 1;
       const weekday = adapter.getWeekday(date);
       const weekend = weekday === 0 || weekday === 6;
+      const holiday = showHolidays ? getHoliday(date) : undefined;
       const flag = (on: boolean) => (on ? ("" as const) : undefined);
+      const label = adapter.format(date, "EEEE d MMMM yyyy", locale);
 
       return {
         type: "button",
@@ -317,7 +364,7 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
         "aria-selected": selected,
         "aria-disabled": disabled || undefined,
         "aria-current": today ? "date" : undefined,
-        "aria-label": adapter.format(date, "EEEE d MMMM yyyy", locale),
+        "aria-label": holiday ? `${label} — ${holiday.name}` : label,
         "data-selected": flag(selected),
         "data-today": flag(today),
         "data-disabled": flag(disabled),
@@ -327,6 +374,9 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
         "data-in-range": flag(isInRange(date)),
         "data-focused": flag(focused),
         "data-weekend": flag(weekend),
+        "data-holiday": flag(holiday != null),
+        "data-holiday-name": holiday?.name,
+        title: holiday?.name,
         ref: (node: HTMLButtonElement | null) => {
           const key = dateKey(date);
           if (node) dayRefs.current.set(key, node);
@@ -346,7 +396,6 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
       locale,
       focusedDate,
       viewDate,
-      numberOfMonths,
       mode,
       isDisabled,
       isSelected,
@@ -355,13 +404,12 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
       isInRange,
       select,
       handleDayKeyDown,
+      getHoliday,
+      showHolidays,
     ],
   );
 
-  const getGridProps = useCallback(
-    (): GridProps => ({ role: "grid", dir }),
-    [dir],
-  );
+  const getGridProps = useCallback((): GridProps => ({ role: "grid", dir }), [dir]);
   const getPrevButtonProps = useCallback(
     (): NavButtonProps => ({
       type: "button",
@@ -383,6 +431,8 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     adapter,
     locale,
     dir,
+    theme,
+    labels,
     weekStartsOn,
     grids,
     weekdays,
@@ -403,6 +453,7 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     isRangeEnd,
     isInRange,
     isDisabled,
+    getHoliday,
     setPreview,
     getDayProps,
     getGridProps,

@@ -43,6 +43,9 @@ export type {
   UseCalendarOptions,
   CalixConstraints,
   CalendarClassNames,
+  ColorTheme,
+  OutputFormat,
+  PickerLabels,
   DayProps,
   GridProps,
   NavButtonProps,
@@ -60,4 +63,5 @@ export type {
   SelectionMode,
   Weekday,
   Direction,
+  Holiday,
 } from "@alydev/core";

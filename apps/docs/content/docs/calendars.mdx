@@ -1,20 +1,22 @@
 ---
 title: Calendar systems
-description: How Calix stays calendar-agnostic, and how to add your own.
+description: Built-in calendars and the contract for custom adapters.
 ---
 
-Calix stores dates as calendar-agnostic parts, never as a JS `Date`:
+Calix keeps calendar behavior behind `CalendarAdapter`. Components never need to
+know how a month rolls over, which digits a locale uses, or how to parse a
+date—those are adapter responsibilities.
+
+At the React boundary, values are JavaScript `Date` objects. Within the core,
+an adapter works with calendar-neutral parts:
 
 ```ts
 interface CalendarDate {
   year: number;
   month: number; // 1-based
-  day: number;
+  day: number; // 1-based
 }
 ```
-
-All calendar math flows through a `CalendarAdapter`. The UI depends only on the
-interface, so Gregorian, Jalali, and any future calendar are peers.
 
 ## Built-in adapters
 
@@ -22,20 +24,27 @@ interface, so Gregorian, Jalali, and any future calendar are peers.
 import { gregorian } from "@alydev/adapter-gregorian";
 import { jalali } from "@alydev/adapter-jalali";
 
-<DatePicker adapter={gregorian} locale="en-US" />
-<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />
+<DatePicker adapter={gregorian} locale="en-US" />;
+<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```
 
-Adapters are **stateless singletons** — share one instance everywhere. Locale is
-always a parameter, never adapter state, so the same Gregorian adapter serves
-`en-US`, `en-GB`, `fr-FR`, and more.
+Both are stateless singletons. Reuse the exported adapter everywhere; locale is
+always passed to the component rather than stored on the adapter. One Gregorian
+adapter can therefore serve `en-US`, `en-GB`, and `fr-FR` at the same time.
 
-## Writing a custom adapter
+## Adapter responsibilities
 
-Implement the `CalendarAdapter` interface from `@alydev/core`. The shared
-`generateMonthGrid` helper builds the month grid from your primitives, so you
-only implement calendar-specific logic (`startOfMonth`, `addDays`, `daysInMonth`,
-`getWeekday`, `format`, `parse`, …).
+Implement a custom adapter when the bundled calendars do not cover your system.
+`CalendarAdapter` includes:
+
+- conversion between `CalendarDate` and local JavaScript `Date`;
+- arithmetic (`addDays`, `addMonths`, `addYears`) and month boundaries;
+- month-grid and week-number support;
+- comparison and equality;
+- localized month, weekday, and era names;
+- parsing, formatting, and RTL detection.
+
+The `@alydev/core` helpers can do the generic parts:
 
 ```ts
 import { generateMonthGrid, type CalendarAdapter } from "@alydev/core";
@@ -43,9 +52,18 @@ import { generateMonthGrid, type CalendarAdapter } from "@alydev/core";
 export const myCalendar: CalendarAdapter = {
   id: "my-calendar",
   defaultLocale: "en-US",
-  // ...implement the interface
+  // Implement conversion, arithmetic, names, formatting, parsing, and comparisons.
   getMonthGrid: (view, options) => generateMonthGrid(myCalendar, view, options),
 };
 ```
 
-See the [API Reference](/docs/api-reference) for the full interface.
+Use [`CalendarAdapter` in the API reference](/docs/api-reference#calendaradapter)
+as the definitive method list. The repository's [adapter architecture](https://github.com/ualiyou/calix-datepicker/tree/main/docs/architecture/02-calendar-adapter.md)
+explains the design decisions.
+
+## Time zones
+
+Calix uses local JavaScript `Date` conversion at its public boundary. It is a
+date/time picker, not a time-zone conversion library. If your application
+stores instants in UTC, convert at your application boundary and keep the
+calendar's selected local date separate from server serialization.

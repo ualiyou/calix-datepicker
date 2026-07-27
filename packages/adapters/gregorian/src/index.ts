@@ -86,8 +86,8 @@ export const gregorian: CalendarAdapter = {
   isSameMonth: (a, b) => a.year === b.year && a.month === b.month,
   isSameYear: (a, b) => a.year === b.year,
 
-  format: (date, pattern, locale = gregorian.defaultLocale) =>
-    formatTokens(date, undefined, pattern, {
+  format: (date, pattern, locale = gregorian.defaultLocale, time) =>
+    formatTokens(date, time, pattern, {
       monthNamesLong: monthNames(locale, "long"),
       monthNamesShort: monthNames(locale, "short"),
       weekdayNamesLong: weekdayNames(locale, "long", CAL),

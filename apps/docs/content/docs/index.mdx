@@ -1,37 +1,52 @@
 ---
 title: Introduction
-description: A production-grade, headless, multi-calendar DatePicker for React.
+description: A headless, accessible, multi-calendar date picker for React.
 ---
 
-**Calix** is a from-scratch, modern React date picker built around a
-framework-agnostic calendar engine. The UI never knows which calendar system is
-active — everything flows through a `CalendarAdapter`, so Gregorian and Jalali
-are interchangeable with a single prop, and new calendars are new packages, not
-UI rewrites.
+**Calix** is a React date picker whose calendar rules are independent of its UI.
+It stores the selection as ordinary JavaScript `Date` values at the public API,
+while adapters handle calendar-specific arithmetic, names, parsing, and layout.
 
-## Highlights
+That separation lets the same component render Gregorian or Jalali dates without
+a second picker, duplicated styling, or locale-specific UI branches.
 
-- **Headless-first.** Calix owns state, behavior, and accessibility; you own the
-  markup. A default theme is available when you want one.
-- **Multi-calendar.** Gregorian and Jalali (Persian) today, both interchangeable.
-- **No styling lock-in.** No Tailwind or shadcn dependency in the library. Styling
-  is a contract of class names, `data-*` attributes, and CSS variables.
-- **Modern React.** React 19, React-Compiler-friendly, SSR and RSC safe,
-  tree-shakeable, side-effect free.
-- **Accessible.** WCAG AA target, full keyboard model, focus management, screen
-  reader announcements, reduced-motion and high-contrast support.
+## What you get
+
+- **Selection:** single, multiple, range, week, month, quarter, and year modes.
+- **Calendars:** bundled Gregorian and Jalali adapters; custom adapters are supported.
+- **Rendering choices:** `DatePicker` for a popover, `Calendar` for inline use,
+  or hooks and compound components for complete DOM control.
+- **Constraints:** min/max dates, allow/deny lists, weekdays, months, years,
+  holidays, business days, and a custom disabled-date predicate.
+- **Localization:** BCP-47 locales, RTL, localized digits, labels, and configurable week starts.
+- **Styling:** no required CSS framework; semantic classes, `data-*` state, and optional themes.
+- **Accessibility:** keyboard navigation, roving focus, ARIA grid semantics, and focus restoration.
 
 <Playground />
 
+## Choose an entry point
+
+| Need                                  | Start with                                                      |
+| ------------------------------------- | --------------------------------------------------------------- |
+| A standard trigger and popup calendar | [`<DatePicker>`](/docs/getting-started)                         |
+| An always-visible calendar            | [`<Calendar>`](/docs/getting-started#an-inline-calendar)        |
+| Custom popup layout or trigger        | [Compound `DatePicker` parts](/docs/hooks#compound-date-picker) |
+| Your own calendar markup              | [`useCalendar`](/docs/hooks#usecalendar)                        |
+| A date text field                     | [`useDateInput`](/docs/hooks#usedateinput)                      |
+| A standalone clock-time field         | [`TimeField`](/docs/picker-modes#time)                          |
+
 ## Packages
 
-| Package | Purpose |
-| --- | --- |
-| `@alydev/core` | Framework-agnostic engine. Zero runtime deps. |
-| `@alydev/datepicker` | Headless hooks + compound components. |
-| `@alydev/adapter-gregorian` | Gregorian adapter (date-fns). |
-| `@alydev/adapter-jalali` | Jalali adapter (date-fns-jalali). |
-| `@alydev/themes` | Optional CSS-variable themes. |
-| `@alydev/icons` | Tree-shakeable SVG icons. |
+| Package                     | Purpose                                                                        |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `@alydev/datepicker`        | React components, hooks, and public value helpers.                             |
+| `@alydev/core`              | Calendar contracts, selection strategies, validation, parsing, and formatting. |
+| `@alydev/adapter-gregorian` | Gregorian adapter, backed by `date-fns`.                                       |
+| `@alydev/adapter-jalali`    | Jalali/Persian adapter, backed by `date-fns-jalali`.                           |
+| `@alydev/holidays-iran`     | Maintained Iranian public-holiday data for Jalali years 1400–1420.             |
+| `@alydev/holidays-international` | New Year's Day and Christmas Day data for 2000–2100.                      |
+| `@alydev/themes`            | Optional default and minimal CSS themes.                                       |
+| `@alydev/icons`             | Tree-shakeable SVG icons.                                                      |
 
-Continue to [Installation](/docs/installation).
+Continue with [Installation](/docs/installation), then build your first picker in
+[Getting Started](/docs/getting-started).

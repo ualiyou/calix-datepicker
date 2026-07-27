@@ -1,17 +1,21 @@
 "use client";
 import { FloatingFocusManager, FloatingPortal } from "@floating-ui/react";
-import type { CalendarDate } from "@alydev/core";
+import type { CalendarDate, Time } from "@alydev/core";
 import {
+  useEffect,
   useMemo,
+  useRef,
+  useState,
   type ButtonHTMLAttributes,
   type InputHTMLAttributes,
   type ReactNode,
 } from "react";
 import { useDatePicker, type UseDatePickerOptions } from "../hooks/useDatePicker.js";
 import { useDateInput } from "../hooks/useDateInput.js";
-import type { CalendarClassNames } from "../types.js";
+import type { CalixValue, CalendarClassNames } from "../types.js";
 import { CalendarView } from "./CalendarView.js";
 import { DatePickerContext, useDatePickerContext } from "./context.js";
+import { TimeField, type TimeFieldProps } from "./TimeField.js";
 
 /* ------------------------------------------------------------------- Root */
 
@@ -52,10 +56,11 @@ function Trigger({ children, ...rest }: DatePickerTriggerProps) {
 export interface DatePickerInputProps extends InputHTMLAttributes<HTMLInputElement> {
   /** Format/parse pattern, e.g. `"yyyy/MM/dd"`. */
   pattern?: string;
+  mask?: boolean;
 }
 
 /** A text input bound to the picker value (single-date mode). */
-function Input({ pattern = "yyyy/MM/dd", ...rest }: DatePickerInputProps) {
+function Input({ pattern = "yyyy/MM/dd", mask = false, ...rest }: DatePickerInputProps) {
   const { calendar, refs, getReferenceProps } = useDatePickerContext();
   const adapter = calendar.adapter;
   const current = (calendar.value as Date | null) ?? null;
@@ -65,11 +70,19 @@ function Input({ pattern = "yyyy/MM/dd", ...rest }: DatePickerInputProps) {
     locale: calendar.locale,
     pattern,
     value: current ? adapter.fromDate(current) : null,
-    onCommit: (cd: CalendarDate | null) =>
-      calendar.setValue(cd ? adapter.toDate(cd) : null),
+    mask,
+    onCommit: (cd: CalendarDate | null) => calendar.setValue(cd ? adapter.toDate(cd) : null),
   });
 
-  return <input ref={refs.setReference} {...getInputProps()} {...getReferenceProps()} {...rest} />;
+  return (
+    <input
+      ref={refs.setReference}
+      data-theme={calendar.theme}
+      {...getInputProps()}
+      {...getReferenceProps()}
+      {...rest}
+    />
+  );
 }
 
 /* ---------------------------------------------------------------- Content */
@@ -77,12 +90,19 @@ function Input({ pattern = "yyyy/MM/dd", ...rest }: DatePickerInputProps) {
 export interface DatePickerContentProps {
   children?: ReactNode;
   classNames?: CalendarClassNames;
+  /** Show the Today control in the default calendar. Default: true. */
+  showToday?: boolean;
   /** Render into a portal at the document body. Default: true. */
   portal?: boolean;
 }
 
 /** The popover surface. Renders the calendar unless custom children are given. */
-function Content({ children, classNames, portal = true }: DatePickerContentProps) {
+function Content({
+  children,
+  classNames,
+  showToday = true,
+  portal = true,
+}: DatePickerContentProps) {
   const { open, context, refs, floatingStyles, getFloatingProps, calendar } =
     useDatePickerContext();
 
@@ -94,11 +114,16 @@ function Content({ children, classNames, portal = true }: DatePickerContentProps
         ref={refs.setFloating}
         style={floatingStyles}
         className="calix-popover"
+        data-theme={calendar.theme}
         data-calix-popover=""
         {...getFloatingProps()}
       >
         {children ?? (
-          <CalendarView calendar={calendar} {...(classNames ? { classNames } : {})} />
+          <CalendarView
+            calendar={calendar}
+            {...(classNames ? { classNames } : {})}
+            showToday={showToday}
+          />
         )}
       </div>
     </FloatingFocusManager>
@@ -114,6 +139,13 @@ export interface DatePickerProps extends UseDatePickerOptions {
   placeholder?: string;
   pattern?: string;
   classNames?: CalendarClassNames;
+  /** Show a time field after selecting a date. Default: false. Single-date mode only. */
+  withTime?: boolean;
+  /** Options forwarded to the optional time field. */
+  timePickerProps?: Omit<TimeFieldProps, "value" | "defaultValue" | "onChange">;
+  showToday?: boolean;
+  showClear?: boolean;
+  infiniteScroll?: boolean;
 }
 
 function formatTrigger(
@@ -123,7 +155,8 @@ function formatTrigger(
   pattern: string,
   placeholder: string,
 ): string {
-  if (value instanceof Date) return adapter.format(adapter.fromDate(value), pattern, locale);
+  if (value instanceof Date)
+    return adapter.format(adapter.fromDate(value), pattern, locale, toTime(value));
   if (value && typeof value === "object" && "start" in value) {
     const r = value as { start: Date | null; end: Date | null };
     if (!r.start) return placeholder;
@@ -141,22 +174,162 @@ function formatTrigger(
  */
 function DatePickerBase({
   placeholder = "Select date",
-  pattern = "yyyy/MM/dd",
+  pattern,
   classNames,
+  withTime = false,
+  timePickerProps,
+  showToday = true,
+  showClear = false,
+  infiniteScroll = false,
   ...options
 }: DatePickerProps) {
   const locale = options.locale ?? options.adapter.defaultLocale;
+  const displayPattern = pattern ?? (withTime ? "yyyy/MM/dd HH:mm" : "yyyy/MM/dd");
   return (
-    <Root {...options}>
+    <Root
+      {...options}
+      {...(withTime
+        ? {
+            closeOnSelect: false,
+            outputPattern: options.outputPattern ?? "yyyy-MM-dd HH:mm",
+          }
+        : {})}
+    >
       <TriggerLabel
         placeholder={placeholder}
-        pattern={pattern}
+        pattern={displayPattern}
         adapter={options.adapter}
         locale={locale}
       />
-      <Content {...(classNames ? { classNames } : {})} />
+      <Content>
+        {withTime ? (
+          <DateTimeContent
+            classNames={classNames}
+            timePickerProps={timePickerProps}
+            showToday={showToday}
+            showClear={showClear}
+            infiniteScroll={infiniteScroll}
+          />
+        ) : (
+          <DefaultContent
+            classNames={classNames}
+            showToday={showToday}
+            showClear={showClear}
+            infiniteScroll={infiniteScroll}
+          />
+        )}
+      </Content>
     </Root>
   );
+}
+
+function DefaultContent({
+  classNames,
+  showToday,
+  showClear,
+  infiniteScroll,
+}: {
+  classNames?: CalendarClassNames | undefined;
+  showToday: boolean;
+  showClear: boolean;
+  infiniteScroll: boolean;
+}) {
+  const { calendar } = useDatePickerContext();
+  return (
+    <CalendarView
+      calendar={calendar}
+      {...(classNames ? { classNames } : {})}
+      showToday={showToday}
+      showClear={showClear}
+      infiniteScroll={infiniteScroll}
+    />
+  );
+}
+
+function DateTimeContent({
+  classNames,
+  timePickerProps,
+  showToday,
+  showClear,
+  infiniteScroll,
+}: {
+  classNames?: CalendarClassNames | undefined;
+  timePickerProps?: DatePickerProps["timePickerProps"] | undefined;
+  showToday: boolean;
+  showClear: boolean;
+  infiniteScroll: boolean;
+}) {
+  const { calendar } = useDatePickerContext();
+  const date = timeTarget(calendar.value);
+  const [step, setStep] = useState<"date" | "time">(date ? "time" : "date");
+  const lastDate = useRef(date?.getTime());
+
+  useEffect(() => {
+    const nextDate = date?.getTime();
+    if (nextDate !== undefined && nextDate !== lastDate.current) setStep("time");
+    lastDate.current = nextDate;
+  }, [date]);
+
+  return (
+    <div className="calix-date-time-picker">
+      {step === "date" || !date ? (
+        <CalendarView
+          calendar={calendar}
+          {...(classNames ? { classNames } : {})}
+          showToday={showToday}
+          showClear={showClear}
+          infiniteScroll={infiniteScroll}
+        />
+      ) : (
+        <div className="calix-time-step">
+          <button type="button" className="calix-time-back" onClick={() => setStep("date")}>
+            {calendar.labels?.back ?? "Back"}
+          </button>
+          <p className="calix-time-step-title">{calendar.labels?.selectTime ?? "Select time"}</p>
+          <TimeField
+            {...timePickerProps}
+            labels={{ ...calendar.labels, ...timePickerProps?.labels }}
+            theme={calendar.theme}
+            variant={timePickerProps?.variant ?? "wheel"}
+            value={toTime(date)}
+            onChange={(time) => calendar.setValue(setTargetTime(calendar.value, date, time))}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function toTime(date: Date): Time {
+  return {
+    hour: date.getHours(),
+    minute: date.getMinutes(),
+    second: date.getSeconds(),
+    millisecond: date.getMilliseconds(),
+  };
+}
+
+function withTime(date: Date, time: Time): Date {
+  const next = new Date(date);
+  next.setHours(time.hour, time.minute, time.second, time.millisecond);
+  return next;
+}
+
+function timeTarget(value: CalixValue): Date | null {
+  if (value instanceof Date) return value;
+  if (Array.isArray(value)) return value.at(-1) ?? null;
+  if (value && typeof value === "object" && "start" in value) {
+    return value.end;
+  }
+  return null;
+}
+
+function setTargetTime(value: CalixValue, target: Date, time: Time): CalixValue {
+  const next = withTime(target, time);
+  if (value instanceof Date) return next;
+  if (Array.isArray(value)) return [...value.slice(0, -1), next];
+  if (value && typeof value === "object" && "start" in value) return { ...value, end: next };
+  return next;
 }
 
 function TriggerLabel({
@@ -176,7 +349,11 @@ function TriggerLabel({
     [calendar.value, adapter, locale, pattern, placeholder],
   );
   return (
-    <Trigger className="calix-trigger" data-empty={calendar.value == null ? "" : undefined}>
+    <Trigger
+      className="calix-trigger"
+      data-theme={calendar.theme}
+      data-empty={calendar.value == null ? "" : undefined}
+    >
       {label}
     </Trigger>
   );

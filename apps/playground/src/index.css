@@ -62,6 +62,15 @@ output {
   border-radius: 0.75rem;
   background: #eeece8;
 }
+.switch-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #6b6b73;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 
 .calendar-switch button {
   border: 0;
@@ -108,16 +117,33 @@ output {
 }
 
 @media (max-width: 640px) {
-  .playground { padding: 2.5rem 1rem; }
-  .demo-section { overflow-x: auto; }
+  .playground {
+    padding: 2.5rem 1rem;
+  }
+  .calix-months {
+    flex-direction: column;
+  }
 }
 @media (prefers-color-scheme: dark) {
   body {
     background: #121212;
     color: #f4f4f5;
   }
-  .calendar-switch { background: #252525; border-color: #383838; }
+  .calendar-switch {
+    background: #252525;
+    border-color: #383838;
+  }
   .calendar-switch button[data-active],
-  .demo-section { background: #1b1b1d; color: #f4f4f5; border-color: #333337; }
-  .playground-header p, .demo-section output { color: #a1a1aa; }
+  .demo-section {
+    background: #1b1b1d;
+    color: #f4f4f5;
+    border-color: #333337;
+  }
+  .playground-header p,
+  .demo-section output {
+    color: #a1a1aa;
+  }
+  .switch-label {
+    color: #a1a1aa;
+  }
 }

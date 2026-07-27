@@ -1,35 +1,53 @@
 ---
 title: Migration
-description: Moving to Calix from other date pickers.
+description: Map common date-picker concepts to Calix.
 ---
+
+Calix uses `value` and `onChange` consistently across its components. It exposes
+native `Date` values and range objects, and keeps calendar-specific behavior in
+the adapter prop.
 
 ## From react-day-picker
 
-| react-day-picker | Calix |
-| --- | --- |
-| `<DayPicker mode="single" />` | `<Calendar mode="single" />` |
-| `selected` / `onSelect` | `value` / `onChange` |
-| `disabled={matchers}` | `disabledDates`, `disabledWeekdays`, `minDate`, `maxDate`, `isDateDisabled` |
-| `numberOfMonths` | `numberOfMonths` |
-| CSS modules / `classNames` | `classNames` + `data-*` contract |
+| react-day-picker              | Calix                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------ |
+| `<DayPicker mode="single" />` | `<Calendar mode="single" />`                                                   |
+| `selected` / `onSelect`       | `value` / `onChange`                                                           |
+| `disabled={matchers}`         | `minDate`, `maxDate`, `disabledDates`, `disabledWeekdays`, or `isDateDisabled` |
+| `numberOfMonths`              | `numberOfMonths`                                                               |
+| `classNames`                  | `classNames` plus the `data-*` state contract                                  |
 
-Calix additionally provides Jalali support, a popup `DatePicker`, and headless
-hooks.
+Add `adapter={gregorian}` to the Calix component. Unlike react-day-picker,
+Calix includes a popup `DatePicker` and a Jalali adapter.
 
-## From MUI X / Ant Design / Mantine
+## From MUI X, Ant Design, or Mantine
 
-Those pickers couple styling to their design systems. Calix is headless: import
-`@alydev/themes/default.css` for a batteries-included look, or style the `data-*`
-contract yourself with any technology. Values are plain `Date`s (or `{ start,
-end }` for ranges), so wiring into forms is straightforward.
+These libraries couple calendar UI to their component systems. With Calix, choose
+one of three migration paths:
 
-## Jalali migration
+1. import `@alydev/themes/default.css` for a ready appearance;
+2. attach your existing utility/CSS classes with `classNames`;
+3. render entirely custom markup with `useCalendar`.
 
-If you previously used a Persian-only picker, switch by passing the Jalali
-adapter — no separate component, no forked styling:
+The form value mapping is usually direct:
+
+```tsx
+const [value, setValue] = useState<Date | null>(null);
+<DatePicker adapter={gregorian} value={value} onChange={setValue} />;
+```
+
+For ranges, initialize with `{ start: null, end: null }`. Use `onOutputChange`
+and `outputPattern` only when an external API needs a serialized value.
+
+## Add Jalali without a separate picker
+
+Replace the adapter and locale; selection and styling APIs stay the same.
 
 ```tsx
 import { jalali } from "@alydev/adapter-jalali";
 
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
 ```
+
+Review [Localization](/docs/localization) if your previous picker used custom
+Persian labels, week starts, or digit formatting.

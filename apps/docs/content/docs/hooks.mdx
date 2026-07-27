@@ -1,14 +1,17 @@
 ---
 title: Hooks
-description: Go fully headless — bring your own markup.
+description: Build custom calendar and picker UI while retaining Calix behavior.
 ---
 
-Every component is built on hooks. Drop down to them for total control over the
-DOM while keeping Calix's state, behavior, and accessibility.
+Every component is built on hooks. Use them when the supplied DOM does not match
+your product, while keeping Calix selection logic, keyboard behavior, and
+accessibility attributes.
 
 ## `useCalendar`
 
-The workhorse. Owns the visible month, roving focus, selection, and prop-getters.
+`useCalendar` owns visible months, focused day, selection, constraints, and
+prop getters. It accepts the same selection and localization options as
+`Calendar`.
 
 ```tsx
 import { useCalendar } from "@alydev/datepicker";
@@ -18,47 +21,109 @@ function MyCalendar() {
   const cal = useCalendar({ adapter: gregorian, locale: "en-US" });
 
   return (
-    <div {...cal.getGridProps()}>
-      <div className="row">
-        {cal.weekdays.map((d) => (
-          <span key={d}>{d}</span>
-        ))}
-      </div>
-      {cal.grids[0].weeks.map((week, i) => (
-        <div key={i} className="row">
-          {week.days.map((cell) => (
-            <button key={cell.date.day} {...cal.getDayProps(cell.date)} />
+    <section>
+      <button {...cal.getPrevButtonProps()}>Previous</button>
+      <span>{cal.getMonthLabel(cal.grids[0].view)}</span>
+      <button {...cal.getNextButtonProps()}>Next</button>
+
+      <div {...cal.getGridProps()}>
+        <div role="row">
+          {cal.weekdays.map((name) => (
+            <span key={name} role="columnheader">
+              {name}
+            </span>
           ))}
         </div>
-      ))}
+        {cal.grids[0].weeks.map((week) => (
+          <div key={week.weekNumber} role="row">
+            {week.days.map((cell) => (
+              <button
+                key={`${cell.date.year}-${cell.date.month}-${cell.date.day}`}
+                {...cal.getDayProps(cell.date, cal.grids[0].view)}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+```
+
+Important return values include `grids`, `weekdays`, `focusedDate`, `value`,
+`setValue`, `select`, `clear`, `goToMonth`, previous/next month and year
+navigation, plus `isSelected`, `isDisabled`, and range-state helpers.
+
+Always spread `getGridProps` and `getDayProps` onto their matching elements.
+`getDayProps` supplies the button type, ARIA state, roving `tabIndex`, keyboard
+handlers, selection handler, and `data-*` state.
+
+## `useDatePicker`
+
+`useDatePicker` combines `useCalendar` with Floating UI positioning and popup
+state. Use it when you need a custom trigger or surface.
+
+```tsx
+const picker = useDatePicker({ adapter: gregorian, placement: "bottom-start" });
+
+<button ref={picker.refs.setReference} {...picker.getReferenceProps()}>
+  Choose date
+</button>;
+
+{
+  picker.open && (
+    <div ref={picker.refs.setFloating} style={picker.floatingStyles} {...picker.getFloatingProps()}>
+      {/* render picker.calendar with CalendarView or your own markup */}
     </div>
   );
 }
 ```
 
-`getDayProps` returns accessible attributes plus `data-selected`, `data-today`,
-`data-in-range`, `data-disabled`, and more — style against these.
-
-## `useDatePicker`
-
-Composes `useCalendar` with a Floating UI popover and open-state management.
-Returns `getReferenceProps`, `getFloatingProps`, and the floating refs.
+Control open state with `open`, `defaultOpen`, and `onOpenChange`. `placement`
+defaults to `"bottom-start"`, `offset` to `8`, and `closeOnSelect` to `true`.
 
 ## `useDateInput`
 
-Masked, auto-formatting text input with parsing, paste, and IME support.
+Use this hook for a text input bound to calendar date parts. It parses on blur
+or Enter, normalizes Persian/Arabic-Indic digits, and reports invalid input
+without replacing the last valid value.
 
 ```tsx
 const { getInputProps } = useDateInput({
   adapter: gregorian,
   pattern: "yyyy/MM/dd",
-  value: selected,
-  onCommit: setSelected,
+  value: selected ? gregorian.fromDate(selected) : null,
+  mask: true,
+  onCommit: (date) => setSelected(date ? gregorian.toDate(date) : null),
+  onInvalid: (raw) => console.warn("Invalid date:", raw),
 });
+
 <input {...getInputProps()} />;
 ```
 
 ## `useTime`
 
-Controlled/uncontrolled clock-time state with hour-cycle awareness, powering
-`TimeField`.
+`useTime` provides controlled or uncontrolled wall-clock state for a custom
+time UI. It exposes `value`, `displayHour`, `meridiem`, setters, and increment
+functions that honor `hourCycle`, `minuteStep`, and `secondStep`.
+
+```tsx
+const time = useTime({ defaultValue: { hour: 9, minute: 30, second: 0, millisecond: 0 } });
+<button onClick={() => time.incrementMinute(1)}>{time.value.minute}</button>;
+```
+
+## Compound date picker
+
+The standard picker is also available in parts. `Root` holds the state;
+`Trigger`, `Input`, and `Content` consume it through context.
+
+```tsx
+<DatePicker.Root adapter={gregorian} closeOnSelect={false}>
+  <DatePicker.Input pattern="yyyy/MM/dd" mask />
+  <DatePicker.Trigger>Open calendar</DatePicker.Trigger>
+  <DatePicker.Content showToday />
+</DatePicker.Root>
+```
+
+`DatePicker.Content` renders the default `CalendarView` unless you pass custom
+children. Set `portal={false}` when the surface must remain in its parent DOM tree.

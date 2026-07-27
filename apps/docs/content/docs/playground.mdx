@@ -3,20 +3,19 @@ title: Playground
 description: Try Calix live — every example is interactive.
 ---
 
-Toggle the calendar system on any example below; the UI is identical because it
-never knows which calendar is active.
+Choose a configuration and see it immediately. The code tab always contains
+the final, dependency-ready component for the current setup.
 
-## Single
+For fixed international observances, select **International** under Holiday data,
+or pass the dataset directly:
 
-<Playground mode="single" />
+```tsx
+import { internationalHolidays } from "@alydev/holidays-international";
 
-## Range (dual month)
+<Calendar holidayData={internationalHolidays} showHolidays />;
+```
 
-<Playground mode="range" inline />
-
-## Inline single
-
-<Playground mode="single" inline />
+<Playground builder />
 
 Want to build your own? See [Getting Started](/docs/getting-started) and the
 [Hooks guide](/docs/hooks).

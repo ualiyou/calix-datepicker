@@ -17,6 +17,12 @@ export interface CalendarDate {
   readonly day: number;
 }
 
+/** A named holiday represented by its calendar-independent JS date. */
+export interface Holiday {
+  readonly date: Date;
+  readonly name: string;
+}
+
 /** A wall-clock time, independent of any date or timezone. */
 export interface Time {
   readonly hour: number;
@@ -153,7 +159,7 @@ export interface CalendarAdapter {
   isSameMonth(a: CalendarDate, b: CalendarDate): boolean;
   isSameYear(a: CalendarDate, b: CalendarDate): boolean;
 
-  format(date: CalendarDate, pattern: string, locale?: string): string;
+  format(date: CalendarDate, pattern: string, locale?: string, time?: Time): string;
   parse(input: string, pattern: string, locale?: string): CalendarDate | null;
 
   getMonthNames(locale?: string, width?: NameWidth): string[];

@@ -5,7 +5,13 @@ description: Render your first Calix date picker.
 
 ## A single-date popup
 
+The `DatePicker` component owns the trigger, popover positioning, calendar, and
+focus behavior. Pass an adapter and, when parent state needs the value, use
+`value` with `onChange`.
+
 ```tsx
+"use client";
+
 import { useState } from "react";
 import { DatePicker } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
@@ -13,12 +19,15 @@ import "@alydev/themes/default.css";
 
 export function Example() {
   const [value, setValue] = useState<Date | null>(null);
+
   return (
     <DatePicker
       adapter={gregorian}
       locale="en-US"
       value={value}
-      onChange={(v) => setValue(v as Date | null)}
+      onChange={setValue}
+      placeholder="Choose a date"
+      theme="light"
     />
   );
 }
@@ -28,33 +37,64 @@ export function Example() {
 
 ## An inline calendar
 
+Use `Calendar` when the calendar should always be visible. It shares the same
+selection, localization, and constraint props as `DatePicker`.
+
 ```tsx
 import { Calendar } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 
-<Calendar adapter={gregorian} locale="en-US" />;
+<Calendar adapter={gregorian} locale="en-US" showToday showClear />;
 ```
 
 <Playground inline />
 
+## Controlled and uncontrolled values
+
+Use `value` and `onChange` when the parent owns the selection. Use
+`defaultValue` when Calix should retain it internally. `onChange` is called in
+both cases.
+
+```tsx
+// Calix owns the value after the initial render.
+<Calendar adapter={gregorian} defaultValue={new Date()} onChange={console.log} />
+```
+
+The public value is always JavaScript `Date` data:
+
+| Mode                                        | Value                                        |
+| ------------------------------------------- | -------------------------------------------- |
+| `single`                                    | `Date \| null`                               |
+| `multiple`                                  | `Date[]`                                     |
+| `range`, `week`, `month`, `quarter`, `year` | `{ start: Date \| null; end: Date \| null }` |
+
 ## Switch calendars
 
-The same component renders any calendar — just pass a different adapter and locale:
+The adapter controls date math; `locale` controls language, digits, and direction.
+Switch to Jalali by replacing the adapter:
 
 ```tsx
 import { jalali } from "@alydev/adapter-jalali";
 
-<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
+<DatePicker adapter={jalali} locale="fa-IR" dir="rtl" placeholder="تاریخ را انتخاب کنید" />;
 ```
 
-## Controlled vs uncontrolled
+`dir` is derived from the locale when omitted, so it is normally not necessary
+to set it yourself.
 
-Provide `value` + `onChange` for controlled usage, or `defaultValue` for
-uncontrolled. Both fire `onChange`.
+## Serialize output for a form or API
+
+Keep `onChange` for typed values. Add `onOutputChange` when you also need a
+formatted string or JSON payload:
 
 ```tsx
-// uncontrolled
-<Calendar adapter={gregorian} defaultValue={new Date()} onChange={console.log} />
+<DatePicker
+  adapter={gregorian}
+  outputPattern="yyyy-MM-dd"
+  onOutputChange={(value) => console.log(value)}
+/>
 ```
 
-Next: explore [Picker modes](/docs/picker-modes) or go [fully headless with hooks](/docs/hooks).
+Set `outputFormat="json"` for JSON instead of text. Next, see
+[Picker modes](/docs/picker-modes), [Localization](/docs/localization), or
+[Hooks](/docs/hooks).

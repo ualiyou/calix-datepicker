@@ -1,37 +1,49 @@
 ---
 title: Accessibility
-description: Keyboard, ARIA, focus, and motion — built in.
+description: Keyboard navigation, ARIA state, focus, and motion support.
 ---
 
-Accessibility is a core feature, not a layer. Calix targets **WCAG 2.1 AA**.
+Calix supplies the accessibility behavior for its components and hook prop
+getters. If you render your own markup, spread the getters onto the intended
+elements instead of copying their attributes manually.
 
-## Grid semantics
+## Calendar semantics
 
-The calendar is a `role="grid"` of `role="row"` weeks and `role="gridcell"` day
-buttons, each labeled with its full localized date. The heading is `aria-live`
-so month changes are announced. Selected/disabled map to `aria-selected` /
-`aria-disabled`; today is `aria-current="date"`.
+The calendar grid uses `role="grid"`, week rows use `role="row"`, and day
+buttons use `role="gridcell"`. A day exposes:
+
+- its localized full date through `aria-label`;
+- selection and disabled state through `aria-selected` and `aria-disabled`;
+- today's date through `aria-current="date"`.
+
+The visible month heading is announced through a polite live region when it
+changes.
 
 ## Keyboard model
 
-| Key | Action |
-| --- | --- |
-| Arrow keys | Move focus by day/week (mirrored in RTL). |
-| Home / End | Start / end of the week. |
-| PageUp / PageDown | Previous / next month. |
-| Shift+PageUp / PageDown | Previous / next year. |
-| Enter / Space | Select the focused day. |
-| Escape | Close the popover, restore focus to the trigger. |
+| Key                         | Action                                                   |
+| --------------------------- | -------------------------------------------------------- |
+| Arrow keys                  | Move focus by a day or a week; left/right mirror in RTL. |
+| Home / End                  | Move to the first / last day of the displayed week.      |
+| Page Up / Page Down         | Move focus one month backward / forward.                 |
+| Shift + Page Up / Page Down | Move focus one year backward / forward.                  |
+| Enter / Space               | Select the focused date.                                 |
+| Escape                      | Dismiss the standard date-picker popover.                |
 
-Focus uses a roving `tabIndex`, and the popover traps focus while open and
-restores it on close.
+Only one day has `tabIndex={0}` at a time. The date picker popover manages
+focus with Floating UI and returns focus to the trigger after dismissal.
 
-## Motion & contrast
+## Motion and contrast
 
-All transitions honor `prefers-reduced-motion`. Themes provide a high-contrast
-variant and never rely on color alone to convey state.
+The supplied themes honor `prefers-reduced-motion` and provide a high-contrast
+variant under `prefers-contrast: more`. Do not convey a custom selected or
+disabled state with color alone—retain a visible non-color distinction as well.
 
-## Verification
+## Custom implementations
 
-Accessibility is checked in CI with `axe` via Playwright, plus Storybook
-interaction tests for the keyboard model.
+When using `useCalendar`, use both `getGridProps()` and
+`getDayProps(date, view)`. The latter is what wires keyboard navigation,
+selection, focus registration, ARIA state, and state attributes.
+
+Test your final UI with a keyboard and a screen reader. Your custom header,
+footer, trigger, and `renderDay` content remain your responsibility.

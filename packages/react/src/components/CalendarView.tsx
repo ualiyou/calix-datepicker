@@ -12,6 +12,11 @@ export interface CalendarViewProps {
   footer?: ReactNode;
   /** Optional header override. */
   header?: ReactNode;
+  /** Show built-in Today and Clear controls. */
+  showToday?: boolean;
+  showClear?: boolean;
+  /** Navigate months with a swipe or mouse wheel. */
+  infiniteScroll?: boolean;
 }
 
 const cx = (...parts: (string | undefined)[]) => parts.filter(Boolean).join(" ") || undefined;
@@ -27,18 +32,30 @@ export function CalendarView({
   renderDay,
   footer,
   header,
+  showToday = false,
+  showClear = false,
+  infiniteScroll = false,
 }: CalendarViewProps) {
   const { grids, weekdays, getMonthLabel, dir } = calendar;
+  const labels = calendar.labels;
+  const weekdayLabels = labels?.weekdays?.length === 7 ? labels.weekdays : weekdays;
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const navigateByGesture = (delta: number) => {
+    if (!infiniteScroll || Math.abs(delta) < 24) return;
+    if (delta > 0) calendar.goToNextMonth();
+    else calendar.goToPrevMonth();
+  };
 
   return (
-    <div className={cx("calix-calendar", classNames?.root)} dir={dir} data-calix-calendar="">
+    <div className={cx("calix-calendar", classNames?.root)} dir={dir} data-theme={calendar.theme} data-calix-calendar="">
       {pickerOpen ? (
-        <MonthYearPicker calendar={calendar} onDone={() => setPickerOpen(false)} />
+        <MonthYearPicker calendar={calendar} labels={labels} onDone={() => setPickerOpen(false)} />
       ) : header ?? (
         <div className={cx("calix-header", classNames?.header)}>
           <button
             {...calendar.getPrevButtonProps()}
+            aria-label={labels?.previousMonth ?? "Previous month"}
             className={cx("calix-nav-button", classNames?.navButton)}
           >
             <span aria-hidden>‹</span>
@@ -46,15 +63,16 @@ export function CalendarView({
           <button
             type="button"
             className={cx("calix-heading", "calix-heading-button", classNames?.heading)}
-            aria-label="Choose month and year"
+            aria-label={labels?.chooseMonthAndYear ?? "Choose month and year"}
             onClick={() => setPickerOpen(true)}
           >
-            {grids.map((g) => (
+            <span aria-live="polite">{grids.map((g) => (
               <span key={`${g.view.year}-${g.view.month}`}>{getMonthLabel(g.view)}</span>
-            ))}
+            ))}</span>
           </button>
           <button
             {...calendar.getNextButtonProps()}
+            aria-label={labels?.nextMonth ?? "Next month"}
             className={cx("calix-nav-button", classNames?.navButton)}
           >
             <span aria-hidden>›</span>
@@ -63,12 +81,17 @@ export function CalendarView({
       )}
 
       {!pickerOpen && (
-        <div className="calix-months">
+        <div
+          className={infiniteScroll ? "calix-months calix-months-scroll" : "calix-months"}
+          onWheel={infiniteScroll ? (event) => { event.preventDefault(); navigateByGesture(event.deltaY); } : undefined}
+          onTouchStart={infiniteScroll ? (event) => setTouchStart(event.touches[0]?.clientX ?? null) : undefined}
+          onTouchEnd={infiniteScroll ? (event) => { const end = event.changedTouches[0]?.clientX; if (touchStart != null && end != null) navigateByGesture(touchStart - end); setTouchStart(null); } : undefined}
+        >
           {grids.map((grid) => (
             <MonthGrid
               key={`${grid.view.year}-${grid.view.month}`}
               grid={grid}
-              weekdays={weekdays}
+              weekdays={weekdayLabels}
               calendar={calendar}
               classNames={classNames}
               renderDay={renderDay}
@@ -77,12 +100,17 @@ export function CalendarView({
         </div>
       )}
 
-      {footer}
+      {footer ?? (showToday || showClear ? (
+        <div className="calix-footer">
+          {showToday && <button type="button" className="calix-footer-button" onClick={calendar.goToToday}>{labels.today}</button>}
+          {showClear && <button type="button" className="calix-footer-button" onClick={calendar.clear}>{labels.clear}</button>}
+        </div>
+      ) : null)}
     </div>
   );
 }
 
-function MonthYearPicker({ calendar, onDone }: { calendar: UseCalendarReturn; onDone: () => void }) {
+function MonthYearPicker({ calendar, labels, onDone }: { calendar: UseCalendarReturn; labels: CalendarViewProps["calendar"]["labels"]; onDone: () => void }) {
   const [selectingYears, setSelectingYears] = useState(false);
   const current = calendar.grids[0]?.view ?? { year: calendar.adapter.today().year, month: 1 };
   const [yearStart, setYearStart] = useState(() => current.year - (current.year % 12));
@@ -92,9 +120,9 @@ function MonthYearPicker({ calendar, onDone }: { calendar: UseCalendarReturn; on
     return (
       <div className="calix-yeargrid" dir={calendar.dir}>
         <div className="calix-header">
-          <button type="button" className="calix-nav-button" aria-label="Previous years" onClick={() => setYearStart((year) => year - 12)}>‹</button>
+          <button type="button" className="calix-nav-button" aria-label={labels?.previousYears ?? "Previous years"} onClick={() => setYearStart((year) => year - 12)}>‹</button>
           <button type="button" className="calix-heading calix-heading-button" onClick={() => setSelectingYears(false)}>{years[0]} – {years[years.length - 1]}</button>
-          <button type="button" className="calix-nav-button" aria-label="Next years" onClick={() => setYearStart((year) => year + 12)}>›</button>
+          <button type="button" className="calix-nav-button" aria-label={labels?.nextYears ?? "Next years"} onClick={() => setYearStart((year) => year + 12)}>›</button>
         </div>
         <div className="calix-yeargrid-body">
           {years.map((year) => (
@@ -111,11 +139,11 @@ function MonthYearPicker({ calendar, onDone }: { calendar: UseCalendarReturn; on
   return (
     <div className="calix-monthgrid" dir={calendar.dir}>
       <div className="calix-header">
-        <button type="button" className="calix-nav-button" aria-label="Previous year" onClick={() => calendar.goToMonth({ year: current.year - 1, month: current.month })}>‹</button>
-        <button type="button" className="calix-heading calix-heading-button" aria-label="Choose year" onClick={() => setSelectingYears(true)}>
+        <button type="button" className="calix-nav-button" aria-label={labels?.previousYear ?? "Previous year"} onClick={() => calendar.goToMonth({ year: current.year - 1, month: current.month })}>‹</button>
+        <button type="button" className="calix-heading calix-heading-button" aria-label={labels?.chooseYear ?? "Choose year"} onClick={() => setSelectingYears(true)}>
           {calendar.adapter.format({ year: current.year, month: 1, day: 1 }, "yyyy", calendar.locale)}
         </button>
-        <button type="button" className="calix-nav-button" aria-label="Next year" onClick={() => calendar.goToMonth({ year: current.year + 1, month: current.month })}>›</button>
+        <button type="button" className="calix-nav-button" aria-label={labels?.nextYear ?? "Next year"} onClick={() => calendar.goToMonth({ year: current.year + 1, month: current.month })}>›</button>
       </div>
       <div className="calix-monthgrid-body">
         {months.map((month, index) => (
@@ -136,7 +164,7 @@ function MonthGrid({
   renderDay,
 }: {
   grid: CalendarGrid;
-  weekdays: string[];
+  weekdays: readonly string[];
   calendar: UseCalendarReturn;
   classNames?: CalendarClassNames | undefined;
   renderDay?: ((date: CalendarDate, defaultLabel: string) => ReactNode) | undefined;
@@ -158,7 +186,7 @@ function MonthGrid({
       {grid.weeks.map((week, wi) => (
         <div key={wi} role="row" className={cx("calix-week", classNames?.week)}>
           {week.days.map((cell) => {
-            const { children, ...dayProps } = calendar.getDayProps(cell.date);
+            const { children, ...dayProps } = calendar.getDayProps(cell.date, grid.view);
             const label = String(cell.date.day);
             return (
               <button

@@ -92,8 +92,8 @@ export const jalali: CalendarAdapter = {
   isSameMonth: (a, b) => a.year === b.year && a.month === b.month,
   isSameYear: (a, b) => a.year === b.year,
 
-  format: (date, pattern, locale = jalali.defaultLocale) =>
-    formatTokens(date, undefined, pattern, {
+  format: (date, pattern, locale = jalali.defaultLocale, time) =>
+    formatTokens(date, time, pattern, {
       monthNamesLong: monthNames(locale, "long"),
       monthNamesShort: monthNames(locale, "short"),
       weekdayNamesLong: weekdayNames(locale, "long", CAL),

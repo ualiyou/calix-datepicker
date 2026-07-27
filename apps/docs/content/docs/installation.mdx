@@ -1,45 +1,75 @@
 ---
 title: Installation
-description: Install Calix and its adapters.
+description: Install Calix, a calendar adapter, and optional styles.
 ---
 
-Install the React binding and at least one calendar adapter. Add the optional
-theme package for default styling.
+Calix needs the React package and **one calendar adapter**. The theme package is
+optional: the components work unstyled.
 
 <Tabs items={["pnpm", "npm", "yarn"]}>
 
 ```bash tab="pnpm"
-pnpm add @alydev/datepicker @alydev/adapter-gregorian @alydev/themes
+pnpm add @alydev/datepicker @alydev/adapter-gregorian
+pnpm add @alydev/themes # optional
 ```
 
 ```bash tab="npm"
-npm install @alydev/datepicker @alydev/adapter-gregorian @alydev/themes
+npm install @alydev/datepicker @alydev/adapter-gregorian
+npm install @alydev/themes # optional
 ```
 
 ```bash tab="yarn"
-yarn add @alydev/datepicker @alydev/adapter-gregorian @alydev/themes
+yarn add @alydev/datepicker @alydev/adapter-gregorian
+yarn add @alydev/themes # optional
 ```
 
 </Tabs>
 
-Need the Persian calendar too?
+To use the Persian calendar, add its adapter instead of or alongside the
+Gregorian one:
 
 ```bash
 pnpm add @alydev/adapter-jalali
 ```
 
-## Peer dependencies
+## Requirements
 
-`@alydev/datepicker` expects **React 18.3+ or 19** (`react` and `react-dom`). The
-Gregorian adapter depends on `date-fns`; the Jalali adapter on `date-fns-jalali`.
-These are pulled in automatically.
+- React and React DOM `18.3+` or `19`.
+- A client component for interactive pickers. In Next.js App Router, add
+  `"use client"` to the component that renders Calix.
 
-## Import the theme (optional)
+The adapters bring their own runtime date library: `date-fns` for Gregorian and
+`date-fns-jalali` for Jalali. You do not need to install those separately.
 
-```ts
-import "@alydev/themes/default.css"; // full theme
-// or
-import "@alydev/themes/minimal.css"; // structural only
+## Optional holiday data
+
+Install a holiday dataset only when you need named holiday markers or
+holiday-aware availability:
+
+```bash
+pnpm add @alydev/holidays-iran
+# or
+pnpm add @alydev/holidays-international
 ```
 
-The library works completely unstyled too — see the [Theming guide](/docs/theming).
+See [Holidays](/docs/holidays) for usage.
+
+## Optional styles
+
+Import one theme once from your application entry point or client layout:
+
+```ts
+import "@alydev/themes/default.css"; // complete default appearance
+// import "@alydev/themes/minimal.css"; // structural styles only
+```
+
+The theme has no JavaScript runtime. To style manually, skip this import and use
+the class-name and state-attribute contract in [Theming](/docs/theming).
+
+## Next.js note
+
+`@alydev/datepicker` is a client package. Keep picker components below a client
+boundary; the adapter can be imported normally. No provider or global calendar
+configuration is required.
+
+Next: [Getting Started](/docs/getting-started).

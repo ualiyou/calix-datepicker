@@ -10,13 +10,16 @@ export interface CalendarProps extends UseCalendarOptions {
   renderDay?: (date: CalendarDate, defaultLabel: string) => ReactNode;
   footer?: ReactNode;
   header?: ReactNode;
+  showToday?: boolean;
+  showClear?: boolean;
+  infiniteScroll?: boolean;
 }
 
 /**
  * An always-visible (inline) calendar. This is the simplest entry point and the
  * building block for the popover picker.
  */
-export function Calendar({ classNames, renderDay, footer, header, ...options }: CalendarProps) {
+export function Calendar({ classNames, renderDay, footer, header, showToday, showClear, infiniteScroll, ...options }: CalendarProps) {
   const calendar = useCalendar(options);
   return (
     <CalendarView
@@ -25,6 +28,9 @@ export function Calendar({ classNames, renderDay, footer, header, ...options }: 
       {...(renderDay ? { renderDay } : {})}
       {...(footer ? { footer } : {})}
       {...(header ? { header } : {})}
+      {...(showToday ? { showToday } : {})}
+      {...(showClear ? { showClear } : {})}
+      {...(infiniteScroll ? { infiniteScroll } : {})}
     />
   );
 }

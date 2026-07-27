@@ -1,56 +1,98 @@
 ---
 title: Picker modes
-description: Single, range, multiple, week, month, quarter, and year selection.
+description: Select dates, ranges, recurring spans, and time.
 ---
 
-Set the `mode` prop. Selection logic is pluggable — each mode is a strategy in
-`@alydev/core`.
+Set `mode` on `Calendar` or `DatePicker`. The default is `"single"`.
 
-| Mode | Value shape | Notes |
-| --- | --- | --- |
-| `single` | `Date \| null` | Default. |
-| `multiple` | `Date[]` | Toggles; supports `max`. |
-| `range` | `{ start, end }` | Ordered automatically; hover preview. |
-| `week` | `{ start, end }` | Selects the whole week. |
-| `month` | `{ start, end }` | Selects the whole month. |
-| `quarter` | `{ start, end }` | Selects the three-month quarter. |
-| `year` | `{ start, end }` | Selects the whole year. |
+| Mode       | Public value     | Behavior                                                |
+| ---------- | ---------------- | ------------------------------------------------------- |
+| `single`   | `Date \| null`   | Select one date.                                        |
+| `multiple` | `Date[]`         | Select and toggle individual dates.                     |
+| `range`    | `{ start, end }` | Select a start then an end; order is normalized.        |
+| `week`     | `{ start, end }` | Select the full locale-relative week.                   |
+| `month`    | `{ start, end }` | Select the complete month containing the clicked day.   |
+| `quarter`  | `{ start, end }` | Select the calendar quarter containing the clicked day. |
+| `year`     | `{ start, end }` | Select the complete calendar year.                      |
+
+For span modes, `end` is `null` only while a `range` selection is incomplete.
 
 ## Range
 
-```tsx
-const [range, setRange] = useState({ start: null, end: null });
+Click a first date and then a second date. While choosing the end, hovering a
+date previews the span. Use `numberOfMonths` to display adjacent months.
 
-<Calendar
-  adapter={gregorian}
-  mode="range"
-  numberOfMonths={2}
-  value={range}
-  onChange={setRange}
-/>;
+```tsx
+import { useState } from "react";
+import { Calendar, type RangeValue } from "@alydev/datepicker";
+
+const [range, setRange] = useState<RangeValue>({ start: null, end: null });
+
+<Calendar adapter={gregorian} mode="range" numberOfMonths={2} value={range} onChange={setRange} />;
 ```
 
 <Playground mode="range" inline />
 
-## Multiple with a max
+## Multiple dates
+
+`max` limits the number of selected dates. Reaching it leaves the existing
+selection unchanged until the user deselects one.
 
 ```tsx
 <Calendar adapter={gregorian} mode="multiple" max={3} />
 ```
 
-## Month & year pickers
+## Complete spans
+
+Week, month, quarter, and year modes calculate both boundaries immediately.
+They are useful when an API expects a date range but the user should select one
+logical period.
+
+```tsx
+<Calendar adapter={gregorian} mode="quarter" onChange={console.log} />
+```
+
+`week` starts according to `weekStartsOn` (or the locale default).
+
+## Month and year views
+
+`MonthPicker` and `YearPicker` are standalone views. They force `month` and
+`year` selection respectively, while accepting the familiar calendar props.
 
 ```tsx
 import { MonthPicker, YearPicker } from "@alydev/datepicker";
 
 <MonthPicker adapter={gregorian} locale="en-US" />
-<YearPicker adapter={gregorian} locale="en-US" />
+<YearPicker adapter={gregorian} locale="en-US" pageSize={12} />
 ```
 
 ## Time
 
-```tsx
-import { TimeField } from "@alydev/datepicker";
+`TimeField` manages a wall-clock `Time` value:
 
-<TimeField hourCycle={12} withSeconds defaultValue={{ hour: 9, minute: 30, second: 0, millisecond: 0 }} />
+```tsx
+import { TimeField, type Time } from "@alydev/datepicker";
+
+const initial: Time = { hour: 9, minute: 30, second: 0, millisecond: 0 };
+
+<TimeField defaultValue={initial} hourCycle={12} withSeconds variant="field" />;
 ```
+
+Available presentations are `"field"` (default), `"wheel"`, and `"analog"`.
+The field variant supports seconds; use `minuteStep` and `secondStep` to change
+arrow-key increments. Add `withTime` to `DatePicker` to show a date-first,
+then-time flow:
+
+```tsx
+<DatePicker adapter={gregorian} withTime timePickerProps={{ hourCycle: 12, variant: "wheel" }} />
+```
+
+## Constraints apply to every mode
+
+All modes accept the same constraints. For example, allow only future weekdays:
+
+```tsx
+<Calendar adapter={gregorian} minDate={new Date()} disabledWeekdays={[0, 6]} businessDaysOnly />
+```
+
+Read [API Reference](/docs/api-reference) for the full prop list.

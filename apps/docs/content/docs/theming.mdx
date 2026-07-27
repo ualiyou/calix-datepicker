@@ -1,67 +1,105 @@
 ---
-title: Theming & customization
-description: Style Calix with any technology — no lock-in.
+title: Theming and customization
+description: Use optional themes or style Calix with your own system.
 ---
 
-Calix ships **no styling dependency**. Every element exposes a stable class name
-and its state via `data-*` attributes. Style with whatever you like.
+Calix has no styling dependency. The built-in components expose stable class
+names and state attributes, so plain CSS, CSS Modules, Tailwind, CSS-in-JS, and
+design-system wrappers can all target the same markup.
 
-## The state contract
+## Optional themes
 
-| Attribute | Meaning |
-| --- | --- |
-| `data-selected` | The day is selected. |
-| `data-today` | The day is today. |
-| `data-disabled` | The day cannot be selected. |
-| `data-outside-month` | Belongs to an adjacent month. |
-| `data-range-start` / `-end` / `-in-range` | Range boundaries and interior. |
-| `data-focused` | Currently focused (roving tabindex). |
-| `data-weekend` | Saturday/Sunday. |
+```ts
+import "@alydev/themes/default.css"; // full default appearance
+// import "@alydev/themes/minimal.css"; // structural styling only
+```
+
+Built-in components use the dark theme by default. Pass `theme="light"` to a
+calendar, date picker, or time field for the light variant. The theme also
+responds to `prefers-contrast: more`.
+
+```tsx
+<DatePicker adapter={gregorian} theme="light" />
+<TimeField theme="light" />
+```
 
 ## CSS variables
 
-`@alydev/themes` implements the contract against variables. Override any of them:
+The provided themes are CSS-variable based. Override a variable in your app to
+match your design system:
 
 ```css
 :root {
   --calix-accent: #6d28d9;
+  --calix-on-accent: #ffffff;
+  --calix-surface: #17171d;
+  --calix-text: #f4f4f5;
   --calix-radius: 10px;
   --calix-cell-size: 2.5rem;
+  --calix-font: "Vazirmatn", system-ui, sans-serif;
 }
 ```
 
-Dark mode is automatic via `prefers-color-scheme` and forceable with
-`[data-theme="dark"]`. A high-contrast variant activates under
-`prefers-contrast: more`.
+Common tokens include `--calix-accent`, `--calix-on-accent`, `--calix-surface`,
+`--calix-surface-raised`, `--calix-text`, `--calix-muted`, `--calix-border`,
+`--calix-hover`, `--calix-radius`, `--calix-radius-sm`, `--calix-cell-size`,
+`--calix-gap`, `--calix-font`, and `--calix-transition`. The default accent
+remains `#8b7cff`.
 
-## Tailwind
+For component states and layout, use `--calix-focus-ring`,
+`--calix-disabled-opacity`, `--calix-weekend`, `--calix-outside-month`,
+`--calix-selected-shadow`, `--calix-calendar-padding`, and
+`--calix-popover-z-index`.
 
-```tsx
-<DatePicker
-  adapter={gregorian}
-  classNames={{
-    day: "rounded-md data-[selected]:bg-blue-600 data-[today]:font-bold data-[disabled]:opacity-40",
-  }}
-/>
-```
+## State contract
 
-## Custom day renderer
+Day buttons carry the following attributes when their state is active:
+
+| Attribute                             | Meaning                                     |
+| ------------------------------------- | ------------------------------------------- |
+| `data-selected`                       | The day is selected.                        |
+| `data-today`                          | The day is today.                           |
+| `data-disabled`                       | The day cannot be selected.                 |
+| `data-outside-month`                  | The day belongs to an adjacent month.       |
+| `data-range-start` / `data-range-end` | A range boundary.                           |
+| `data-in-range`                       | A day inside a selected or previewed range. |
+| `data-focused`                        | The roving-focus day.                       |
+| `data-weekend`                        | Saturday or Sunday.                         |
+| `data-holiday`                        | A named holiday is visible on the day.       |
+| `data-holiday-name`                   | The visible holiday's name.                  |
+
+The default theme marks holidays and shows their name on hover. Target these
+attributes to replace that presentation; see [Holidays](/docs/holidays) for
+the data contract.
+
+## Slot class names
+
+Pass `classNames` to `Calendar` or `DatePicker` to add classes to structural
+slots: `root`, `header`, `heading`, `nav`, `navButton`, `grid`, `weekdays`,
+`weekday`, `week`, and `day`.
 
 ```tsx
 <Calendar
   adapter={gregorian}
-  renderDay={(date, label) => <span>{label}</span>}
+  classNames={{
+    root: "calendar-shell",
+    day: "rounded-md data-[selected]:bg-violet-600 data-[disabled]:opacity-40",
+  }}
 />
 ```
 
-## Custom compound layout
+## Custom content and layout
 
-Use the primitives for full control over structure:
+Use `renderDay` to replace a day's content without reimplementing selection or
+accessibility. Use `header` and `footer` for complete header/footer replacement.
 
 ```tsx
-<DatePicker.Root adapter={gregorian}>
-  <DatePicker.Input />
-  <DatePicker.Trigger>📅</DatePicker.Trigger>
-  <DatePicker.Content />
-</DatePicker.Root>
+<Calendar
+  adapter={gregorian}
+  renderDay={(date, label) => <span title={`${date.year}/${date.month}/${date.day}`}>{label}</span>}
+  footer={<a href="/availability">Check availability</a>}
+/>
 ```
+
+For markup beyond the calendar, compose `DatePicker.Root`, `.Trigger`, `.Input`,
+and `.Content`, or render from `useCalendar`. See [Hooks](/docs/hooks).

@@ -1,58 +1,140 @@
 ---
 title: API Reference
-description: Components, hooks, and core types.
+description: Components, hooks, values, and core contracts.
 ---
+
+All date-picking components require an `adapter`. Their public values use native
+JavaScript `Date` objects; calendar-specific parts are only exposed to adapter
+and headless-hook APIs.
+
+## Shared calendar options
+
+`Calendar`, `DatePicker`, `useCalendar`, and `useDatePicker` accept these options.
+
+| Prop                     | Type                                                                            | Default                               |
+| ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------- |
+| `adapter`                | `CalendarAdapter`                                                               | required                              |
+| `mode`                   | `"single" \| "multiple" \| "range" \| "week" \| "month" \| "quarter" \| "year"` | `"single"`                            |
+| `value` / `defaultValue` | `CalixValue`                                                                    | mode empty value                      |
+| `onChange`               | `(value: CalixValue) => void`                                                   | —                                     |
+| `onSelect`               | `(value: CalixValue, complete: boolean) => void`                                | —                                     |
+| `locale`                 | `string`                                                                        | adapter default                       |
+| `dir`                    | `"ltr" \| "rtl"`                                                                | adapter locale result                 |
+| `labels`                 | `PickerLabels`                                                                  | localized defaults                    |
+| `theme`                  | `"dark" \| "light"`                                                             | `"dark"`                              |
+| `weekStartsOn`           | `0`–`6`                                                                         | Saturday for `fa-*`, Sunday otherwise |
+| `defaultMonth`           | `Date`                                                                          | selected date or today                |
+| `numberOfMonths`         | `number`                                                                        | `1`                                   |
+| `fixedWeeks`             | `boolean`                                                                       | `true`                                |
+| `max`                    | `number`                                                                        | —; multiple mode only                 |
+| `onOutputChange`         | `(value: string) => void`                                                       | —                                     |
+| `outputFormat`           | `"string" \| "json"`                                                            | `"string"`                            |
+| `outputPattern`          | `string`                                                                        | `"yyyy-MM-dd"`                        |
+
+`complete` is false only while a range is waiting for its end date.
+
+### Constraints
+
+| Prop                               | Type                         | Meaning                                             |
+| ---------------------------------- | ---------------------------- | --------------------------------------------------- |
+| `minDate` / `maxDate`              | `Date`                       | Inclusive allowed boundaries.                       |
+| `disabledDates`                    | `Date[]`                     | Explicitly blocked dates.                           |
+| `enabledDates`                     | `Date[]`                     | When present, only these dates are allowed.         |
+| `disabledWeekdays`                 | `Weekday[]`                  | `0` Sunday through `6` Saturday.                    |
+| `disabledMonths` / `disabledYears` | `number[]`                   | Calendar month numbers (1-based) or years to block. |
+| `businessDaysOnly`                 | `boolean`                    | Blocks Saturday and Sunday.                         |
+| `holidays`                         | `Date[]`                     | Dates treated as blocked.                           |
+| `holidayData`                      | `readonly Holiday[]`         | Named dates for holiday markers and tooltips.       |
+| `showHolidays`                     | `boolean`                    | Shows holiday markers and names; default `false`.   |
+| `holidaysSelectable`               | `boolean`                    | Keeps `holidayData` dates selectable; default `true`. |
+| `isDateDisabled`                   | `(date, adapter) => boolean` | Return `true` to block a calendar date.             |
 
 ## `<DatePicker>`
 
-Convenience popup picker. Also exposes `DatePicker.Root`, `.Trigger`, `.Input`,
-`.Content`.
+The convenience popover picker. In addition to shared options:
 
-| Prop | Type | Default |
-| --- | --- | --- |
-| `adapter` | `CalendarAdapter` | — (required) |
-| `mode` | `SelectionMode` | `"single"` |
-| `value` / `defaultValue` | `CalixValue` | — |
-| `onChange` | `(value: CalixValue) => void` | — |
-| `locale` | `string` | adapter default |
-| `dir` | `"ltr" \| "rtl"` | from locale |
-| `weekStartsOn` | `0–6` | locale-based |
-| `numberOfMonths` | `number` | `1` |
-| `minDate` / `maxDate` | `Date` | — |
-| `disabledDates` / `enabledDates` | `Date[]` | — |
-| `disabledWeekdays` | `Weekday[]` | — |
-| `disabledMonths` / `disabledYears` | `number[]` | — |
-| `businessDaysOnly` | `boolean` | `false` |
-| `holidays` | `Date[]` | — |
-| `isDateDisabled` | `(date, adapter) => boolean` | — |
-| `max` | `number` | — (multiple mode) |
-| `placement` | Floating UI `Placement` | `"bottom-start"` |
-| `closeOnSelect` | `boolean` | `true` |
+| Prop                      | Type                                    | Default                                |
+| ------------------------- | --------------------------------------- | -------------------------------------- |
+| `placeholder`             | `string`                                | `"Select date"`                        |
+| `pattern`                 | `string`                                | `"yyyy/MM/dd"` or date-time equivalent |
+| `classNames`              | `CalendarClassNames`                    | —                                      |
+| `withTime`                | `boolean`                               | `false`                                |
+| `timePickerProps`         | `TimeFieldProps` without value handlers | —                                      |
+| `showToday` / `showClear` | `boolean`                               | `true` / `false`                       |
+| `infiniteScroll`          | `boolean`                               | `false`                                |
+| `open` / `defaultOpen`    | `boolean`                               | uncontrolled / `false`                 |
+| `onOpenChange`            | `(open: boolean) => void`               | —                                      |
+| `closeOnSelect`           | `boolean`                               | `true`                                 |
+| `placement`               | Floating UI placement                   | `"bottom-start"`                       |
+| `offset`                  | `number`                                | `8`                                    |
 
-## `<Calendar>`
+### Compound components
 
-Inline calendar. Same options as above, plus `classNames`, `renderDay`,
-`header`, and `footer`.
+`DatePicker.Root` takes the shared options plus open-state options.
+`DatePicker.Trigger` is a button wired to the popover. `DatePicker.Input` accepts
+all native input props plus `pattern` and `mask`. `DatePicker.Content` accepts
+`classNames`, `showToday`, `portal` (default `true`), and custom children.
 
-## Components
+## `<Calendar>` and `<CalendarView>`
 
-`Calendar`, `CalendarView`, `DatePicker` (+ compound parts), `TimeField`,
-`MonthPicker`, `YearPicker`.
+`Calendar` is an inline component that takes shared options plus:
+
+| Prop                                         | Type                                                      |
+| -------------------------------------------- | --------------------------------------------------------- |
+| `classNames`                                 | `CalendarClassNames`                                      |
+| `renderDay`                                  | `(date: CalendarDate, defaultLabel: string) => ReactNode` |
+| `header` / `footer`                          | `ReactNode`                                               |
+| `showToday` / `showClear` / `infiniteScroll` | `boolean`                                                 |
+
+`CalendarView` is presentational. It receives a `calendar` result returned by
+`useCalendar`, then accepts the same rendering props above.
+
+`CalendarClassNames` has slots: `root`, `header`, `heading`, `nav`, `navButton`,
+`grid`, `weekdays`, `weekday`, `week`, and `day`.
+
+## `<TimeField>`, `<MonthPicker>`, and `<YearPicker>`
+
+`TimeField` takes `value`, `defaultValue`, `onChange`, `hourCycle` (`12` or
+`24`), `minuteStep`, `secondStep`, `withSeconds`, `variant` (`"field"`,
+`"wheel"`, or `"analog"`), `labels`, `theme`, `className`, and `disabled`.
+
+`MonthPicker` forces month selection; `YearPicker` forces year selection. Both
+take shared calendar options. `YearPicker` also has `pageSize` (default `12`).
 
 ## Hooks
 
-`useCalendar`, `useDatePicker`, `useDateInput`, `useTime`, `useControllableState`.
+| Hook                            | Returns                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------- |
+| `useCalendar(options)`          | Calendar state, navigation, selection methods, checks, grids, and prop getters.             |
+| `useDatePicker(options)`        | `useCalendar` plus popover state, Floating UI refs/styles/context, and interaction getters. |
+| `useDateInput(options)`         | `inputValue`, `setInputValue`, and `getInputProps`.                                         |
+| `useTime(options?)`             | Time value, display state, setters, and increment helpers.                                  |
+| `useControllableState(options)` | Controlled/uncontrolled state primitive.                                                    |
 
-## `CalendarAdapter` (from `@alydev/core`)
+## Values and types
 
-The interface every calendar implements: `today`, `toDate`/`fromDate`,
-`addDays`/`addMonths`/`addYears`, `startOfMonth`/`endOfMonth`, `daysInMonth`,
-`monthsInYear`, `isLeapYear`, `getWeekday`, `getMonthGrid`, `getYearRange`,
-`getWeek`, `compare`/`isSameDay`/`isSameMonth`/`isSameYear`, `format`/`parse`,
-`getMonthNames`/`getWeekdayNames`/`getEraNames`, `isRTL`.
+`CalixValue` is `Date | Date[] | RangeValue | null`; `RangeValue` is
+`{ start: Date | null; end: Date | null }`. `Weekday` is `0` through `6`.
+
+`PickerLabels` can override weekdays, navigation, month/year choices, time
+labels, and today/clear actions. See [Localization](/docs/localization).
+
+## `CalendarAdapter`
+
+Every calendar adapter implements: `today`; `toDate` / `fromDate`; day, month,
+and year arithmetic; month boundaries; month length and leap-year rules; weekday,
+month-grid, year-range, and week-number methods; comparison/equality; parsing,
+formatting, localized names, and RTL detection.
+
+Import it from `@alydev/core`:
+
+```ts
+import type { CalendarAdapter, CalendarDate, Time } from "@alydev/core";
+```
 
 ## Core exports
 
-`generateMonthGrid`, `buildDisabledPredicate`, `getSelectionStrategy`,
-`registerSelectionStrategy`, `formatTokens`, `parseTokens`, `toLocaleDigits`,
-`toLatinDigits`, `directionForLocale`, and the calendar/date/selection types.
+`@alydev/core` also exports `generateMonthGrid`, `buildDisabledPredicate`,
+`nearestEnabledDate`, selection-strategy helpers, date comparison and range
+helpers, localized digit helpers, `formatTokens`, `parseTokens`, and the core
+calendar/date/selection types.

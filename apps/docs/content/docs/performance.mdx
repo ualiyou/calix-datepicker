@@ -1,30 +1,36 @@
 ---
 title: Performance
-description: How Calix stays fast and small.
+description: What Calix computes and how to keep custom UI responsive.
 ---
 
-## Principles
+Calix limits its work to the months it displays. A render generates one grid per
+visible month and memoizes derived selection, constraint, weekday, and grid data
+inside `useCalendar`.
 
-- **Calendar-agnostic values.** Storing `{ year, month, day }` avoids `Date`
-  allocation churn and timezone recomputation.
-- **Lazy grid generation.** Grids are computed per visible month and memoized by
-  `adapter + view + locale + weekStartsOn`.
-- **Split contexts.** Config, state, and dispatch are separate contexts, so a day
-  cell that only dispatches never re-renders when the focused date changes.
-- **Stable references.** Prop-getters and callbacks are stable; the code is
-  React-Compiler-friendly and never relies on referential identity for
-  correctness.
-- **Tree-shakeable & side-effect free.** Every package declares
-  `"sideEffects": false` and externalizes its dependencies.
+## Bundle boundaries
 
-## Bundle size
+- `@alydev/core` has no runtime dependencies.
+- Gregorian and Jalali are separate adapters, so importing one does not import
+  the other.
+- The React package is marked side-effect free; optional theme CSS is the
+  intentional side effect of importing a stylesheet.
 
-`@alydev/core` has **zero runtime dependencies**. Adapters pull in `date-fns` /
-`date-fns-jalali` only when imported, so an app that never uses Jalali never
-ships it.
+## Keep custom UI efficient
 
-## Benchmarks
+- Keep `adapter` stable: use the exported singleton (`gregorian` or `jalali`),
+  not a newly created object per render.
+- Memoize expensive `renderDay` content and callbacks when rendering many months.
+- Use `numberOfMonths` only for months you intend to show.
+- Put expensive availability lookups outside `isDateDisabled`; pass resolved
+  dates or a fast predicate to the picker.
 
-The repository includes a benchmark harness comparing render counts and bundle
-size against react-day-picker, react-aria, MUI X, Mantine, and Ant Design. Run
-`pnpm --filter @alydev/datepicker bench` (see the repo `bench/` directory).
+## Verify in this repository
+
+```bash
+pnpm size                    # package bundle budgets
+pnpm --filter @alydev/core bench # core grid micro-benchmarks
+```
+
+The `bench/` directory also contains render-profiler harnesses. Treat results as
+release checks for this repository rather than universal comparisons: application
+markup, CSS, React version, and number of displayed months affect real results.

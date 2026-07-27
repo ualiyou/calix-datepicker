@@ -1,0 +1,51 @@
+---
+title: Holidays
+description: Display named holidays or prevent their selection.
+---
+
+Use `holidayData` to attach a name to a local JavaScript date. Set
+`showHolidays` to expose a marker and tooltip; set `holidaysSelectable={false}`
+when those dates must also be unavailable.
+
+```tsx
+import { Calendar } from "@alydev/datepicker";
+import { jalali } from "@alydev/adapter-jalali";
+import { iranHolidays } from "@alydev/holidays-iran";
+
+<Calendar
+  adapter={jalali}
+  locale="fa-IR"
+  holidayData={iranHolidays}
+  showHolidays
+  holidaysSelectable={false}
+/>;
+```
+
+Install the dataset you use:
+
+```bash
+pnpm add @alydev/holidays-iran
+# or
+pnpm add @alydev/holidays-international
+```
+
+`@alydev/holidays-iran` contains maintained Iranian public holidays from Jalali
+years 1400 through 1420. `@alydev/holidays-international` contains New Year's
+Day and Christmas Day for 2000 through 2100.
+
+## Your own data
+
+Pass the same small shape for company closures or another holiday source:
+
+```tsx
+import { gregorian } from "@alydev/adapter-gregorian";
+
+const holidays = [
+  { date: new Date(2026, 2, 20), name: "Company holiday" },
+];
+
+<Calendar adapter={gregorian} holidayData={holidays} showHolidays />;
+```
+
+`holidays` is separate from `holidayData`: it only blocks plain `Date` values
+and does not provide a label or marker.
