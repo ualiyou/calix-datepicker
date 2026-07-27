@@ -26,8 +26,9 @@ test.describe("Calix playground accessibility", () => {
 
   test("popup opens and closes with the keyboard", async ({ page }) => {
     await page.goto("/");
-    const trigger = page.locator(".calix-trigger").first();
-    await trigger.click();
+    const trigger = page.getByRole("combobox").first();
+    await trigger.focus();
+    await page.keyboard.press("Enter");
     await expect(page.getByRole("dialog")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog")).toBeHidden();
