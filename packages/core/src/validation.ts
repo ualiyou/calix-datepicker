@@ -28,6 +28,7 @@ export function buildDisabledPredicate(
     disabledMonths,
     disabledYears,
     businessDaysOnly,
+    weekendDays,
     holidays,
     isDateDisabled,
   } = constraints;
@@ -38,6 +39,9 @@ export function buildDisabledPredicate(
   const weekdaySet = disabledWeekdays ? new Set<Weekday>(disabledWeekdays) : null;
   const monthSet = disabledMonths ? new Set<number>(disabledMonths) : null;
   const yearSet = disabledYears ? new Set<number>(disabledYears) : null;
+  const weekendSet = businessDaysOnly
+    ? new Set<Weekday>(weekendDays && weekendDays.length > 0 ? weekendDays : [0, 6])
+    : null;
 
   return (date: CalendarDate): boolean => {
     if (min && compareCalendarDate(date, min) < 0) return true;
@@ -51,10 +55,10 @@ export function buildDisabledPredicate(
     if (monthSet?.has(date.month)) return true;
     if (yearSet?.has(date.year)) return true;
 
-    if (weekdaySet || businessDaysOnly) {
+    if (weekdaySet || weekendSet) {
       const weekday = adapter.getWeekday(date);
       if (weekdaySet?.has(weekday)) return true;
-      if (businessDaysOnly && (weekday === 0 || weekday === 6)) return true;
+      if (weekendSet?.has(weekday)) return true;
     }
 
     if (isDateDisabled?.(date, adapter)) return true;

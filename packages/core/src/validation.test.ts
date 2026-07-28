@@ -38,6 +38,16 @@ describe("buildDisabledPredicate", () => {
     expect(isDisabled(d(2026, 7, 13))).toBe(false); // Monday
   });
 
+  it("honours a custom weekend via weekendDays", () => {
+    const isDisabled = buildDisabledPredicate(
+      { businessDaysOnly: true, weekendDays: [5] },
+      mockAdapter,
+    );
+    expect(isDisabled(d(2026, 7, 10))).toBe(true); // Friday is the weekend
+    expect(isDisabled(d(2026, 7, 11))).toBe(false); // Saturday now a working day
+    expect(isDisabled(d(2026, 7, 12))).toBe(false); // Sunday now a working day
+  });
+
   it("treats enabledDates as an allow-list", () => {
     const isDisabled = buildDisabledPredicate(
       { enabledDates: [d(2026, 7, 1), d(2026, 7, 2)] },

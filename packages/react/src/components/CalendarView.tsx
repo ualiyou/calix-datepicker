@@ -1,6 +1,7 @@
 import type { CalendarDate, CalendarGrid } from "@alydev/core";
 import { useState, type ReactNode } from "react";
-import type { CalendarClassNames } from "../types.js";
+import type { CalendarClassNames, CalendarPreset } from "../types.js";
+import type { CalixValue } from "../value.js";
 import type { UseCalendarReturn } from "../hooks/useCalendar.js";
 
 export interface CalendarViewProps {
@@ -17,6 +18,15 @@ export interface CalendarViewProps {
   showClear?: boolean;
   /** Navigate months with a swipe or mouse wheel. */
   infiniteScroll?: boolean;
+  /** One-click shortcuts (e.g. Today, Last 7 days) rendered beside the footer. */
+  presets?: CalendarPreset[] | undefined;
+}
+
+function firstDateOf(value: CalixValue): Date | null {
+  if (value instanceof Date) return value;
+  if (Array.isArray(value)) return value[0] ?? null;
+  if (value && typeof value === "object" && "start" in value) return value.start ?? null;
+  return null;
 }
 
 const cx = (...parts: (string | undefined)[]) => parts.filter(Boolean).join(" ") || undefined;
@@ -35,6 +45,7 @@ export function CalendarView({
   showToday = false,
   showClear = false,
   infiniteScroll = false,
+  presets,
 }: CalendarViewProps) {
   const { grids, weekdays, getMonthLabel, dir } = calendar;
   const labels = calendar.labels;
@@ -99,6 +110,28 @@ export function CalendarView({
           ))}
         </div>
       )}
+
+      {presets && presets.length > 0 ? (
+        <div className="calix-presets" role="group" aria-label="Presets">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className="calix-preset"
+              onClick={() => {
+                calendar.setValue(preset.value);
+                const first = firstDateOf(preset.value);
+                if (first) {
+                  const cd = calendar.adapter.fromDate(first);
+                  calendar.goToMonth({ year: cd.year, month: cd.month });
+                }
+              }}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {footer ?? (showToday || showClear ? (
         <div className="calix-footer">

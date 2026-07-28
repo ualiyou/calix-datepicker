@@ -43,6 +43,7 @@ export type {
   UseCalendarOptions,
   CalixConstraints,
   CalendarClassNames,
+  CalendarPreset,
   ColorTheme,
   OutputFormat,
   PickerLabels,

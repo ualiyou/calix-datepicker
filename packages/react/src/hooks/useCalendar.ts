@@ -82,6 +82,11 @@ function defaultWeekStart(locale: string): Weekday {
   return /^fa\b/i.test(locale) ? 6 : 0;
 }
 
+/** Locale-appropriate weekend. Iran (and much of the region) rests on Friday. */
+function defaultWeekend(locale: string): Weekday[] {
+  return /^fa\b/i.test(locale) ? [5] : [0, 6];
+}
+
 /**
  * The headless calendar engine as a React hook. Owns the visible month, the
  * roving focus, selection (via the core strategy for `mode`), and produces
@@ -95,6 +100,8 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     numberOfMonths = 1,
     fixedWeeks = true,
     max,
+    minRange,
+    maxRange,
   } = options;
 
   const dir: Direction = options.dir ?? (adapter.isRTL(locale) ? "rtl" : "ltr");
@@ -104,6 +111,10 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     [locale, options.labels],
   );
   const weekStartsOn = options.weekStartsOn ?? defaultWeekStart(locale);
+  const weekendDays = useMemo<Weekday[]>(
+    () => options.weekendDays ?? defaultWeekend(locale),
+    [options.weekendDays, locale],
+  );
 
   const [value, setValue] = useControllableState<CalixValue>({
     value: options.value,
@@ -143,12 +154,12 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
       ...(options.disabledWeekdays ? { disabledWeekdays: options.disabledWeekdays } : {}),
       ...(options.disabledMonths ? { disabledMonths: options.disabledMonths } : {}),
       ...(options.disabledYears ? { disabledYears: options.disabledYears } : {}),
-      ...(options.businessDaysOnly ? { businessDaysOnly: true } : {}),
+      ...(options.businessDaysOnly ? { businessDaysOnly: true, weekendDays } : {}),
       ...(options.holidays ? { holidays: options.holidays.map((d) => adapter.fromDate(d)) } : {}),
       ...(options.isDateDisabled ? { isDateDisabled: options.isDateDisabled } : {}),
     };
     return buildDisabledPredicate(c, adapter);
-  }, [adapter, options]);
+  }, [adapter, options, weekendDays]);
 
   const holidaysByDate = useMemo(() => {
     const holidays = new Map<string, Holiday>();
@@ -195,9 +206,40 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
     setPreview(null);
   }, [adapter, internalValue, options.defaultMonth]);
 
+  // Notify on visible-month changes (skipping the initial mount).
+  const onMonthChangeRef = useRef(options.onMonthChange);
+  onMonthChangeRef.current = options.onMonthChange;
+  const monthMounted = useRef(false);
+  useEffect(() => {
+    if (!monthMounted.current) {
+      monthMounted.current = true;
+      return;
+    }
+    onMonthChangeRef.current?.({ year: viewDate.year, month: viewDate.month });
+  }, [viewDate.year, viewDate.month]);
+
+  // Notify on roving-focus changes (skipping the initial mount).
+  const onFocusChangeRef = useRef(options.onFocusChange);
+  onFocusChangeRef.current = options.onFocusChange;
+  const focusMounted = useRef(false);
+  useEffect(() => {
+    if (!focusMounted.current) {
+      focusMounted.current = true;
+      return;
+    }
+    onFocusChangeRef.current?.(focusedDate);
+  }, [focusedDate]);
+
   const selectionCtx: SelectionContext = useMemo(
-    () => ({ adapter, weekStartsOn, preview, ...(max != null ? { max } : {}) }),
-    [adapter, weekStartsOn, preview, max],
+    () => ({
+      adapter,
+      weekStartsOn,
+      preview,
+      ...(max != null ? { max } : {}),
+      ...(minRange != null ? { minRange } : {}),
+      ...(maxRange != null ? { maxRange } : {}),
+    }),
+    [adapter, weekStartsOn, preview, max, minRange, maxRange],
   );
 
   const grids = useMemo(
@@ -351,7 +393,7 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
       const focused = adapter.isSameDay(date, focusedDate);
       const today = adapter.isSameDay(date, adapter.today());
       const weekday = adapter.getWeekday(date);
-      const weekend = weekday === 0 || weekday === 6;
+      const weekend = weekendDays.includes(weekday);
       const holiday = showHolidays ? getHoliday(date) : undefined;
       const flag = (on: boolean) => (on ? ("" as const) : undefined);
       const label = adapter.format(date, "EEEE d MMMM yyyy", locale);
@@ -406,6 +448,7 @@ export function useCalendar(options: UseCalendarOptions): UseCalendarReturn {
       handleDayKeyDown,
       getHoliday,
       showHolidays,
+      weekendDays,
     ],
   );
 

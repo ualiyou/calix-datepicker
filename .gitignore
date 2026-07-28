@@ -31,6 +31,8 @@ pnpm-debug.log*
 
 # editor / os
 .agents/
+IDEAS.md
+packages/adapters/hijri/_to_delete/
 .DS_Store
 .idea
 .vscode/*

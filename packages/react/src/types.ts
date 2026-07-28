@@ -3,6 +3,7 @@ import type {
   CalendarDate,
   Direction,
   Holiday,
+  MonthView,
   SelectionMode,
   Weekday,
 } from "@alydev/core";
@@ -137,6 +138,20 @@ export interface UseCalendarOptions extends CalixConstraints {
   fixedWeeks?: boolean;
   /** Max selectable dates in `multiple` mode. */
   max?: number;
+  /** Minimum length of a `range` selection, in inclusive days. */
+  minRange?: number;
+  /** Maximum length of a `range` selection, in inclusive days. */
+  maxRange?: number;
+  /**
+   * Weekdays rendered with `data-weekend` and treated as the weekend for
+   * `businessDaysOnly` (0 = Sun … 6 = Sat). Defaults by locale — Persian
+   * locales default to `[5]` (Friday); everything else to `[0, 6]`.
+   */
+  weekendDays?: Weekday[];
+  /** Fired when the visible (leading) month changes. */
+  onMonthChange?: (view: MonthView) => void;
+  /** Fired when the focused (roving) date changes. */
+  onFocusChange?: (date: CalendarDate) => void;
 }
 
 /** Props returned for a single day cell button. */
@@ -157,6 +172,14 @@ export type DayProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export type GridProps = HTMLAttributes<HTMLDivElement>;
 export type NavButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+
+/** A one-click shortcut that applies a predefined value (e.g. "Last 7 days"). */
+export interface CalendarPreset {
+  /** Button text. */
+  label: string;
+  /** Value applied when chosen; its shape follows the picker `mode`. */
+  value: CalixValue;
+}
 
 /** Per-slot class names accepted by the styled components. */
 export interface CalendarClassNames {

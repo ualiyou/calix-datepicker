@@ -69,6 +69,29 @@ describe("range strategy", () => {
     expect(r.start.day).toBe(15);
     expect(r.end).toBeNull();
   });
+  it("clamps a range to maxRange days", () => {
+    const rc: SelectionContext = { ...ctx, maxRange: 7 };
+    let v = s.select(s.empty(), d(2026, 7, 10), rc);
+    v = s.select(v, d(2026, 7, 20), rc);
+    const r = v as DateRange;
+    expect(r.start.day).toBe(10);
+    expect(r.end?.day).toBe(16);
+  });
+  it("extends a range to minRange days", () => {
+    const rc: SelectionContext = { ...ctx, minRange: 5 };
+    let v = s.select(s.empty(), d(2026, 7, 10), rc);
+    v = s.select(v, d(2026, 7, 12), rc);
+    const r = v as DateRange;
+    expect(r.end?.day).toBe(14);
+  });
+  it("clamps respecting the drag direction", () => {
+    const rc: SelectionContext = { ...ctx, maxRange: 7 };
+    let v = s.select(s.empty(), d(2026, 7, 20), rc);
+    v = s.select(v, d(2026, 7, 10), rc);
+    const r = v as DateRange;
+    expect(r.start.day).toBe(14);
+    expect(r.end?.day).toBe(20);
+  });
 });
 
 describe("span strategies", () => {

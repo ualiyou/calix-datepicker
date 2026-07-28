@@ -23,14 +23,22 @@ interface CalendarDate {
 ```tsx
 import { gregorian } from "@alydev/adapter-gregorian";
 import { jalali } from "@alydev/adapter-jalali";
+import { hijri } from "@alydev/adapter-hijri";
+import { buddhist } from "@alydev/adapter-buddhist";
 
 <DatePicker adapter={gregorian} locale="en-US" />;
 <DatePicker adapter={jalali} locale="fa-IR" dir="rtl" />;
+<DatePicker adapter={hijri} locale="ar-SA" dir="rtl" />;
+<DatePicker adapter={buddhist} locale="th-TH" />;
 ```
 
-Both are stateless singletons. Reuse the exported adapter everywhere; locale is
+All four are stateless singletons. Reuse the exported adapter everywhere; locale is
 always passed to the component rather than stored on the adapter. One Gregorian
 adapter can therefore serve `en-US`, `en-GB`, and `fr-FR` at the same time.
+
+The Hijri adapter uses the platform ICU `islamic-umalqura` calendar, so it ships
+without date tables. The Thai Buddhist adapter uses Gregorian month/day rules and
+represents years in Buddhist Era (`BE = CE + 543`).
 
 ## Adapter responsibilities
 

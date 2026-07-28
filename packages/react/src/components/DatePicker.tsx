@@ -12,7 +12,7 @@ import {
 } from "react";
 import { useDatePicker, type UseDatePickerOptions } from "../hooks/useDatePicker.js";
 import { useDateInput } from "../hooks/useDateInput.js";
-import type { CalixValue, CalendarClassNames } from "../types.js";
+import type { CalixValue, CalendarClassNames, CalendarPreset } from "../types.js";
 import { CalendarView } from "./CalendarView.js";
 import { DatePickerContext, useDatePickerContext } from "./context.js";
 import { TimeField, type TimeFieldProps } from "./TimeField.js";
@@ -146,6 +146,8 @@ export interface DatePickerProps extends UseDatePickerOptions {
   showToday?: boolean;
   showClear?: boolean;
   infiniteScroll?: boolean;
+  /** One-click shortcuts shown in the popover (e.g. Today, Last 7 days). */
+  presets?: CalendarPreset[];
 }
 
 function formatTrigger(
@@ -181,6 +183,7 @@ function DatePickerBase({
   showToday = true,
   showClear = false,
   infiniteScroll = false,
+  presets,
   ...options
 }: DatePickerProps) {
   const locale = options.locale ?? options.adapter.defaultLocale;
@@ -209,6 +212,7 @@ function DatePickerBase({
             showToday={showToday}
             showClear={showClear}
             infiniteScroll={infiniteScroll}
+            {...(presets ? { presets } : {})}
           />
         ) : (
           <DefaultContent
@@ -216,6 +220,7 @@ function DatePickerBase({
             showToday={showToday}
             showClear={showClear}
             infiniteScroll={infiniteScroll}
+            {...(presets ? { presets } : {})}
           />
         )}
       </Content>
@@ -228,11 +233,13 @@ function DefaultContent({
   showToday,
   showClear,
   infiniteScroll,
+  presets,
 }: {
   classNames?: CalendarClassNames | undefined;
   showToday: boolean;
   showClear: boolean;
   infiniteScroll: boolean;
+  presets?: CalendarPreset[] | undefined;
 }) {
   const { calendar } = useDatePickerContext();
   return (
@@ -242,6 +249,7 @@ function DefaultContent({
       showToday={showToday}
       showClear={showClear}
       infiniteScroll={infiniteScroll}
+      {...(presets ? { presets } : {})}
     />
   );
 }
@@ -252,12 +260,14 @@ function DateTimeContent({
   showToday,
   showClear,
   infiniteScroll,
+  presets,
 }: {
   classNames?: CalendarClassNames | undefined;
   timePickerProps?: DatePickerProps["timePickerProps"] | undefined;
   showToday: boolean;
   showClear: boolean;
   infiniteScroll: boolean;
+  presets?: CalendarPreset[] | undefined;
 }) {
   const { calendar } = useDatePickerContext();
   const date = timeTarget(calendar.value);
@@ -279,6 +289,7 @@ function DateTimeContent({
           showToday={showToday}
           showClear={showClear}
           infiniteScroll={infiniteScroll}
+          {...(presets ? { presets } : {})}
         />
       ) : (
         <div className="calix-time-step">

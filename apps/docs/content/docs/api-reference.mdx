@@ -27,6 +27,10 @@ and headless-hook APIs.
 | `numberOfMonths`         | `number`                                                                        | `1`                                   |
 | `fixedWeeks`             | `boolean`                                                                       | `true`                                |
 | `max`                    | `number`                                                                        | —; multiple mode only                 |
+| `minRange` / `maxRange`  | `number`                                                                        | —; inclusive days, range mode only    |
+| `weekendDays`            | `Weekday[]`                                                                     | `[5]` for `fa-*`, `[0, 6]` otherwise  |
+| `onMonthChange`          | `(view: MonthView) => void`                                                     | —; excludes initial render            |
+| `onFocusChange`          | `(date: CalendarDate) => void`                                                  | —; excludes initial render            |
 | `onOutputChange`         | `(value: string) => void`                                                       | —                                     |
 | `outputFormat`           | `"string" \| "json"`                                                            | `"string"`                            |
 | `outputPattern`          | `string`                                                                        | `"yyyy-MM-dd"`                        |
@@ -42,7 +46,8 @@ and headless-hook APIs.
 | `enabledDates`                     | `Date[]`                     | When present, only these dates are allowed.         |
 | `disabledWeekdays`                 | `Weekday[]`                  | `0` Sunday through `6` Saturday.                    |
 | `disabledMonths` / `disabledYears` | `number[]`                   | Calendar month numbers (1-based) or years to block. |
-| `businessDaysOnly`                 | `boolean`                    | Blocks Saturday and Sunday.                         |
+| `businessDaysOnly`                 | `boolean`                    | Blocks the configured `weekendDays`.                |
+| `weekendDays`                      | `Weekday[]`                  | Weekend days; `[5]` for `fa-*`, `[0, 6]` otherwise. |
 | `holidays`                         | `Date[]`                     | Dates treated as blocked.                           |
 | `holidayData`                      | `readonly Holiday[]`         | Named dates for holiday markers and tooltips.       |
 | `showHolidays`                     | `boolean`                    | Shows holiday markers and names; default `false`.   |
@@ -62,6 +67,7 @@ The convenience popover picker. In addition to shared options:
 | `timePickerProps`         | `TimeFieldProps` without value handlers | —                                      |
 | `showToday` / `showClear` | `boolean`                               | `true` / `false`                       |
 | `infiniteScroll`          | `boolean`                               | `false`                                |
+| `presets`                 | `CalendarPreset[]`                      | —                                      |
 | `open` / `defaultOpen`    | `boolean`                               | uncontrolled / `false`                 |
 | `onOpenChange`            | `(open: boolean) => void`               | —                                      |
 | `closeOnSelect`           | `boolean`                               | `true`                                 |

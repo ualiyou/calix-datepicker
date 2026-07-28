@@ -4,7 +4,7 @@
 
 **A headless, accessible, multi-calendar date picker for React.**
 
-Gregorian and Jalali calendars · React 18/19 · RTL/LTR · TypeScript · SSR-safe · optional CSS theme.
+Gregorian, Jalali, Hijri, and Buddhist calendars · React 18/19 · RTL/LTR · TypeScript · SSR-safe · optional CSS theme.
 
 [Documentation](https://ualiyou.github.io/calix-datepicker/) · [Packages](#packages) · [Contributing](./CONTRIBUTING.md) · [Roadmap](./ROADMAP.md)
 
@@ -22,7 +22,7 @@ require rewriting your picker UI.
 ## Features
 
 - Single, range, and multiple-date selection.
-- Gregorian and Jalali/Persian adapters, with support for custom adapters.
+- Gregorian, Jalali/Persian, Hijri (Umm al-Qura), and Thai Buddhist adapters, with support for custom adapters.
 - Inline calendar, ready-to-use popover picker, and compound primitives.
 - Date/time selection, typed input, validation, disabled dates, and business-day rules.
 - Locale-aware month names, weekday order, digits, direction, and RTL keyboard behavior.
@@ -241,6 +241,8 @@ Every day button exposes state attributes such as `data-selected`, `data-today`,
 | [`@alydev/core`](./packages/core)                            | Framework-agnostic types, adapter contract, selection, validation, parsing, and formatting. Zero runtime dependencies. |
 | [`@alydev/adapter-gregorian`](./packages/adapters/gregorian) | Gregorian adapter powered by `date-fns`.                                                                               |
 | [`@alydev/adapter-jalali`](./packages/adapters/jalali)       | Jalali/Persian adapter powered by `date-fns-jalali`.                                                                   |
+| [`@alydev/adapter-hijri`](./packages/adapters/hijri)         | Hijri (Umm al-Qura) adapter powered by the platform ICU calendar. Zero data tables.                                    |
+| [`@alydev/adapter-buddhist`](./packages/adapters/buddhist)   | Thai Buddhist adapter (Buddhist Era = Common Era + 543).                                                               |
 | `@alydev/holidays-iran`                                     | Maintained Iranian public-holiday data for Jalali years 1400–1420.                                                     |
 | `@alydev/holidays-international`                            | New Year's Day and Christmas Day data for 2000–2100.                                                                   |
 | [`@alydev/datepicker`](./packages/react)                     | React hooks and accessible components.                                                                                 |

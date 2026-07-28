@@ -31,6 +31,13 @@ const [range, setRange] = useState<RangeValue>({ start: null, end: null });
 <Calendar adapter={gregorian} mode="range" numberOfMonths={2} value={range} onChange={setRange} />;
 ```
 
+Use `minRange` and `maxRange` to constrain the inclusive length of a range. The
+selected endpoint and hover preview are clamped to the closest allowed span.
+
+```tsx
+<Calendar adapter={gregorian} mode="range" minRange={2} maxRange={14} />
+```
+
 <Playground mode="range" inline />
 
 ## Multiple dates

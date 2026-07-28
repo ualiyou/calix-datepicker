@@ -93,6 +93,32 @@
   justify-content: center;
   gap: 0.5rem;
 }
+.calix-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--calix-border, transparent);
+}
+.calix-preset {
+  border: 0;
+  border-radius: var(--calix-radius-sm);
+  background: transparent;
+  color: var(--calix-accent);
+  padding: 0.3125rem 0.5rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.calix-preset:hover {
+  background: var(--calix-cell-hover, rgba(127, 127, 127, 0.12));
+}
+.calix-preset:focus-visible {
+  outline: 2px solid var(--calix-focus-ring);
+  outline-offset: 2px;
+}
 .calix-footer-button {
   border: 0;
   border-radius: var(--calix-radius-sm);

@@ -44,5 +44,8 @@ benchmarks vs. react-day-picker / react-aria / MUI X / Mantine / Ant Design.
 semantic versioning, final polish.
 
 ## Beyond 1.0 (ideas)
-Additional calendars (Hijri, Hebrew, Buddhist, Japanese), presets/shortcuts panel,
-timezone-aware values, `@alydev/vue` and `@alydev/solid` bindings, Tempo/Temporal support.
+Additional calendars — Hijri ✅ (`@alydev/adapter-hijri`); Hebrew, Buddhist,
+Japanese planned. Presets/shortcuts panel ✅. Regional weekends ✅ (`weekendDays`).
+Range length limits ✅ (`minRange`/`maxRange`). Month/focus callbacks ✅.
+Still planned: timezone-aware values (`@date-fns/tz`), `@alydev/vue` and
+`@alydev/solid` bindings, Tempo/Temporal support.

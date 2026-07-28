@@ -1,8 +1,8 @@
 # @alydev/datepicker
 
-An accessible, headless date picker for React 18 and 19. Calix supports Gregorian and
-Jalali/Persian calendars, RTL, typed date input, time selection, ranges, multiple dates,
-constraints, and optional CSS themes.
+An accessible, headless date picker for React 18 and 19. Calix supports Gregorian,
+Jalali/Persian, Hijri (Umm al-Qura), and Thai Buddhist calendars, RTL, typed date input,
+time selection, ranges, multiple dates, constraints, and optional CSS themes.
 
 [Documentation](https://ualiyou.github.io/calix-datepicker/) · [Interactive playground](https://ualiyou.github.io/calix-datepicker/docs/playground) · [GitHub](https://github.com/ualiyou/calix-datepicker)
 
@@ -20,6 +20,9 @@ For Jalali/Persian calendars:
 ```bash
 pnpm add @alydev/datepicker @alydev/adapter-jalali
 ```
+
+Hijri and Thai Buddhist adapters are available as `@alydev/adapter-hijri` and
+`@alydev/adapter-buddhist`.
 
 ## Quick start
 
@@ -67,6 +70,7 @@ import { jalali } from "@alydev/adapter-jalali";
 - Headless `useCalendar`, `useDatePicker`, `useDateInput`, and `useTime` hooks.
 - Single, multiple, and range selection; date/time picking; typed input and formatting.
 - Date constraints, business-day-only rules, custom disabled dates, and holiday data.
+- Range-length limits, regional weekends, month/focus callbacks, and one-click presets.
 - Keyboard navigation, roving focus, ARIA grid semantics, RTL, and reduced-motion support.
 
 ## Common patterns
@@ -135,6 +139,8 @@ your design system.
 - [Theming](https://ualiyou.github.io/calix-datepicker/docs/theming)
 - [`@alydev/adapter-gregorian`](https://www.npmjs.com/package/@alydev/adapter-gregorian)
 - [`@alydev/adapter-jalali`](https://www.npmjs.com/package/@alydev/adapter-jalali)
+- [`@alydev/adapter-hijri`](https://www.npmjs.com/package/@alydev/adapter-hijri)
+- [`@alydev/adapter-buddhist`](https://www.npmjs.com/package/@alydev/adapter-buddhist)
 - [`@alydev/themes`](https://www.npmjs.com/package/@alydev/themes)
 
 ## License

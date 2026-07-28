@@ -53,6 +53,26 @@ function spanForMode(
   }
 }
 
+/**
+ * Clamp the tentative endpoint so the resulting range honours `minRange` /
+ * `maxRange` (both measured in inclusive days). The endpoint is moved along the
+ * same direction the user dragged, never past the anchor.
+ */
+function clampSpan(start: CalendarDate, end: CalendarDate, ctx: SelectionContext): CalendarDate {
+  const { adapter, minRange, maxRange } = ctx;
+  if (minRange == null && maxRange == null) return end;
+  const diff = Math.round(
+    (adapter.toDate(end).getTime() - adapter.toDate(start).getTime()) / 86_400_000,
+  );
+  const dir = diff >= 0 ? 1 : -1;
+  const inclusive = Math.abs(diff) + 1;
+  let target = inclusive;
+  if (maxRange != null && target > maxRange) target = maxRange;
+  if (minRange != null && target < minRange) target = minRange;
+  if (target === inclusive) return end;
+  return adapter.addDays(start, dir * (target - 1));
+}
+
 function orderedRange(
   a: CalendarDate,
   b: CalendarDate,
@@ -84,10 +104,10 @@ const multiple: SelectionStrategy<CalendarDate[]> = {
 const range: SelectionStrategy<DateRange | null> = {
   mode: "range",
   empty: () => null,
-  select: (current, date) => {
+  select: (current, date, ctx) => {
     // Start a fresh range when empty or already complete.
     if (!current || current.end !== null) return { start: date, end: null };
-    return orderedRange(current.start, date);
+    return orderedRange(current.start, clampSpan(current.start, date, ctx));
   },
   isSelected: (value, date) =>
     value != null &&
@@ -100,7 +120,7 @@ const range: SelectionStrategy<DateRange | null> = {
     if (value.end != null) return isWithinRange(date, value.start, value.end);
     // Mid-selection: preview the tentative range under the pointer/focus.
     if (ctx.preview) {
-      const r = orderedRange(value.start, ctx.preview);
+      const r = orderedRange(value.start, clampSpan(value.start, ctx.preview, ctx));
       return isWithinRange(date, r.start, r.end);
     }
     return false;

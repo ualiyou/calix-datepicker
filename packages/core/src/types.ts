@@ -176,6 +176,10 @@ export interface SelectionContext {
   readonly preview?: CalendarDate | null;
   /** Maximum number of selectable items (multiple mode). */
   readonly max?: number;
+  /** Minimum length of a `range`, in inclusive days. */
+  readonly minRange?: number;
+  /** Maximum length of a `range`, in inclusive days. */
+  readonly maxRange?: number;
 }
 
 /**
@@ -210,6 +214,12 @@ export interface DateConstraints {
   readonly disabledYears?: readonly number[];
   /** When true, only Mon–Fri are selectable. */
   readonly businessDaysOnly?: boolean;
+  /**
+   * Weekdays treated as the weekend for `businessDaysOnly` (0 = Sun … 6 = Sat).
+   * Defaults to `[0, 6]` (Sunday/Saturday). For regions such as Iran, pass `[5]`
+   * (Friday) or `[4, 5]` (Thursday/Friday).
+   */
+  readonly weekendDays?: readonly Weekday[];
   /** Holiday dates treated as disabled. */
   readonly holidays?: readonly CalendarDate[];
   /** Arbitrary predicate; returning true disables the date. */
