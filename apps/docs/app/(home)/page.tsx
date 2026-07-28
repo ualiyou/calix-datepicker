@@ -25,12 +25,22 @@ const features = [
 
 const proof = ["React 18 / 19", "TypeScript", "SSR-safe", "RTL / LTR", "Four calendars"];
 
+function CalixMark() {
+  return (
+    <svg className="calix-home__mark" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18.5 7.25a7.5 7.5 0 1 0 0 9.5" />
+      <circle className="calix-home__mark-accent" cx="18.25" cy="12" r="2" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   return (
     <main className="calix-home">
       <nav className="calix-home__nav" aria-label="Primary navigation">
         <Link href="/" className="calix-home__brand" aria-label="Calix home">
-          <span aria-hidden>◒</span> Calix
+          <CalixMark />
+          <span>Calix</span>
         </Link>
         <div className="calix-home__nav-links">
           <Link href="/docs">Docs</Link>
@@ -46,9 +56,6 @@ export default function HomePage() {
 
       <section className="calix-home__hero">
         <div className="calix-home__copy">
-          <p className="calix-home__eyebrow">
-            <span aria-hidden>&lt;/&gt;</span> React date infrastructure
-          </p>
           <h1>Every calendar. One date layer.</h1>
           <p className="calix-home__lede">
             Accessible date primitives for React products that need more than a single locale,

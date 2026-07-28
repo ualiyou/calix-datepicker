@@ -1,5 +1,11 @@
 # @alydev/react
 
+## 2.1.1
+
+### Patch Changes
+
+- Refresh the Calix documentation landing page with the new minimal brand mark.
+
 ## 2.1.0
 
 ### Minor Changes
