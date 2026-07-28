@@ -8,18 +8,27 @@ import {
   type OutputFormat,
 } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
+import { hijri } from "@alydev/adapter-hijri";
 import { jalali } from "@alydev/adapter-jalali";
+import { buddhist } from "@alydev/adapter-buddhist";
 import { CodeIcon, EyeIcon } from "@alydev/icons";
 import { internationalHolidays } from "@alydev/holidays-international";
 import { iranHolidays } from "@alydev/holidays-iran";
 import type { CalendarAdapter, SelectionMode, Weekday } from "@alydev/core";
 
-type CalendarKind = "gregorian" | "jalali";
+type CalendarKind = "gregorian" | "jalali" | "hijri" | "buddhist";
 type View = "datepicker" | "calendar";
 type HolidaySource = "none" | "iran" | "international";
 
 const modes: SelectionMode[] = ["single", "multiple", "range", "week", "month", "year", "quarter"];
 type Choice = string | number;
+
+const calendarOptions: Record<CalendarKind, { adapter: CalendarAdapter; locale: string }> = {
+  gregorian: { adapter: gregorian, locale: "en-US" },
+  jalali: { adapter: jalali, locale: "fa-IR" },
+  hijri: { adapter: hijri, locale: "ar-SA" },
+  buddhist: { adapter: buddhist, locale: "th-TH" },
+};
 
 function highlightTsx(code: string): ReactNode[] {
   return code
@@ -135,7 +144,7 @@ function Toggle({
 
 function createCode(config: Config): string {
   const component = config.view === "calendar" ? "Calendar" : "DatePicker";
-  const adapter = config.calendar === "jalali" ? "jalali" : "gregorian";
+  const adapter = config.calendar;
   const holidayDataName =
     config.holidaySource === "iran" ? "iranHolidays" : "internationalHolidays";
   const holidayImport =
@@ -146,7 +155,7 @@ function createCode(config: Config): string {
     config.holidaySource !== "none" && (config.showHolidays || !config.holidaysSelectable);
   const props = [
     `adapter={${adapter}}`,
-    `locale="${config.calendar === "jalali" ? "fa-IR" : "en-US"}"`,
+    `locale="${calendarOptions[config.calendar].locale}"`,
     config.mode !== "single" && `mode="${config.mode}"`,
     config.theme !== "dark" && `theme="light"`,
     config.numberOfMonths !== 1 && `numberOfMonths={${config.numberOfMonths}}`,
@@ -325,8 +334,7 @@ export function Playground({ builder = false }: { builder?: boolean }) {
     setConfig((current) => ({ ...current, mode, withTime: mode === "single" && current.withTime }));
     setSelectedValue(previewValue(mode));
   };
-  const adapter = config.calendar === "jalali" ? jalali : gregorian;
-  const locale = config.calendar === "jalali" ? "fa-IR" : "en-US";
+  const { adapter, locale } = calendarOptions[config.calendar];
   const holidayData =
     config.holidaySource === "iran" ? iranHolidays : internationalHolidays;
   const includesTime = config.view === "datepicker" && config.mode === "single" && config.withTime;
@@ -402,6 +410,8 @@ export function Playground({ builder = false }: { builder?: boolean }) {
             options={[
               { value: "gregorian", label: "Gregorian" },
               { value: "jalali", label: "Jalali" },
+              { value: "hijri", label: "Hijri" },
+              { value: "buddhist", label: "Buddhist" },
             ]}
             onChange={(value) => update("calendar", value)}
           />

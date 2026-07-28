@@ -74,9 +74,15 @@ importers:
 
   apps/docs:
     dependencies:
+      '@alydev/adapter-buddhist':
+        specifier: workspace:*
+        version: link:../../packages/adapters/buddhist
       '@alydev/adapter-gregorian':
         specifier: workspace:*
         version: link:../../packages/adapters/gregorian
+      '@alydev/adapter-hijri':
+        specifier: workspace:*
+        version: link:../../packages/adapters/hijri
       '@alydev/adapter-jalali':
         specifier: workspace:*
         version: link:../../packages/adapters/jalali

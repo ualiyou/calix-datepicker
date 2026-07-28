@@ -104,4 +104,17 @@ describe("hijri adapter — structure", () => {
     expect(t.month).toBeGreaterThanOrEqual(1);
     expect(t.month).toBeLessThanOrEqual(12);
   });
+  it("implements the remaining CalendarAdapter primitives", () => {
+    const date = { year: 1448, month: 2, day: 14 };
+    expect(hijri.addYears(date, 1)).toEqual({ year: 1449, month: 2, day: 14 });
+    expect(hijri.getMonthGrid({ year: 1448, month: 2 }, { weekStartsOn: 0 }).days).toHaveLength(42);
+    expect(hijri.getYearRange(1448, 3)).toEqual([1447, 1448, 1449]);
+    expect(hijri.getWeek(date, { weekStartsOn: 0 })).toBeGreaterThan(0);
+    expect(hijri.isSameDay(date, { ...date })).toBe(true);
+    expect(hijri.isSameMonth(date, { ...date, day: 1 })).toBe(true);
+    expect(hijri.isSameYear(date, { ...date, month: 1 })).toBe(true);
+    expect(hijri.parse("1448-02-14", "yyyy-MM-dd", "en-US")).toEqual(date);
+    expect(hijri.getWeekdayNames("en-US", "short")).toHaveLength(7);
+    expect(hijri.getEraNames("ar-SA")).not.toHaveLength(0);
+  });
 });

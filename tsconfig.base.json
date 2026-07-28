@@ -37,6 +37,7 @@
       "@alydev/adapter-gregorian": ["./packages/adapters/gregorian/src/index.ts"],
       "@alydev/adapter-hijri": ["./packages/adapters/hijri/src/index.ts"],
       "@alydev/adapter-jalali": ["./packages/adapters/jalali/src/index.ts"],
+      "@alydev/adapter-buddhist": ["./packages/adapters/buddhist/src/index.ts"],
       "@alydev/holidays-international": ["./packages/holidays/international/src/index.ts"],
       "@alydev/holidays-iran": ["./packages/holidays/iran/src/index.ts"],
       "@alydev/icons": ["./packages/icons/src/index.tsx"],

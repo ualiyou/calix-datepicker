@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@alydev/adapter-gregorian": "workspace:*",
+    "@alydev/adapter-hijri": "workspace:*",
     "@alydev/adapter-jalali": "workspace:*",
+    "@alydev/adapter-buddhist": "workspace:*",
     "@alydev/core": "workspace:*",
     "@alydev/icons": "workspace:*",
     "@alydev/datepicker": "workspace:*",
