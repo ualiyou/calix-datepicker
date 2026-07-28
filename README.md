@@ -1,5 +1,9 @@
 <div align="center">
 
+<img src="./assets/branding/calix-github-banner.png" alt="Calix calendar banner" width="100%" />
+
+<img src="./assets/branding/calix-logo.png" alt="Calix logo" width="112" />
+
 # Calix
 
 **A headless, accessible, multi-calendar date picker for React.**
