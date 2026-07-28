@@ -80,6 +80,35 @@ function positionFor(
     else if (align === "center") top = reference.top + (reference.height - floating.height) / 2;
   }
 
+  if (
+    side === "bottom" &&
+    top + floating.height > window.innerHeight - VIEWPORT_PADDING &&
+    reference.top - floating.height - offset >= VIEWPORT_PADDING
+  ) {
+    top = reference.top - floating.height - offset;
+  }
+  if (
+    side === "top" &&
+    top < VIEWPORT_PADDING &&
+    reference.bottom + offset + floating.height <= window.innerHeight - VIEWPORT_PADDING
+  ) {
+    top = reference.bottom + offset;
+  }
+  if (
+    side === "right" &&
+    left + floating.width > window.innerWidth - VIEWPORT_PADDING &&
+    reference.left - floating.width - offset >= VIEWPORT_PADDING
+  ) {
+    left = reference.left - floating.width - offset;
+  }
+  if (
+    side === "left" &&
+    left < VIEWPORT_PADDING &&
+    reference.right + offset + floating.width <= window.innerWidth - VIEWPORT_PADDING
+  ) {
+    left = reference.right + offset;
+  }
+
   return {
     position: "fixed",
     left: Math.max(

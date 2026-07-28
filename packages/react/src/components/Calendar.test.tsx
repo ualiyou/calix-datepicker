@@ -375,6 +375,34 @@ describe("<Calendar>", () => {
     rect.mockRestore();
   });
 
+  it("opens above the trigger when there is no room below", () => {
+    const innerHeight = Object.getOwnPropertyDescriptor(window, "innerHeight");
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 768 });
+    const rect = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        const popover = this.hasAttribute("data-calix-popover");
+        return {
+          bottom: popover ? 100 : 760,
+          height: popover ? 100 : 20,
+          left: popover ? 0 : 100,
+          right: popover ? 200 : 200,
+          top: popover ? 0 : 740,
+          width: popover ? 200 : 100,
+        } as DOMRect;
+      });
+
+    render(
+      <DatePicker.Root adapter={gregorian} locale="en-US" defaultOpen>
+        <DatePicker.Trigger>Choose date</DatePicker.Trigger>
+        <DatePicker.Content portal={false} />
+      </DatePicker.Root>,
+    );
+    expect(screen.getByRole("dialog")).toHaveStyle({ top: "632px" });
+    rect.mockRestore();
+    Object.defineProperty(window, "innerHeight", innerHeight!);
+  });
+
   it("shows time after selecting a date and includes it in the value", async () => {
     const onChange = vi.fn();
     const onOutputChange = vi.fn();
