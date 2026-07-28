@@ -75,14 +75,15 @@ import { MonthPicker, YearPicker } from "@alydev/datepicker";
 
 ## Time
 
-`TimeField` manages a wall-clock `Time` value:
+`TimeField` (also exported as `TimePicker`) is a standalone wall-clock control;
+it does not require a date picker:
 
 ```tsx
-import { TimeField, type Time } from "@alydev/datepicker";
+import { TimePicker, type Time } from "@alydev/datepicker";
 
 const initial: Time = { hour: 9, minute: 30, second: 0, millisecond: 0 };
 
-<TimeField defaultValue={initial} hourCycle={12} withSeconds variant="field" />;
+<TimePicker defaultValue={initial} hourCycle={12} variant="analog" />;
 ```
 
 Available presentations are `"field"` (default), `"wheel"`, and `"analog"`.

@@ -36,7 +36,10 @@ export interface PickerLabels {
   meridiem?: string;
   toggleMeridiem?: string;
   today?: string;
+  now?: string;
+  confirm?: string;
   clear?: string;
+  cancel?: string;
 }
 
 /** Built-in UI text. Persian is selected automatically for a Persian locale. */
@@ -61,7 +64,10 @@ export function defaultPickerLabels(locale: string): Required<PickerLabels> {
       meridiem: "قبل از ظهر/بعد از ظهر",
       toggleMeridiem: "تغییر قبل از ظهر/بعد از ظهر",
       today: "امروز",
+      now: "الان",
+      confirm: "ثبت",
       clear: "پاک کردن",
+      cancel: "انصراف",
     };
   }
   return {
@@ -83,7 +89,10 @@ export function defaultPickerLabels(locale: string): Required<PickerLabels> {
     meridiem: "AM/PM",
     toggleMeridiem: "Toggle AM/PM",
     today: "Today",
+    now: "Now",
+    confirm: "Confirm",
     clear: "Clear",
+    cancel: "Cancel",
   };
 }
 
@@ -188,9 +197,32 @@ export interface CalendarClassNames {
   heading?: string;
   nav?: string;
   navButton?: string;
+  months?: string;
   grid?: string;
   weekdays?: string;
   weekday?: string;
   week?: string;
   day?: string;
+  footer?: string;
+  footerButton?: string;
+  presets?: string;
+  preset?: string;
+  picker?: string;
+  pickerBody?: string;
+  month?: string;
+  year?: string;
+}
+
+/** Extra slots used by the convenience popover `DatePicker`. */
+export interface DatePickerClassNames extends CalendarClassNames {
+  popover?: string;
+  field?: string;
+  input?: string;
+  toggle?: string;
+  clear?: string;
+  dateTime?: string;
+  timeStep?: string;
+  timeBack?: string;
+  timeTitle?: string;
+  timeActions?: string;
 }

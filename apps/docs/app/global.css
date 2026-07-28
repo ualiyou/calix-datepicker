@@ -34,8 +34,8 @@
   --fd-ring: 247 100% 75%;
 }
 
-/* Fumadocs anchors search near the top; keep dialogs centered in the viewport. */
-[role="dialog"] {
+/* Fumadocs anchors search near the top; keep its dialogs centered in the viewport. */
+[role="dialog"]:not([data-calix-popover]) {
   top: 50%;
   right: auto;
   bottom: auto;
@@ -62,6 +62,54 @@
   border-bottom: 1px solid hsl(var(--fd-border));
   background: hsl(var(--fd-muted) / 0.7);
 }
+.calix-playground__controls-header,
+.calix-playground__workspace-header,
+.calix-playground__workspace-header > p,
+.calix-playground__tabs {
+  display: flex;
+  align-items: center;
+}
+.calix-playground__controls-header,
+.calix-playground__workspace-header {
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.calix-playground__workspace-header > p {
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+.calix-playground__workspace-header > p span {
+  border: 1px solid hsl(var(--fd-border));
+  border-radius: 999px;
+  color: hsl(var(--fd-muted-foreground));
+  padding: 0.2rem 0.45rem;
+  font:
+    600 0.6875rem/1 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.calix-playground__reset {
+  min-height: 2rem;
+  border: 1px solid hsl(var(--fd-border));
+  border-radius: 0.5rem;
+  background: hsl(var(--fd-background));
+  color: hsl(var(--fd-muted-foreground));
+  padding: 0.35rem 0.55rem;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.calix-playground__reset:hover {
+  border-color: hsl(var(--fd-primary) / 0.6);
+  color: hsl(var(--fd-foreground));
+}
+.calix-playground__reset:focus-visible {
+  outline: 2px solid hsl(var(--fd-primary));
+  outline-offset: 2px;
+}
 
 .calix-playground__field {
   display: grid;
@@ -71,7 +119,7 @@
   font-weight: 650;
 }
 
-.calix-playground input:not([type="checkbox"]) {
+.calix-playground__controls input:not([type="checkbox"]) {
   width: 100%;
   min-height: 2.6rem;
   border: 1px solid hsl(var(--fd-border));
@@ -86,10 +134,10 @@
     box-shadow 180ms ease;
 }
 
-.calix-playground input:not([type="checkbox"]):hover {
+.calix-playground__controls input:not([type="checkbox"]):hover {
   border-color: hsl(var(--fd-primary) / 0.6);
 }
-.calix-playground input:not([type="checkbox"]):focus-visible {
+.calix-playground__controls input:not([type="checkbox"]):focus-visible {
   outline: 0;
   border-color: hsl(var(--fd-primary));
   box-shadow: 0 0 0 3px hsl(var(--fd-primary) / 0.18);
@@ -153,14 +201,21 @@
   padding: 1.25rem;
 }
 .calix-playground__tabs {
-  display: flex;
-  justify-content: flex-end;
   gap: 0.35rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid hsl(var(--fd-border));
 }
 .calix-playground__tabs button {
+  display: inline-flex;
+  min-height: 2.25rem;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid hsl(var(--fd-border));
+  border-radius: 0.55rem;
+  background: hsl(var(--fd-background));
   color: hsl(var(--fd-muted-foreground));
+  padding: 0.4rem 0.55rem;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
   transition:
     background 180ms ease,
     color 180ms ease,
@@ -170,6 +225,15 @@
 .calix-playground__tabs button:hover {
   color: hsl(var(--fd-foreground));
   border-color: hsl(var(--fd-primary) / 0.55);
+}
+.calix-playground__tabs button[aria-pressed="true"] {
+  border-color: hsl(var(--fd-primary));
+  background: hsl(var(--fd-primary));
+  color: hsl(var(--fd-primary-foreground));
+}
+.calix-playground__tabs button:focus-visible {
+  outline: 2px solid hsl(var(--fd-primary));
+  outline-offset: 2px;
 }
 
 @media (min-width: 64rem) {
@@ -196,6 +260,66 @@
     5rem 5rem,
     5rem 5rem;
   color: var(--home-paper);
+}
+
+.calix-home__nav {
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  top: 1.25rem;
+  right: 50%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(calc(100% - 3rem), 72rem);
+  transform: translateX(50%);
+}
+.calix-home__brand,
+.calix-home__nav-links,
+.calix-home__nav-links a,
+.calix-home__nav-cta {
+  display: inline-flex;
+  align-items: center;
+}
+.calix-home__brand {
+  gap: 0.45rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+.calix-home__brand span {
+  color: #a99fff;
+  font-size: 1.2rem;
+}
+.calix-home__nav-links {
+  gap: 1rem;
+}
+.calix-home__nav-links a {
+  gap: 0.2rem;
+  color: #b8bed0;
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.calix-home__nav-links a:hover {
+  color: #fff;
+}
+.calix-home__nav-cta {
+  min-height: 2.25rem;
+  border: 1px solid #5a5295;
+  border-radius: 999px;
+  background: rgb(139 124 255 / 0.14);
+  color: #e5e2ff;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+.calix-home__nav a:focus-visible {
+  outline: 2px solid #c7c0ff;
+  outline-offset: 3px;
 }
 
 .calix-home__hero {
@@ -359,7 +483,13 @@
   background: rgb(12 16 31 / 0.78);
   box-shadow: 0 2rem 5rem rgb(0 0 0 / 0.28);
 }
-.calix-home__preview > p {
+.calix-home__preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.calix-home__preview-header p {
   margin: 0;
   color: #c7c0ff;
   font:
@@ -368,9 +498,34 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+.calix-home__preview-header span {
+  border: 1px solid rgb(196 203 255 / 0.2);
+  border-radius: 999px;
+  color: #c7c0ff;
+  padding: 0.25rem 0.45rem;
+  font-size: 0.67rem;
+}
 .calix-home__preview > span {
   color: var(--home-muted);
   font-size: 0.78rem;
+}
+
+.calix-home__proof {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  width: min(calc(100% - 3rem), 72rem);
+  margin: -2rem auto 0;
+  padding: 1rem 0 3.5rem;
+}
+.calix-home__proof span {
+  border: 1px solid var(--home-line);
+  border-radius: 999px;
+  background: rgb(12 16 31 / 0.58);
+  color: #c7c0ff;
+  padding: 0.42rem 0.65rem;
+  font: 700 0.68rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .calix-home__section {
@@ -453,6 +608,13 @@
   color: #a9b0c4;
   font-size: 0.72rem;
 }
+.calix-home__code-card pre {
+  overflow-x: auto;
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  color: #bdb8ff;
+  font: 0.75rem/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
 .calix-home__code-card code {
   display: block;
   padding: 1.25rem;
@@ -483,6 +645,9 @@
 }
 
 @media (max-width: 800px) {
+  .calix-home__nav {
+    width: min(calc(100% - 2rem), 35rem);
+  }
   .calix-home__hero {
     grid-template-columns: 1fr;
     width: min(calc(100% - 2rem), 35rem);
@@ -507,6 +672,10 @@
   .calix-home__section {
     width: min(calc(100% - 2rem), 35rem);
   }
+  .calix-home__proof {
+    width: min(calc(100% - 2rem), 35rem);
+    margin-top: -1.25rem;
+  }
   .calix-home__code-section,
   .calix-home__cta {
     grid-template-columns: 1fr;
@@ -516,6 +685,12 @@
 }
 
 @media (max-width: 440px) {
+  .calix-home__nav {
+    width: min(calc(100% - 1.25rem), 35rem);
+  }
+  .calix-home__nav-links {
+    display: none;
+  }
   .calix-home__hero {
     width: min(calc(100% - 1.25rem), 35rem);
   }

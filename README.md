@@ -181,11 +181,7 @@ Use the existing `holidays` prop when you only need dates disabled without holid
 ```tsx
 import { internationalHolidays } from "@alydev/holidays-international";
 
-<Calendar
-  adapter={gregorian}
-  holidayData={internationalHolidays}
-  showHolidays
-/>;
+<Calendar adapter={gregorian} holidayData={internationalHolidays} showHolidays />;
 ```
 
 The package contains New Year's Day and Christmas Day from 2000 through 2100.
@@ -233,15 +229,31 @@ Override CSS variables to match your design system:
 }
 ```
 
-Every day button exposes state attributes such as `data-selected`, `data-today`, `data-disabled`, `data-outside-month`, `data-range-start`, `data-range-end`, `data-in-range`, `data-focused`, and `data-weekend`. Use `classNames` for per-slot classes or `renderDay` for custom day content.
+Every day button exposes state attributes such as `data-selected`, `data-today`, `data-disabled`, `data-outside-month`, `data-range-start`, `data-range-end`, `data-in-range`, `data-focused`, and `data-weekend`.
+
+`Calendar` exposes styling slots for the shell, title, navigation, month/year
+picker, weekday grid, day cells, presets, and footer. `DatePicker` adds slots
+for the popover, input, calendar toggle, clear button, and date-time step. Use
+`renderDay` for custom day content; use `header` and `footer` callbacks when a
+custom title or button needs calendar actions.
 
 ```tsx
 <Calendar
   adapter={gregorian}
-  classNames={{ day: "my-day" }}
+  classNames={{
+    heading: "my-title",
+    navButton: "my-nav-button",
+    day: "my-day",
+    footerButton: "my-footer-button",
+  }}
   renderDay={(date, label) => <span title={`${date.year}/${date.month}/${date.day}`}>{label}</span>}
+  header={(calendar) => <button onClick={calendar.goToToday}>This month</button>}
+  footer={(calendar) => <button onClick={calendar.clear}>Reset</button>}
 />
 ```
+
+For complete markup control, compose `DatePicker.Root`, `.Input`, `.Trigger`,
+and `.Content`, or render directly from `useCalendar`.
 
 ## Packages
 
@@ -252,8 +264,8 @@ Every day button exposes state attributes such as `data-selected`, `data-today`,
 | [`@alydev/adapter-jalali`](./packages/adapters/jalali)       | Jalali/Persian adapter powered by `date-fns-jalali`.                                                                   |
 | [`@alydev/adapter-hijri`](./packages/adapters/hijri)         | Hijri (Umm al-Qura) adapter powered by the platform ICU calendar. Zero data tables.                                    |
 | [`@alydev/adapter-buddhist`](./packages/adapters/buddhist)   | Thai Buddhist adapter (Buddhist Era = Common Era + 543).                                                               |
-| `@alydev/holidays-iran`                                     | Maintained Iranian public-holiday data for Jalali years 1400–1420.                                                     |
-| `@alydev/holidays-international`                            | New Year's Day and Christmas Day data for 2000–2100.                                                                   |
+| `@alydev/holidays-iran`                                      | Maintained Iranian public-holiday data for Jalali years 1400–1420.                                                     |
+| `@alydev/holidays-international`                             | New Year's Day and Christmas Day data for 2000–2100.                                                                   |
 | [`@alydev/datepicker`](./packages/react)                     | React hooks and accessible components.                                                                                 |
 | [`@alydev/themes`](./packages/themes)                        | Optional CSS-variable themes.                                                                                          |
 | [`@alydev/icons`](./packages/icons)                          | Tree-shakeable SVG icons.                                                                                              |

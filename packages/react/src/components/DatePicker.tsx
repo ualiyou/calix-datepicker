@@ -12,7 +12,12 @@ import {
 import { createPortal } from "react-dom";
 import { useDatePicker, type UseDatePickerOptions } from "../hooks/useDatePicker.js";
 import { useDateInput } from "../hooks/useDateInput.js";
-import type { CalixValue, CalendarClassNames, CalendarPreset } from "../types.js";
+import type {
+  CalixValue,
+  CalendarClassNames,
+  CalendarPreset,
+  DatePickerClassNames,
+} from "../types.js";
 import { CalendarView } from "./CalendarView.js";
 import { DatePickerContext, useDatePickerContext } from "./context.js";
 import { TimeField, type TimeFieldProps } from "./TimeField.js";
@@ -33,17 +38,20 @@ function Root({ children, ...options }: DatePickerRootProps) {
 
 export interface DatePickerTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
+  /** Use this element as the popover anchor. Default: true. */
+  reference?: boolean;
 }
 
 /** A button that toggles the popover. */
-function Trigger({ children, ...rest }: DatePickerTriggerProps) {
-  const { refs, getReferenceProps, open } = useDatePickerContext();
+function Trigger({ children, reference = true, ...rest }: DatePickerTriggerProps) {
+  const { refs, getReferenceProps, open, popoverId } = useDatePickerContext();
   return (
     <button
-      ref={refs.setReference}
+      ref={reference ? refs.setReference : undefined}
       type="button"
       aria-haspopup="dialog"
       aria-expanded={open}
+      aria-controls={popoverId}
       {...getReferenceProps(rest)}
     >
       {children}
@@ -57,11 +65,18 @@ export interface DatePickerInputProps extends InputHTMLAttributes<HTMLInputEleme
   /** Format/parse pattern, e.g. `"yyyy/MM/dd"`. */
   pattern?: string;
   mask?: boolean;
+  /** Use this element as the popover anchor. Default: true. */
+  reference?: boolean;
 }
 
 /** A text input bound to the picker value (single-date mode). */
-function Input({ pattern = "yyyy/MM/dd", mask = false, ...rest }: DatePickerInputProps) {
-  const { calendar, refs, getReferenceProps } = useDatePickerContext();
+function Input({
+  pattern = "yyyy/MM/dd",
+  mask = false,
+  reference = true,
+  ...rest
+}: DatePickerInputProps) {
+  const { calendar, refs, getReferenceProps, open, popoverId, setOpen } = useDatePickerContext();
   const adapter = calendar.adapter;
   const current = (calendar.value as Date | null) ?? null;
 
@@ -74,13 +89,23 @@ function Input({ pattern = "yyyy/MM/dd", mask = false, ...rest }: DatePickerInpu
     onCommit: (cd: CalendarDate | null) => calendar.setValue(cd ? adapter.toDate(cd) : null),
   });
 
+  const inputProps = getInputProps();
+  const { onKeyDown, ...inputRest } = rest;
+
   return (
     <input
-      ref={refs.setReference}
+      ref={reference ? refs.setReference : undefined}
       data-theme={calendar.theme}
-      {...getInputProps()}
-      {...getReferenceProps()}
-      {...rest}
+      {...inputProps}
+      {...getReferenceProps(inputRest)}
+      aria-haspopup="dialog"
+      aria-expanded={open}
+      aria-controls={popoverId}
+      onKeyDown={(event) => {
+        inputProps.onKeyDown?.(event);
+        onKeyDown?.(event);
+        if (event.key === "Enter" || event.key === " ") setOpen(true);
+      }}
     />
   );
 }
@@ -90,8 +115,11 @@ function Input({ pattern = "yyyy/MM/dd", mask = false, ...rest }: DatePickerInpu
 export interface DatePickerContentProps {
   children?: ReactNode;
   classNames?: CalendarClassNames;
+  className?: string;
   /** Show the Today control in the default calendar. Default: true. */
   showToday?: boolean;
+  /** Show a Cancel control that closes the default calendar. Default: true. */
+  showCancel?: boolean;
   /** Render into a portal at the document body. Default: true. */
   portal?: boolean;
 }
@@ -100,18 +128,22 @@ export interface DatePickerContentProps {
 function Content({
   children,
   classNames,
+  className,
   showToday = true,
+  showCancel = true,
   portal = true,
 }: DatePickerContentProps) {
-  const { open, refs, floatingStyles, getFloatingProps, calendar } = useDatePickerContext();
+  const { open, refs, floatingStyles, getFloatingProps, calendar, popoverId, setOpen } =
+    useDatePickerContext();
 
   if (!open) return null;
 
   const surface = (
     <div
       ref={refs.setFloating}
+      id={popoverId}
       style={floatingStyles}
-      className="calix-popover"
+      className={["calix-popover", className].filter(Boolean).join(" ")}
       data-theme={calendar.theme}
       data-calix-popover=""
       {...getFloatingProps()}
@@ -121,6 +153,7 @@ function Content({
           calendar={calendar}
           {...(classNames ? { classNames } : {})}
           showToday={showToday}
+          {...(showCancel ? { onCancel: () => setOpen(false) } : {})}
         />
       )}
     </div>
@@ -135,13 +168,15 @@ export interface DatePickerProps extends UseDatePickerOptions {
   /** Placeholder shown in the trigger when no date is selected. */
   placeholder?: string;
   pattern?: string;
-  classNames?: CalendarClassNames;
+  classNames?: DatePickerClassNames;
   /** Show a time field after selecting a date. Default: false. Single-date mode only. */
   withTime?: boolean;
   /** Options forwarded to the optional time field. */
   timePickerProps?: Omit<TimeFieldProps, "value" | "defaultValue" | "onChange">;
   showToday?: boolean;
   showClear?: boolean;
+  /** Show a Cancel control that closes the popover. Default: true. */
+  showCancel?: boolean;
   infiniteScroll?: boolean;
   /** One-click shortcuts shown in the popover (e.g. Today, Last 7 days). */
   presets?: CalendarPreset[];
@@ -179,6 +214,7 @@ function DatePickerBase({
   timePickerProps,
   showToday = true,
   showClear = false,
+  showCancel = true,
   infiniteScroll = false,
   presets,
   ...options
@@ -200,22 +236,25 @@ function DatePickerBase({
         pattern={displayPattern}
         adapter={options.adapter}
         locale={locale}
+        {...(classNames ? { classNames } : {})}
       />
-      <Content>
+      <Content {...(classNames?.popover ? { className: classNames.popover } : {})} showCancel={false}>
         {withTime ? (
           <DateTimeContent
-            classNames={classNames}
+            {...(classNames ? { classNames } : {})}
             timePickerProps={timePickerProps}
             showToday={showToday}
             showClear={showClear}
+            showCancel={showCancel}
             infiniteScroll={infiniteScroll}
             {...(presets ? { presets } : {})}
           />
         ) : (
           <DefaultContent
-            classNames={classNames}
+            {...(classNames ? { classNames } : {})}
             showToday={showToday}
             showClear={showClear}
+            showCancel={showCancel}
             infiniteScroll={infiniteScroll}
             {...(presets ? { presets } : {})}
           />
@@ -229,22 +268,25 @@ function DefaultContent({
   classNames,
   showToday,
   showClear,
+  showCancel,
   infiniteScroll,
   presets,
 }: {
-  classNames?: CalendarClassNames | undefined;
+  classNames?: DatePickerClassNames | undefined;
   showToday: boolean;
   showClear: boolean;
+  showCancel: boolean;
   infiniteScroll: boolean;
   presets?: CalendarPreset[] | undefined;
 }) {
-  const { calendar } = useDatePickerContext();
+  const { calendar, setOpen } = useDatePickerContext();
   return (
     <CalendarView
       calendar={calendar}
       {...(classNames ? { classNames } : {})}
       showToday={showToday}
       showClear={showClear}
+      {...(showCancel ? { onCancel: () => setOpen(false) } : {})}
       infiniteScroll={infiniteScroll}
       {...(presets ? { presets } : {})}
     />
@@ -256,17 +298,19 @@ function DateTimeContent({
   timePickerProps,
   showToday,
   showClear,
+  showCancel,
   infiniteScroll,
   presets,
 }: {
-  classNames?: CalendarClassNames | undefined;
+  classNames?: DatePickerClassNames | undefined;
   timePickerProps?: DatePickerProps["timePickerProps"] | undefined;
   showToday: boolean;
   showClear: boolean;
+  showCancel: boolean;
   infiniteScroll: boolean;
   presets?: CalendarPreset[] | undefined;
 }) {
-  const { calendar } = useDatePickerContext();
+  const { calendar, setOpen } = useDatePickerContext();
   const date = timeTarget(calendar.value);
   const [step, setStep] = useState<"date" | "time">(date ? "time" : "date");
   const lastDate = useRef(date?.getTime());
@@ -278,30 +322,58 @@ function DateTimeContent({
   }, [date]);
 
   return (
-    <div className="calix-date-time-picker">
+    <div className={["calix-date-time-picker", classNames?.dateTime].filter(Boolean).join(" ")}>
       {step === "date" || !date ? (
         <CalendarView
           calendar={calendar}
           {...(classNames ? { classNames } : {})}
           showToday={showToday}
           showClear={showClear}
+          {...(showCancel ? { onCancel: () => setOpen(false) } : {})}
           infiniteScroll={infiniteScroll}
           {...(presets ? { presets } : {})}
         />
       ) : (
-        <div className="calix-time-step">
-          <button type="button" className="calix-time-back" onClick={() => setStep("date")}>
+        <div className={["calix-time-step", classNames?.timeStep].filter(Boolean).join(" ")}>
+          <button
+            type="button"
+            className={["calix-time-back", classNames?.timeBack].filter(Boolean).join(" ")}
+            onClick={() => setStep("date")}
+          >
             {calendar.labels?.back ?? "Back"}
           </button>
-          <p className="calix-time-step-title">{calendar.labels?.selectTime ?? "Select time"}</p>
+          <p className={["calix-time-step-title", classNames?.timeTitle].filter(Boolean).join(" ")}>
+            {calendar.labels?.selectTime ?? "Select time"}
+          </p>
           <TimeField
             {...timePickerProps}
+            locale={calendar.locale}
             labels={{ ...calendar.labels, ...timePickerProps?.labels }}
             theme={calendar.theme}
             variant={timePickerProps?.variant ?? "wheel"}
             value={toTime(date)}
             onChange={(time) => calendar.setValue(setTargetTime(calendar.value, date, time))}
           />
+          <div
+            className={["calix-time-picker-actions", classNames?.timeActions]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <button type="button" onClick={() => setOpen(false)}>
+              {calendar.labels?.confirm ?? "Confirm"}
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                calendar.setValue(setTargetTime(calendar.value, date, toTime(new Date())))
+              }
+            >
+              {calendar.labels?.now ?? "Now"}
+            </button>
+            <button type="button" onClick={() => setOpen(false)}>
+              {calendar.labels?.cancel ?? "Cancel"}
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -345,25 +417,70 @@ function TriggerLabel({
   pattern,
   adapter,
   locale,
+  classNames,
 }: {
   placeholder: string;
   pattern: string;
   adapter: DatePickerProps["adapter"];
   locale: string;
+  classNames?: DatePickerClassNames | undefined;
 }) {
   const { calendar } = useDatePickerContext();
+  const hasValue =
+    calendar.value != null && (!Array.isArray(calendar.value) || calendar.value.length > 0);
   const label = useMemo(
     () => formatTrigger(calendar.value, adapter, locale, pattern, placeholder),
     [calendar.value, adapter, locale, pattern, placeholder],
   );
   return (
-    <Trigger
-      className="calix-trigger"
+    <div
+      className={["calix-date-picker-field", classNames?.field].filter(Boolean).join(" ")}
       data-theme={calendar.theme}
-      data-empty={calendar.value == null ? "" : undefined}
+      data-has-value={hasValue ? "" : undefined}
+      dir={calendar.dir}
     >
-      {label}
-    </Trigger>
+      <Input
+        className={["calix-input", classNames?.input].filter(Boolean).join(" ")}
+        placeholder={placeholder}
+        pattern={pattern}
+        aria-label={label}
+      />
+      <Trigger
+        reference={false}
+        className={["calix-date-picker-toggle", classNames?.toggle].filter(Boolean).join(" ")}
+        aria-label={label}
+        title={label}
+      >
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <rect x="3" y="4" width="18" height="17" rx="2" />
+          <path d="M8 2v4M16 2v4M3 10h18" />
+        </svg>
+      </Trigger>
+      <button
+        type="button"
+        className={["calix-date-picker-clear", classNames?.clear].filter(Boolean).join(" ")}
+        aria-label={calendar.labels?.clear ?? "Clear"}
+        title={calendar.labels?.clear ?? "Clear"}
+        disabled={!hasValue}
+        onClick={calendar.clear}
+      >
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="m7 7 10 10M17 7 7 17" />
+        </svg>
+      </button>
+    </div>
   );
 }
 

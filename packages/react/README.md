@@ -128,7 +128,24 @@ import "@alydev/themes/default.css";
 
 Use CSS variables, `classNames`, `renderDay`, and state attributes such as
 `data-selected`, `data-today`, `data-disabled`, and `data-in-range` to integrate it with
-your design system.
+your design system. `CalendarClassNames` covers the calendar shell, header,
+navigation, grids, day cells, presets, footer, and month/year picker;
+`DatePickerClassNames` additionally covers the popover, field, input, toggle,
+clear control, and date-time step.
+
+```tsx
+<Calendar
+  adapter={gregorian}
+  classNames={{ heading: "calendar-title", navButton: "calendar-nav", day: "calendar-day" }}
+  header={(calendar) => <button onClick={calendar.goToToday}>This month</button>}
+  footer={(calendar) => <button onClick={calendar.clear}>Reset</button>}
+/>
+```
+
+`header` and `footer` can also be plain React nodes. Use their callback form to
+keep custom controls connected to the built-in calendar state. For complete DOM
+control, compose `DatePicker.Root`, `.Input`, `.Trigger`, and `.Content`, or use
+`useCalendar` directly.
 
 ## Documentation and packages
 

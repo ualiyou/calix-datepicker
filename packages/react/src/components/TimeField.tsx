@@ -1,13 +1,26 @@
 "use client";
 import type { Time } from "@alydev/core";
-import { useEffect, useRef, type ChangeEvent, type KeyboardEvent } from "react";
+import { autoUpdate, flip, offset, shift, useFloating } from "@floating-ui/react-dom";
+import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type KeyboardEvent } from "react";
+import { createPortal } from "react-dom";
 import { useTime, type UseTimeOptions } from "../hooks/useTime.js";
-import type { ColorTheme, PickerLabels } from "../types.js";
+import { defaultPickerLabels, type ColorTheme, type PickerLabels } from "../types.js";
+import { useControllableState } from "../utils/useControllableState.js";
 
 export interface TimeFieldProps extends UseTimeOptions {
   /** Presentation style. Default: "field". */
   variant?: "field" | "wheel" | "analog";
   labels?: PickerLabels;
+  /** Locale used for labels and numeric clock values. Default: "en-US". */
+  locale?: string;
+  /** Commits the selected value from the analog picker. */
+  onAccept?: (value: Time) => void;
+  /** Applies the current local time. */
+  onNow?: (value: Time) => void;
+  /** Dismisses the analog picker without changing its value. */
+  onCancel?: () => void;
+  /** Show the action footer in the inline analog field. Default: true. */
+  showActions?: boolean;
   /** Color scheme for the standalone field. Default: "dark". */
   theme?: ColorTheme;
   className?: string;
@@ -16,15 +29,30 @@ export interface TimeFieldProps extends UseTimeOptions {
 }
 
 const pad = (n: number) => String(n).padStart(2, "0");
+const EMPTY_TIME: Time = { hour: 0, minute: 0, second: 0, millisecond: 0 };
 
 /**
  * An accessible digital time field with stepper behavior. Arrow keys adjust the
  * focused segment; type to overwrite. Emits a {@link Time} on change.
  */
-export function TimeField({ className, disabled, variant = "field", labels, theme = "dark", ...options }: TimeFieldProps) {
+export function TimeField({
+  className,
+  disabled,
+  variant = "field",
+  labels,
+  locale = "en-US",
+  onAccept,
+  onNow,
+  onCancel,
+  showActions = true,
+  theme = "dark",
+  ...options
+}: TimeFieldProps) {
   const t = useTime(options);
   const withSeconds = options.withSeconds ?? false;
   const hourCycle = options.hourCycle ?? 24;
+  const [analogPart, setAnalogPart] = useState<"hour" | "minute">("hour");
+  const text = { ...defaultPickerLabels(locale), ...labels };
 
   const segmentKeyDown =
     (increment: (d: number) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
@@ -74,7 +102,9 @@ export function TimeField({ className, disabled, variant = "field", labels, them
       >
         <WheelColumn
           label={labels?.hour ?? "Hour"}
-          values={Array.from({ length: hourCycle === 12 ? 12 : 24 }, (_, i) => hourCycle === 12 ? i + 1 : i)}
+          values={Array.from({ length: hourCycle === 12 ? 12 : 24 }, (_, i) =>
+            hourCycle === 12 ? i + 1 : i,
+          )}
           value={t.displayHour}
           disabled={disabled}
           onChange={(hour) => t.setHour(hourCycle === 12 ? to24(hour, t.meridiem) : hour)}
@@ -100,15 +130,126 @@ export function TimeField({ className, disabled, variant = "field", labels, them
   }
 
   if (variant === "analog") {
-    const hours = Array.from({ length: hourCycle === 12 ? 12 : 24 }, (_, index) => hourCycle === 12 ? index + 1 : index);
+    const hourLabel = text.hour;
+    const minuteLabel = text.minute;
+    const timeLabel = text.time;
+    const format = (value: number) =>
+      new Intl.NumberFormat(locale, { minimumIntegerDigits: 2, useGrouping: false }).format(value);
+    const hours = Array.from({ length: 12 }, (_, index) =>
+      hourCycle === 12
+        ? [{ value: index + 1, radius: "6.75rem" }]
+        : [
+            { value: index, radius: "3.75rem" },
+            { value: index + 12, radius: "6.75rem" },
+          ],
+    ).flat();
+    const minutes = Array.from({ length: 12 }, (_, index) => index * 5);
+    const selectedHour = hourCycle === 12 ? t.displayHour : t.value.hour;
+    const activeLabel = analogPart === "hour" ? hourLabel : minuteLabel;
     return (
-      <div className={["calix-time", "calix-time-analog", className].filter(Boolean).join(" ")} role="group" aria-label={options["aria-label"] ?? labels?.time} data-theme={theme} data-calix-time="">
-        <div className="calix-clock-face" role="listbox" aria-label={labels?.hour}>
-          {hours.map((hour) => (
-            <button key={hour} type="button" role="option" aria-selected={hour === t.displayHour} onClick={() => t.setHour(hourCycle === 12 ? to24(hour, t.meridiem) : hour)}>{pad(hour)}</button>
-          ))}
+      <div
+        className={["calix-time", "calix-time-analog", className].filter(Boolean).join(" ")}
+        role="group"
+        aria-label={options["aria-label"] ?? timeLabel}
+        data-theme={theme}
+        data-calix-time=""
+      >
+        <output className="calix-clock-value" aria-live="polite">
+          {format(t.displayHour)}:{format(t.value.minute)}
+        </output>
+        <div className="calix-clock-tabs" role="tablist" aria-label={timeLabel}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={analogPart === "hour"}
+            onClick={() => setAnalogPart("hour")}
+          >
+            {hourLabel}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={analogPart === "minute"}
+            onClick={() => setAnalogPart("minute")}
+          >
+            {minuteLabel}
+          </button>
         </div>
-        <label className="calix-clock-minute">{labels?.minute}<input type="range" min="0" max="59" step={options.minuteStep ?? 1} value={t.value.minute} onChange={(event) => t.setMinute(Number(event.target.value))} /></label>
+        <div
+          className="calix-clock-face"
+          role="listbox"
+          aria-label={activeLabel}
+          data-part={analogPart}
+          style={
+            {
+              "--calix-clock-hour-angle": `${(t.displayHour % 12) * 30 + t.value.minute / 2}deg`,
+              "--calix-clock-minute-angle": `${t.value.minute * 6}deg`,
+            } as CSSProperties
+          }
+        >
+          <span className="calix-clock-hand calix-clock-hour-hand" aria-hidden="true" />
+          <span className="calix-clock-hand calix-clock-minute-hand" aria-hidden="true" />
+          <span className="calix-clock-center" aria-hidden="true" />
+          {(analogPart === "hour" ? hours : minutes).map((item) => {
+            const hour = typeof item === "number" ? item : item.value;
+            const radius = typeof item === "number" ? "6.75rem" : item.radius;
+            const ring = typeof item === "number" || item.value >= 12 ? "outer" : "inner";
+            const selected = analogPart === "hour" ? hour === selectedHour : hour === t.value.minute;
+            return (
+            <button
+              key={`${analogPart}-${hour}`}
+              type="button"
+              role="option"
+              aria-label={`${activeLabel} ${format(hour)}`}
+              aria-selected={selected}
+              data-ring={ring}
+              disabled={disabled}
+              style={
+                {
+                  "--calix-clock-angle": `${analogPart === "minute" ? hour * 6 : (hour % 12) * 30}deg`,
+                  "--calix-clock-radius": radius,
+                } as CSSProperties
+              }
+              onClick={() => {
+                if (analogPart === "hour") {
+                  t.setHour(hourCycle === 12 ? to24(hour, t.meridiem) : hour);
+                  setAnalogPart("minute");
+                } else {
+                  t.setMinute(hour);
+                }
+              }}
+            >
+              {format(hour)}
+            </button>
+            );
+          })}
+        </div>
+        {hourCycle === 12 && (
+          <button
+            type="button"
+            className="calix-time-meridiem"
+            aria-label={labels?.toggleMeridiem ?? "Toggle AM/PM"}
+            disabled={disabled}
+            onClick={() => t.setMeridiem(t.meridiem === "am" ? "pm" : "am")}
+          >
+            {t.meridiem.toUpperCase()}
+          </button>
+        )}
+        {showActions && (
+          <TimePickerActions
+            disabled={disabled}
+            labels={text}
+            onAccept={() => onAccept?.(t.value)}
+            onNow={() => {
+              const value = nowTime();
+              t.setHour(value.hour);
+              t.setMinute(value.minute);
+              t.setSecond(value.second);
+              onNow?.(value);
+            }}
+            onCancel={onCancel}
+          />
+        )}
       </div>
     );
   }
@@ -131,13 +272,25 @@ export function TimeField({ className, disabled, variant = "field", labels, them
       <span aria-hidden className="calix-time-separator">
         :
       </span>
-      {numberInput(labels?.minute ?? "Minute", t.value.minute, 59, t.setMinute, segmentKeyDown(t.incrementMinute))}
+      {numberInput(
+        labels?.minute ?? "Minute",
+        t.value.minute,
+        59,
+        t.setMinute,
+        segmentKeyDown(t.incrementMinute),
+      )}
       {withSeconds && (
         <>
           <span aria-hidden className="calix-time-separator">
             :
           </span>
-          {numberInput(labels?.second ?? "Second", t.value.second, 59, t.setSecond, segmentKeyDown(t.incrementSecond))}
+          {numberInput(
+            labels?.second ?? "Second",
+            t.value.second,
+            59,
+            t.setSecond,
+            segmentKeyDown(t.incrementSecond),
+          )}
         </>
       )}
       {hourCycle === 12 && (
@@ -155,7 +308,186 @@ export function TimeField({ className, disabled, variant = "field", labels, them
   );
 }
 
-const WHEEL_ITEM_HEIGHT = 40;
+export interface TimePickerProps extends TimeFieldProps {
+  /** Placeholder used only when the picker has no value. */
+  placeholder?: string;
+}
+
+/** A time input with a popover picker. Use {@link TimeField} for an inline control. */
+export function TimePicker({
+  className,
+  defaultValue,
+  onAccept,
+  onCancel,
+  onNow,
+  onChange,
+  placeholder,
+  value,
+  ...props
+}: TimePickerProps) {
+  const [open, setOpen] = useState(false);
+  const [time, setTime] = useControllableState<Time>({
+    value,
+    defaultValue: defaultValue ?? EMPTY_TIME,
+    onChange,
+  });
+  const locale = props.locale ?? "en-US";
+  const format = (part: number) =>
+    new Intl.NumberFormat(locale, { minimumIntegerDigits: 2, useGrouping: false }).format(part);
+  const text = { ...defaultPickerLabels(locale), ...props.labels };
+  const hasValue = time.hour !== 0 || time.minute !== 0 || time.second !== 0 || time.millisecond !== 0;
+  const { refs, floatingStyles } = useFloating({
+    open,
+    placement: "bottom-start",
+    strategy: "fixed",
+    transform: false,
+    middleware: [
+      offset(8),
+      flip({ padding: 8, fallbackStrategy: "initialPlacement" }),
+      shift({ padding: 8, mainAxis: false }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
+  useEffect(() => {
+    if (!open) return;
+    const dismiss = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      const reference = target instanceof Element && target.closest("[data-calix-time-reference]");
+      if (target && !reference && !refs.floating.current?.contains(target)) setOpen(false);
+    };
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", dismiss);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open, refs.floating]);
+
+  const popover = open ? (
+    <div
+      ref={refs.setFloating}
+      style={floatingStyles}
+      className="calix-time-popover"
+      data-calix-popover=""
+      role="dialog"
+      aria-label={text.time}
+    >
+      <TimeField
+        {...props}
+        variant={props.variant ?? "analog"}
+        showActions={false}
+        value={time}
+        onChange={setTime}
+      />
+      <TimePickerActions
+        disabled={props.disabled}
+        labels={text}
+        onAccept={() => {
+          onAccept?.(time);
+          setOpen(false);
+        }}
+        onNow={() => {
+          const value = nowTime();
+          setTime(value);
+          onNow?.(value);
+        }}
+        onCancel={() => {
+          onCancel?.();
+          setOpen(false);
+        }}
+      />
+    </div>
+  ) : null;
+
+  return (
+    <div className={["calix-time-picker", className].filter(Boolean).join(" ")}>
+      <input
+        ref={refs.setReference}
+        className="calix-input"
+        data-calix-time-reference=""
+        readOnly
+        aria-label={props["aria-label"] ?? text.time}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        placeholder={placeholder ?? text.time}
+        value={`${format(props.hourCycle === 12 ? (time.hour % 12 || 12) : time.hour)}:${format(time.minute)}`}
+        onClick={() => setOpen(true)}
+      />
+      <button
+        type="button"
+        className="calix-time-picker-toggle"
+        data-calix-time-reference=""
+        aria-label={text.time}
+        aria-expanded={open}
+        disabled={props.disabled}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <circle cx="12" cy="13" r="7" />
+          <path d="M12 9v4l2.5 1.5M9 2h6M12 2v3M4 4l1.5 1.5M20 4l-1.5 1.5" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        className="calix-time-picker-clear"
+        data-calix-time-reference=""
+        aria-label={text.clear}
+        title={text.clear}
+        disabled={props.disabled || !hasValue}
+        onClick={() => setTime(EMPTY_TIME)}
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="m7 7 10 10M17 7 7 17" />
+        </svg>
+      </button>
+      {popover && (typeof document !== "undefined" ? createPortal(popover, document.body) : popover)}
+    </div>
+  );
+}
+
+function nowTime(): Time {
+  const now = new Date();
+  return {
+    hour: now.getHours(),
+    minute: now.getMinutes(),
+    second: now.getSeconds(),
+    millisecond: now.getMilliseconds(),
+  };
+}
+
+function TimePickerActions({
+  disabled,
+  labels,
+  onAccept,
+  onNow,
+  onCancel,
+}: {
+  disabled?: boolean | undefined;
+  labels: Required<PickerLabels>;
+  onAccept: () => void;
+  onNow: () => void;
+  onCancel?: (() => void) | undefined;
+}) {
+  return (
+    <div className="calix-time-picker-actions">
+      <button type="button" disabled={disabled} onClick={onAccept}>
+        {labels.confirm}
+      </button>
+      <button type="button" disabled={disabled} onClick={onNow}>
+        {labels.now}
+      </button>
+      <button type="button" disabled={disabled} onClick={onCancel}>
+        {labels.cancel}
+      </button>
+    </div>
+  );
+}
+
+const WHEEL_ITEM_HEIGHT = 32;
 
 function WheelColumn<T extends number | "am" | "pm">({
   label,

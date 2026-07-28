@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   Calendar,
   DatePicker,
+  TimePicker,
   type CalixValue,
   type ColorTheme,
   type OutputFormat,
@@ -12,7 +13,7 @@ import { CodeIcon, EyeIcon } from "@alydev/icons";
 import type { CalendarAdapter, Holiday, SelectionMode, Weekday } from "@alydev/core";
 
 type CalendarKind = "gregorian" | "jalali" | "hijri" | "buddhist";
-type View = "datepicker" | "calendar";
+type View = "datepicker" | "calendar" | "timepicker";
 type HolidaySource = "none" | "iran" | "international";
 
 const modes: SelectionMode[] = ["single", "multiple", "range", "week", "month", "year", "quarter"];
@@ -153,6 +154,9 @@ function Toggle({
 }
 
 function createCode(config: Config): string {
+  if (config.view === "timepicker") {
+    return `import { TimePicker } from "@alydev/datepicker";\nimport "@alydev/themes/default.css";\n\n<TimePicker\n  defaultValue={{ hour: 9, minute: 30, second: 0, millisecond: 0 }}\n  variant="${config.timeVariant}"\n  locale="${calendarLocales[config.calendar]}"\n  hourCycle={${config.hourCycle}}${config.theme !== "dark" ? '\n  theme="light"' : ""}\n/>;`;
+  }
   const component = config.view === "calendar" ? "Calendar" : "DatePicker";
   const adapter = config.calendar;
   const holidayDataName =
@@ -218,7 +222,7 @@ interface Config {
   showToday: boolean;
   max: number;
   withTime: boolean;
-  timeVariant: "field" | "wheel";
+  timeVariant: "field" | "wheel" | "analog";
   hourCycle: 12 | 24;
   outputFormat: OutputFormat;
   placeholder: string;
@@ -342,8 +346,15 @@ export function Playground({ builder = false }: { builder?: boolean }) {
   const [selectedValue, setSelectedValue] = useState<CalixValue>(() =>
     previewValue(initialConfig.mode),
   );
+  const [timeValue, setTimeValue] = useState({ hour: 9, minute: 30, second: 0, millisecond: 0 });
   const update = <K extends keyof Config>(key: K, value: Config[K]) =>
     setConfig((current) => ({ ...current, [key]: value }));
+  const reset = () => {
+    setConfig(initialConfig);
+    setSelectedValue(previewValue(initialConfig.mode));
+    setTimeValue({ hour: 9, minute: 30, second: 0, millisecond: 0 });
+    setTab("preview");
+  };
   const selectMode = (mode: SelectionMode) => {
     setConfig((current) => ({ ...current, mode, withTime: mode === "single" && current.withTime }));
     setSelectedValue(previewValue(mode));
@@ -351,6 +362,7 @@ export function Playground({ builder = false }: { builder?: boolean }) {
   const locale = calendarLocales[config.calendar];
   const calendarLoading = loadedCalendar !== config.calendar;
   const activeHolidayData = loadedHolidaySource === config.holidaySource ? holidayData : undefined;
+  const isStandaloneTime = config.view === "timepicker";
   const includesTime = config.view === "datepicker" && config.mode === "single" && config.withTime;
   const labels = config.labels
     ? {
@@ -445,11 +457,16 @@ export function Playground({ builder = false }: { builder?: boolean }) {
   return (
     <div className="calix-playground not-prose my-6 grid gap-4 lg:grid-cols-[19rem_minmax(0,1fr)]">
       <aside className="calix-playground__controls">
-        <div>
-          <p className="font-semibold">Configure</p>
-          <p className="text-sm text-fd-muted-foreground">
-            Changes update the preview and final code.
-          </p>
+        <div className="calix-playground__controls-header">
+          <div>
+            <p className="font-semibold">Configure</p>
+            <p className="text-sm text-fd-muted-foreground">
+              Changes update the preview and final code.
+            </p>
+          </div>
+          <button type="button" className="calix-playground__reset" onClick={reset}>
+            Reset
+          </button>
         </div>
         <Field label="Component">
           <Choices
@@ -457,10 +474,50 @@ export function Playground({ builder = false }: { builder?: boolean }) {
             options={[
               { value: "datepicker", label: "Date picker" },
               { value: "calendar", label: "Inline calendar" },
+              { value: "timepicker", label: "Time picker" },
             ]}
             onChange={(value) => update("view", value)}
           />
         </Field>
+        {isStandaloneTime && (
+          <>
+            <Field label="Time style">
+              <Choices
+                value={config.timeVariant}
+                options={[
+                  { value: "field", label: "Field" },
+                  { value: "wheel", label: "Wheel" },
+                  { value: "analog", label: "Analog" },
+                ]}
+                onChange={(value) => update("timeVariant", value)}
+              />
+            </Field>
+            <Field label="Calendar">
+              <Choices
+                value={config.calendar}
+                options={[
+                  { value: "gregorian", label: "Gregorian" },
+                  { value: "jalali", label: "Jalali" },
+                  { value: "hijri", label: "Hijri" },
+                  { value: "buddhist", label: "Buddhist" },
+                ]}
+                onChange={(value) => update("calendar", value)}
+              />
+            </Field>
+          </>
+        )}
+        <Field label="Theme">
+          <Choices
+            value={config.theme}
+            options={[
+              { value: "dark", label: "Dark" },
+              { value: "light", label: "Light" },
+            ]}
+            onChange={(value) => update("theme", value)}
+          />
+        </Field>
+        {!isStandaloneTime && (
+          <>
         <Field label="Calendar">
           <Choices
             value={config.calendar}
@@ -478,16 +535,6 @@ export function Playground({ builder = false }: { builder?: boolean }) {
             value={config.mode}
             options={modes.map((value) => ({ value, label: value }))}
             onChange={selectMode}
-          />
-        </Field>
-        <Field label="Theme">
-          <Choices
-            value={config.theme}
-            options={[
-              { value: "dark", label: "Dark" },
-              { value: "light", label: "Light" },
-            ]}
-            onChange={(value) => update("theme", value)}
           />
         </Field>
         <Field label="Output">
@@ -594,6 +641,7 @@ export function Playground({ builder = false }: { builder?: boolean }) {
                     options={[
                       { value: "wheel", label: "Wheel" },
                       { value: "field", label: "Field" },
+                      { value: "analog", label: "Analog" },
                     ]}
                     onChange={(value) => update("timeVariant", value)}
                   />
@@ -639,35 +687,64 @@ export function Playground({ builder = false }: { builder?: boolean }) {
             </Field>
           </>
         )}
+          </>
+        )}
+        {isStandaloneTime && (
+          <Field label="Clock">
+            <Choices
+              value={config.hourCycle}
+              options={[
+                { value: 24, label: "24-hour" },
+                { value: 12, label: "12-hour" },
+              ]}
+              onChange={(value) => update("hourCycle", value)}
+            />
+          </Field>
+        )}
       </aside>
       <section className="calix-playground__workspace min-w-0">
-        <div className="calix-playground__tabs">
-          <button
-            type="button"
-            aria-label="Show preview"
-            title="Show preview"
-            aria-pressed={tab === "preview"}
-            onClick={() => setTab("preview")}
-            className="grid size-9 place-items-center rounded-md border aria-pressed:border-fd-primary aria-pressed:bg-fd-primary aria-pressed:text-fd-primary-foreground"
-          >
-            <EyeIcon aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Show code"
-            title="Show code"
-            aria-pressed={tab === "code"}
-            onClick={() => setTab("code")}
-            className="grid size-9 place-items-center rounded-md border aria-pressed:border-fd-primary aria-pressed:bg-fd-primary aria-pressed:text-fd-primary-foreground"
-          >
-            <CodeIcon aria-hidden />
-          </button>
+        <div className="calix-playground__workspace-header">
+          <p>
+            <span>{config.calendar}</span>
+            <span>{isStandaloneTime ? config.timeVariant : config.mode}</span>
+            <span>{config.theme}</span>
+          </p>
+          <div className="calix-playground__tabs">
+            <button
+              type="button"
+              aria-label="Show preview"
+              aria-pressed={tab === "preview"}
+              onClick={() => setTab("preview")}
+            >
+              <EyeIcon aria-hidden />
+              Preview
+            </button>
+            <button
+              type="button"
+              aria-label="Show code"
+              aria-pressed={tab === "code"}
+              onClick={() => setTab("code")}
+            >
+              <CodeIcon aria-hidden />
+              Code
+            </button>
+          </div>
         </div>
         {tab === "preview" ? (
           <div className="grid min-h-96 place-items-center p-6">
             <div className="grid place-items-center gap-4">
               {config.view === "calendar" ? (
                 <Calendar key={code} {...previewProps} />
+              ) : isStandaloneTime ? (
+                <TimePicker
+                  key={code}
+                  value={timeValue}
+                  onChange={setTimeValue}
+                  variant={config.timeVariant}
+                  hourCycle={config.hourCycle}
+                  locale={locale}
+                  theme={config.theme}
+                />
               ) : (
                 <DatePicker
                   key={code}
@@ -684,21 +761,23 @@ export function Playground({ builder = false }: { builder?: boolean }) {
                     : {})}
                 />
               )}
-              <div className="max-w-full">
-                <p className="mb-1 text-xs text-fd-muted-foreground">
-                  Output ({config.outputFormat})
-                </p>
-                <output
-                  data-output-format={config.outputFormat}
-                  className="block max-w-full overflow-x-auto whitespace-pre-wrap rounded border bg-slate-950 px-3 py-2 font-mono text-sm text-slate-100"
-                >
-                  {output
-                    ? config.outputFormat === "json"
-                      ? highlightJson(output)
-                      : output
-                    : "Select a date to see the output"}
-                </output>
-              </div>
+              {!isStandaloneTime && (
+                <div className="max-w-full">
+                  <p className="mb-1 text-xs text-fd-muted-foreground">
+                    Output ({config.outputFormat})
+                  </p>
+                  <output
+                    data-output-format={config.outputFormat}
+                    className="block max-w-full overflow-x-auto whitespace-pre-wrap rounded border bg-slate-950 px-3 py-2 font-mono text-sm text-slate-100"
+                  >
+                    {output
+                      ? config.outputFormat === "json"
+                        ? highlightJson(output)
+                        : output
+                      : "Select a date to see the output"}
+                  </output>
+                </div>
+              )}
             </div>
           </div>
         ) : (

@@ -58,28 +58,29 @@ and headless-hook APIs.
 
 The convenience popover picker. In addition to shared options:
 
-| Prop                      | Type                                    | Default                                |
-| ------------------------- | --------------------------------------- | -------------------------------------- |
-| `placeholder`             | `string`                                | `"Select date"`                        |
-| `pattern`                 | `string`                                | `"yyyy/MM/dd"` or date-time equivalent |
-| `classNames`              | `CalendarClassNames`                    | —                                      |
-| `withTime`                | `boolean`                               | `false`                                |
-| `timePickerProps`         | `TimeFieldProps` without value handlers | —                                      |
-| `showToday` / `showClear` | `boolean`                               | `true` / `false`                       |
-| `infiniteScroll`          | `boolean`                               | `false`                                |
-| `presets`                 | `CalendarPreset[]`                      | —                                      |
-| `open` / `defaultOpen`    | `boolean`                               | uncontrolled / `false`                 |
-| `onOpenChange`            | `(open: boolean) => void`               | —                                      |
-| `closeOnSelect`           | `boolean`                               | `true`                                 |
-| `placement`               | Popover placement                       | `"bottom-start"`                       |
-| `offset`                  | `number`                                | `8`                                    |
+| Prop                                     | Type                                    | Default                                |
+| ---------------------------------------- | --------------------------------------- | -------------------------------------- |
+| `placeholder`                            | `string`                                | `"Select date"`                        |
+| `pattern`                                | `string`                                | `"yyyy/MM/dd"` or date-time equivalent |
+| `classNames`                             | `DatePickerClassNames`                  | —                                      |
+| `withTime`                               | `boolean`                               | `false`                                |
+| `timePickerProps`                        | `TimeFieldProps` without value handlers | —                                      |
+| `showToday` / `showClear` / `showCancel` | `boolean`                               | `true` / `false` / `true`              |
+| `infiniteScroll`                         | `boolean`                               | `false`                                |
+| `presets`                                | `CalendarPreset[]`                      | —                                      |
+| `open` / `defaultOpen`                   | `boolean`                               | uncontrolled / `false`                 |
+| `onOpenChange`                           | `(open: boolean) => void`               | —                                      |
+| `closeOnSelect`                          | `boolean`                               | `true`                                 |
+| `placement`                              | Popover placement                       | `"bottom-start"`                       |
+| `offset`                                 | `number`                                | `8`                                    |
 
 ### Compound components
 
 `DatePicker.Root` takes the shared options plus open-state options.
 `DatePicker.Trigger` is a button wired to the popover. `DatePicker.Input` accepts
-all native input props plus `pattern` and `mask`. `DatePicker.Content` accepts
-`classNames`, `showToday`, `portal` (default `true`), and custom children.
+all native input props plus `pattern`, `mask`, and `reference`. `DatePicker.Content`
+accepts `classNames`, `className` (the popover surface), `showToday`, `showCancel`,
+`portal` (default `true`), and custom children.
 
 ## `<Calendar>` and `<CalendarView>`
 
@@ -89,14 +90,18 @@ all native input props plus `pattern` and `mask`. `DatePicker.Content` accepts
 | -------------------------------------------- | --------------------------------------------------------- |
 | `classNames`                                 | `CalendarClassNames`                                      |
 | `renderDay`                                  | `(date: CalendarDate, defaultLabel: string) => ReactNode` |
-| `header` / `footer`                          | `ReactNode`                                               |
+| `header` / `footer`                          | `ReactNode \| (calendar) => ReactNode`                    |
 | `showToday` / `showClear` / `infiniteScroll` | `boolean`                                                 |
 
 `CalendarView` is presentational. It receives a `calendar` result returned by
 `useCalendar`, then accepts the same rendering props above.
 
 `CalendarClassNames` has slots: `root`, `header`, `heading`, `nav`, `navButton`,
-`grid`, `weekdays`, `weekday`, `week`, and `day`.
+`months`, `grid`, `weekdays`, `weekday`, `week`, `day`, `footer`,
+`footerButton`, `presets`, `preset`, `picker`, `pickerBody`, `month`, and `year`.
+`DatePickerClassNames` includes every `CalendarClassNames` slot plus `popover`,
+`field`, `input`, `toggle`, `clear`, `dateTime`, `timeStep`, `timeBack`,
+`timeTitle`, and `timeActions`.
 
 ## `<TimeField>`, `<MonthPicker>`, and `<YearPicker>`
 
@@ -123,7 +128,7 @@ take shared calendar options. `YearPicker` also has `pageSize` (default `12`).
 `{ start: Date | null; end: Date | null }`. `Weekday` is `0` through `6`.
 
 `PickerLabels` can override weekdays, navigation, month/year choices, time
-labels, and today/clear actions. See [Localization](/docs/localization).
+labels, and today/now/confirm/clear/cancel actions. See [Localization](/docs/localization).
 
 ## `CalendarAdapter`
 

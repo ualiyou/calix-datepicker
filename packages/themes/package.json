@@ -1,6 +1,6 @@
 {
   "name": "@alydev/themes",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Optional CSS-variable themes for Calix. No JavaScript, no Tailwind.",
   "license": "MIT",
   "sideEffects": [

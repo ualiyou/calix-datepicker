@@ -6,64 +6,70 @@ import Link from "next/link";
 
 const features = [
   [
-    "Any calendar",
-    "Gregorian and Jalali today, with adapters for the calendars your product needs.",
+    "Calendar-native",
+    "Gregorian, Jalali, Hijri, and Buddhist adapters share one predictable API.",
   ],
   [
-    "Headless control",
-    "Composable primitives give product teams complete control over markup and behavior.",
+    "Own the interface",
+    "Start with a ready-made picker or compose the headless primitives into your system.",
   ],
   [
     "Accessible by default",
-    "Keyboard navigation, focus management, grid semantics, and reduced-motion support.",
+    "Keyboard navigation, focus restoration, ARIA grid semantics, and reduced motion are built in.",
   ],
   [
-    "Built for real flows",
-    "Single, range, multiple, business-day, holiday, and date-time selection.",
+    "Ready for real flows",
+    "Single, range, multiple, holiday, business-day, and date-time selection in one layer.",
   ],
 ];
+
+const proof = ["React 18 / 19", "TypeScript", "SSR-safe", "RTL / LTR", "Four calendars"];
 
 export default function HomePage() {
   return (
     <main className="calix-home">
+      <nav className="calix-home__nav" aria-label="Primary navigation">
+        <Link href="/" className="calix-home__brand" aria-label="Calix home">
+          <span aria-hidden>◒</span> Calix
+        </Link>
+        <div className="calix-home__nav-links">
+          <Link href="/docs">Docs</Link>
+          <Link href="/docs/playground">Playground</Link>
+          <a href="https://github.com/ualiyou/calix-datepicker" target="_blank" rel="noreferrer">
+            GitHub <span aria-hidden>↗</span>
+          </a>
+        </div>
+        <a className="calix-home__nav-cta" href="#install">
+          Install
+        </a>
+      </nav>
+
       <section className="calix-home__hero">
         <div className="calix-home__copy">
           <p className="calix-home__eyebrow">
-            <span aria-hidden>&lt;/&gt;</span> Headless by design. Built for React.
+            <span aria-hidden>&lt;/&gt;</span> React date infrastructure
           </p>
-          <h1>Dates, without constraints.</h1>
+          <h1>Every calendar. One date layer.</h1>
           <p className="calix-home__lede">
-            A production-grade DatePicker for React — accessible, typed, and ready for every
-            calendar your product needs.
+            Accessible date primitives for React products that need more than a single locale,
+            a single calendar, or a fragile popup.
           </p>
           <div className="calix-home__actions">
             <Link href="/docs" className="calix-home__primary">
-              Get started <span aria-hidden>→</span>
+              Read the docs <span aria-hidden>→</span>
             </Link>
             <Link href="/docs/playground" className="calix-home__secondary">
               Open playground <span aria-hidden>↗</span>
             </Link>
           </div>
-          <div className="calix-home__links" aria-label="Project links">
-            <a href="https://github.com/ualiyou/calix-datepicker" target="_blank" rel="noreferrer">
-              GitHub <span aria-hidden>↗</span>
-            </a>
-            <a
-              href="https://www.npmjs.com/package/@alydev/datepicker"
-              target="_blank"
-              rel="noreferrer"
-            >
-              npm <span aria-hidden>↗</span>
-            </a>
-          </div>
           <dl className="calix-home__details">
             <div>
               <dt>Framework</dt>
-              <dd>React 19</dd>
+              <dd>React 18 / 19</dd>
             </div>
             <div>
               <dt>Calendars</dt>
-              <dd>Gregorian · Jalali</dd>
+              <dd>Four adapters</dd>
             </div>
             <div>
               <dt>Rendering</dt>
@@ -73,16 +79,29 @@ export default function HomePage() {
         </div>
 
         <aside className="calix-home__preview" aria-label="Interactive calendar preview">
-          <p>Live preview</p>
-          <Calendar adapter={gregorian} locale="en-US" showToday />
-          <span>Keyboard-ready · Fully themeable</span>
+          <div className="calix-home__preview-header">
+            <p>Live component</p>
+            <span>Keyboard-ready</span>
+          </div>
+          <Calendar adapter={gregorian} locale="en-US" showToday showClear />
+          <span>Use the component, or own every element.</span>
         </aside>
+      </section>
+
+      <section className="calix-home__proof" aria-label="Calix capabilities">
+        {proof.map((item) => (
+          <span key={item}>{item}</span>
+        ))}
       </section>
 
       <section className="calix-home__section" aria-labelledby="features-title">
         <div className="calix-home__section-heading">
           <p>Designed for product teams</p>
-          <h2 id="features-title">The date layer you do not have to rebuild.</h2>
+          <h2 id="features-title">Stop rebuilding dates in every product.</h2>
+          <p>
+            Calix keeps calendar logic, locale behavior, and accessible interactions in one
+            tested layer—without forcing a design system on your app.
+          </p>
         </div>
         <div className="calix-home__feature-grid">
           {features.map(([title, description], index) => (
@@ -96,23 +115,28 @@ export default function HomePage() {
       </section>
 
       <section
+        id="install"
         className="calix-home__section calix-home__code-section"
         aria-labelledby="install-title"
       >
         <div className="calix-home__section-heading">
-          <p>Start small</p>
-          <h2 id="install-title">One package. Your own interface.</h2>
+          <p>Start in one command</p>
+          <h2 id="install-title">The interface is yours. The hard parts are not.</h2>
           <p>
             Use the styled components or compose the headless primitives into your existing design
             system.
           </p>
         </div>
         <div className="calix-home__code-card">
-          <div>
+          <div className="calix-home__code-tabs">
             <span>Terminal</span>
             <span>npm</span>
           </div>
           <code>npm install @alydev/datepicker @alydev/adapter-gregorian</code>
+          <pre>{`import { DatePicker } from "@alydev/datepicker";
+import { gregorian } from "@alydev/adapter-gregorian";
+
+<DatePicker adapter={gregorian} locale="en-US" />;`}</pre>
         </div>
       </section>
 

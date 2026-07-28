@@ -18,6 +18,7 @@ test-results
 
 # turbo
 .turbo
+.superpowers/
 
 # logs
 *.log

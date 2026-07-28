@@ -1,5 +1,13 @@
 # @alydev/themes
 
+## 2.1.0
+
+### Minor Changes
+
+- Add accessible popover controls, richer calendar and time-picker behavior, and
+  updated default theme support. Refresh the documentation and product landing page
+  to reflect the released multi-calendar feature set.
+
 ## 2.0.1
 
 ## 2.0.0

@@ -1,5 +1,17 @@
 # @alydev/react
 
+## 2.1.0
+
+### Minor Changes
+
+- Add accessible popover controls, richer calendar and time-picker behavior, and
+  updated default theme support. Refresh the documentation and product landing page
+  to reflect the released multi-calendar feature set.
+
+### Patch Changes
+
+- [`ab4bb49`](https://github.com/ualiyou/calix-datepicker/commit/ab4bb497398b9a1cbbb473830d9732518523f1f9) Thanks [@ualiyou](https://github.com/ualiyou)! - Remove the Floating UI runtime dependency while preserving the date picker popover behavior.
+
 ## 2.0.1
 
 ### Patch Changes

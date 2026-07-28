@@ -13,7 +13,8 @@ a second picker, duplicated styling, or locale-specific UI branches.
 ## What you get
 
 - **Selection:** single, multiple, range, week, month, quarter, and year modes.
-- **Calendars:** bundled Gregorian and Jalali adapters; custom adapters are supported.
+- **Calendars:** Gregorian, Jalali/Persian, Hijri (Umm al-Qura), and Thai Buddhist adapters;
+  custom adapters are supported.
 - **Rendering choices:** `DatePicker` for a popover, `Calendar` for inline use,
   or hooks and compound components for complete DOM control.
 - **Constraints:** min/max dates, allow/deny lists, weekdays, months, years,
@@ -43,6 +44,8 @@ a second picker, duplicated styling, or locale-specific UI branches.
 | `@alydev/core`              | Calendar contracts, selection strategies, validation, parsing, and formatting. |
 | `@alydev/adapter-gregorian` | Gregorian adapter, backed by `date-fns`.                                       |
 | `@alydev/adapter-jalali`    | Jalali/Persian adapter, backed by `date-fns-jalali`.                           |
+| `@alydev/adapter-hijri`     | Hijri (Umm al-Qura) adapter backed by the platform ICU calendar.               |
+| `@alydev/adapter-buddhist`  | Thai Buddhist adapter using Buddhist Era years.                                 |
 | `@alydev/holidays-iran`     | Maintained Iranian public-holiday data for Jalali years 1400–1420.             |
 | `@alydev/holidays-international` | New Year's Day and Christmas Day data for 2000–2100.                      |
 | `@alydev/themes`            | Optional default and minimal CSS themes.                                       |

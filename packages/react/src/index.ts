@@ -30,7 +30,12 @@ export {
   type DatePickerContentProps,
 } from "./components/DatePicker.js";
 export { DatePickerContext, useDatePickerContext } from "./components/context.js";
-export { TimeField, type TimeFieldProps } from "./components/TimeField.js";
+export {
+  TimeField,
+  TimePicker,
+  type TimeFieldProps,
+  type TimePickerProps,
+} from "./components/TimeField.js";
 export {
   MonthPicker,
   YearPicker,
@@ -43,6 +48,7 @@ export type {
   UseCalendarOptions,
   CalixConstraints,
   CalendarClassNames,
+  DatePickerClassNames,
   CalendarPreset,
   ColorTheme,
   OutputFormat,
@@ -62,6 +68,7 @@ export type {
   CalendarDate,
   DateRange,
   SelectionMode,
+  Time,
   Weekday,
   Direction,
   Holiday,

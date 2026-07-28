@@ -65,8 +65,8 @@ Day buttons carry the following attributes when their state is active:
 | `data-in-range`                       | A day inside a selected or previewed range. |
 | `data-focused`                        | The roving-focus day.                       |
 | `data-weekend`                        | Saturday or Sunday.                         |
-| `data-holiday`                        | A named holiday is visible on the day.       |
-| `data-holiday-name`                   | The visible holiday's name.                  |
+| `data-holiday`                        | A named holiday is visible on the day.      |
+| `data-holiday-name`                   | The visible holiday's name.                 |
 
 The default theme marks holidays and shows their name on hover. Target these
 attributes to replace that presentation; see [Holidays](/docs/holidays) for
@@ -74,9 +74,12 @@ the data contract.
 
 ## Slot class names
 
-Pass `classNames` to `Calendar` or `DatePicker` to add classes to structural
-slots: `root`, `header`, `heading`, `nav`, `navButton`, `grid`, `weekdays`,
-`weekday`, `week`, and `day`.
+Pass `classNames` to `Calendar` or `DatePicker` to add classes to every
+built-in calendar slot: `root`, `header`, `heading`, `navButton`, `months`,
+`grid`, `weekdays`, `weekday`, `week`, `day`, `footer`, `footerButton`,
+`presets`, `preset`, `picker`, `pickerBody`, `month`, and `year`. `DatePicker`
+also exposes `popover`, `field`, `input`, `toggle`, `clear`, `dateTime`,
+`timeStep`, `timeBack`, `timeTitle`, and `timeActions`.
 
 ```tsx
 <Calendar
@@ -91,13 +94,16 @@ slots: `root`, `header`, `heading`, `nav`, `navButton`, `grid`, `weekdays`,
 ## Custom content and layout
 
 Use `renderDay` to replace a day's content without reimplementing selection or
-accessibility. Use `header` and `footer` for complete header/footer replacement.
+accessibility. `header` and `footer` accept either a node or a callback which
+receives the complete `useCalendar` API, so custom titles and buttons retain the
+built-in navigation and selection behavior.
 
 ```tsx
 <Calendar
   adapter={gregorian}
   renderDay={(date, label) => <span title={`${date.year}/${date.month}/${date.day}`}>{label}</span>}
-  footer={<a href="/availability">Check availability</a>}
+  header={(calendar) => <button onClick={calendar.goToToday}>This month</button>}
+  footer={(calendar) => <button onClick={calendar.clear}>Reset</button>}
 />
 ```
 
