@@ -1,6 +1,6 @@
 {
   "name": "@alydev/adapter-buddhist",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Thai Buddhist calendar adapter for Calix (BE = CE + 543).",
   "license": "MIT",
   "type": "module",

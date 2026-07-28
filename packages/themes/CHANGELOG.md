@@ -1,5 +1,14 @@
 # @alydev/themes
 
+## 2.0.0
+
+### Minor Changes
+
+- [`2715ed1`](https://github.com/ualiyou/calix-datepicker/commit/2715ed1514eada76c2848fc2dec3c6a2db0aa6ea) Thanks [@ualiyou](https://github.com/ualiyou)! - Add a `presets` prop to `DatePicker` and `CalendarView` for one-click shortcuts
+  (e.g. Today, Last 7 days, This month). Choosing a preset applies its value and
+  navigates the view to the value's month. Ships default `.calix-presets` /
+  `.calix-preset` theme styles.
+
 ## 1.0.1
 
 ## 1.0.0

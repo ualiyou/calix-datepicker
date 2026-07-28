@@ -1,6 +1,6 @@
 {
   "name": "@alydev/adapter-jalali",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Jalali (Persian/Shamsi) calendar adapter for Calix, powered by date-fns-jalali.",
   "license": "MIT",
   "type": "module",

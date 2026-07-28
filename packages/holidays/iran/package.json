@@ -1,6 +1,6 @@
 {
   "name": "@alydev/holidays-iran",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Iranian public-holiday data for Calix.",
   "license": "MIT",
   "type": "module",
