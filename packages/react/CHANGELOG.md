@@ -1,5 +1,30 @@
 # @alydev/react
 
+## 2.0.0
+
+### Minor Changes
+
+- [`2715ed1`](https://github.com/ualiyou/calix-datepicker/commit/2715ed1514eada76c2848fc2dec3c6a2db0aa6ea) Thanks [@ualiyou](https://github.com/ualiyou)! - Add a `presets` prop to `DatePicker` and `CalendarView` for one-click shortcuts
+  (e.g. Today, Last 7 days, This month). Choosing a preset applies its value and
+  navigates the view to the value's month. Ships default `.calix-presets` /
+  `.calix-preset` theme styles.
+
+- [`2715ed1`](https://github.com/ualiyou/calix-datepicker/commit/2715ed1514eada76c2848fc2dec3c6a2db0aa6ea) Thanks [@ualiyou](https://github.com/ualiyou)! - Add regional weekend support, range length limits, and month/focus callbacks.
+
+  - **`weekendDays`**: configure which weekdays are treated as the weekend for
+    `data-weekend` and `businessDaysOnly`. Defaults are locale-aware — Persian
+    locales default to `[5]` (Friday), everything else to `[0, 6]` (Sun/Sat).
+  - **`minRange` / `maxRange`**: constrain a `range` selection to a minimum and/or
+    maximum number of inclusive days; the tentative endpoint (and hover preview)
+    is clamped along the drag direction.
+  - **`onMonthChange(view)`** and **`onFocusChange(date)`** callbacks fire when the
+    visible month or the roving focus changes.
+
+### Patch Changes
+
+- Updated dependencies [[`2715ed1`](https://github.com/ualiyou/calix-datepicker/commit/2715ed1514eada76c2848fc2dec3c6a2db0aa6ea)]:
+  - @alydev/core@2.0.0
+
 ## 1.0.1
 
 ### Patch Changes
