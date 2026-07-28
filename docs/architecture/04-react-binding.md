@@ -29,7 +29,7 @@ the focused date moves.
 - **`useDateInput`** — masked, auto-formatting text input: parsing, paste, IME
   composition guarding, and validation, all driven by the adapter's
   `format`/`parse`.
-- **`useDatePicker`** — the composition root. Wires input + Floating UI popover +
+- **`useDatePicker`** — the composition root. Wires input + lightweight popover +
   calendar + focus management and returns prop-getters
   (`getTriggerProps`, `getContentProps`, `getInputProps`).
 

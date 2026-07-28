@@ -8,8 +8,8 @@
     "name": "@alydev/react (with core)",
     "path": "packages/react/dist/index.js",
     "import": "{ DatePicker }",
-    "limit": "16 kB",
-    "ignore": ["react", "react-dom", "@floating-ui/react", "motion"]
+    "limit": "10 kB",
+    "ignore": ["react", "react-dom"]
   },
   {
     "name": "@alydev/adapter-gregorian",

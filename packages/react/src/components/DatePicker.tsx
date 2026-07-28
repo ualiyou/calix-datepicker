@@ -1,5 +1,4 @@
 "use client";
-import { FloatingFocusManager, FloatingPortal } from "@floating-ui/react";
 import type { CalendarDate, Time } from "@alydev/core";
 import {
   useEffect,
@@ -10,6 +9,7 @@ import {
   type InputHTMLAttributes,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { useDatePicker, type UseDatePickerOptions } from "../hooks/useDatePicker.js";
 import { useDateInput } from "../hooks/useDateInput.js";
 import type { CalixValue, CalendarClassNames, CalendarPreset } from "../types.js";
@@ -35,7 +35,7 @@ export interface DatePickerTriggerProps extends ButtonHTMLAttributes<HTMLButtonE
   children?: ReactNode;
 }
 
-/** A button that toggles the popover, wired to Floating UI reference props. */
+/** A button that toggles the popover. */
 function Trigger({ children, ...rest }: DatePickerTriggerProps) {
   const { refs, getReferenceProps, open } = useDatePickerContext();
   return (
@@ -103,33 +103,30 @@ function Content({
   showToday = true,
   portal = true,
 }: DatePickerContentProps) {
-  const { open, context, refs, floatingStyles, getFloatingProps, calendar } =
-    useDatePickerContext();
+  const { open, refs, floatingStyles, getFloatingProps, calendar } = useDatePickerContext();
 
   if (!open) return null;
 
   const surface = (
-    <FloatingFocusManager context={context} modal={false}>
-      <div
-        ref={refs.setFloating}
-        style={floatingStyles}
-        className="calix-popover"
-        data-theme={calendar.theme}
-        data-calix-popover=""
-        {...getFloatingProps()}
-      >
-        {children ?? (
-          <CalendarView
-            calendar={calendar}
-            {...(classNames ? { classNames } : {})}
-            showToday={showToday}
-          />
-        )}
-      </div>
-    </FloatingFocusManager>
+    <div
+      ref={refs.setFloating}
+      style={floatingStyles}
+      className="calix-popover"
+      data-theme={calendar.theme}
+      data-calix-popover=""
+      {...getFloatingProps()}
+    >
+      {children ?? (
+        <CalendarView
+          calendar={calendar}
+          {...(classNames ? { classNames } : {})}
+          showToday={showToday}
+        />
+      )}
+    </div>
   );
 
-  return portal ? <FloatingPortal>{surface}</FloatingPortal> : surface;
+  return portal && typeof document !== "undefined" ? createPortal(surface, document.body) : surface;
 }
 
 /* ------------------------------------------------------- default DatePicker */

@@ -54,7 +54,10 @@ describe("<Calendar>", () => {
     expect(onChange).toHaveBeenLastCalledWith(null);
     await userEvent.click(screen.getByRole("button", { name: "Today" }));
     expect(screen.getByRole("gridcell", { current: "date" })).toHaveFocus();
-    expect(screen.getByRole("gridcell", { current: "date" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("gridcell", { current: "date" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
     expect(onChange).toHaveBeenLastCalledWith(gregorian.toDate(gregorian.today()));
   });
 
@@ -327,6 +330,49 @@ describe("<Calendar>", () => {
     expect(screen.getByRole("button", { name: "Today" })).toBeInTheDocument();
     await userEvent.click(screen.getByRole("gridcell", { name: "Saturday 4 July 2026" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("dismisses the picker with Escape and an outside click", async () => {
+    render(
+      <>
+        <button type="button">Outside</button>
+        <DatePicker adapter={gregorian} locale="en-US" />
+      </>,
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "Select date" }));
+    await userEvent.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Select date" })).toHaveFocus();
+
+    await userEvent.click(screen.getByRole("button", { name: "Select date" }));
+    await userEvent.click(screen.getByRole("button", { name: "Outside" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("positions the popover below its trigger", () => {
+    const rect = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        const popover = this.hasAttribute("data-calix-popover");
+        return {
+          bottom: popover ? 100 : 40,
+          height: popover ? 100 : 20,
+          left: popover ? 0 : 100,
+          right: popover ? 200 : 200,
+          top: popover ? 0 : 20,
+          width: popover ? 200 : 100,
+        } as DOMRect;
+      });
+
+    render(
+      <DatePicker.Root adapter={gregorian} locale="en-US" defaultOpen>
+        <DatePicker.Trigger>Choose date</DatePicker.Trigger>
+        <DatePicker.Content portal={false} />
+      </DatePicker.Root>,
+    );
+    expect(screen.getByRole("dialog")).toHaveStyle({ left: "100px", top: "48px" });
+    rect.mockRestore();
   });
 
   it("shows time after selecting a date and includes it in the value", async () => {

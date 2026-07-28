@@ -39,20 +39,20 @@ and headless-hook APIs.
 
 ### Constraints
 
-| Prop                               | Type                         | Meaning                                             |
-| ---------------------------------- | ---------------------------- | --------------------------------------------------- |
-| `minDate` / `maxDate`              | `Date`                       | Inclusive allowed boundaries.                       |
-| `disabledDates`                    | `Date[]`                     | Explicitly blocked dates.                           |
-| `enabledDates`                     | `Date[]`                     | When present, only these dates are allowed.         |
-| `disabledWeekdays`                 | `Weekday[]`                  | `0` Sunday through `6` Saturday.                    |
-| `disabledMonths` / `disabledYears` | `number[]`                   | Calendar month numbers (1-based) or years to block. |
-| `businessDaysOnly`                 | `boolean`                    | Blocks the configured `weekendDays`.                |
-| `weekendDays`                      | `Weekday[]`                  | Weekend days; `[5]` for `fa-*`, `[0, 6]` otherwise. |
-| `holidays`                         | `Date[]`                     | Dates treated as blocked.                           |
-| `holidayData`                      | `readonly Holiday[]`         | Named dates for holiday markers and tooltips.       |
-| `showHolidays`                     | `boolean`                    | Shows holiday markers and names; default `false`.   |
+| Prop                               | Type                         | Meaning                                               |
+| ---------------------------------- | ---------------------------- | ----------------------------------------------------- |
+| `minDate` / `maxDate`              | `Date`                       | Inclusive allowed boundaries.                         |
+| `disabledDates`                    | `Date[]`                     | Explicitly blocked dates.                             |
+| `enabledDates`                     | `Date[]`                     | When present, only these dates are allowed.           |
+| `disabledWeekdays`                 | `Weekday[]`                  | `0` Sunday through `6` Saturday.                      |
+| `disabledMonths` / `disabledYears` | `number[]`                   | Calendar month numbers (1-based) or years to block.   |
+| `businessDaysOnly`                 | `boolean`                    | Blocks the configured `weekendDays`.                  |
+| `weekendDays`                      | `Weekday[]`                  | Weekend days; `[5]` for `fa-*`, `[0, 6]` otherwise.   |
+| `holidays`                         | `Date[]`                     | Dates treated as blocked.                             |
+| `holidayData`                      | `readonly Holiday[]`         | Named dates for holiday markers and tooltips.         |
+| `showHolidays`                     | `boolean`                    | Shows holiday markers and names; default `false`.     |
 | `holidaysSelectable`               | `boolean`                    | Keeps `holidayData` dates selectable; default `true`. |
-| `isDateDisabled`                   | `(date, adapter) => boolean` | Return `true` to block a calendar date.             |
+| `isDateDisabled`                   | `(date, adapter) => boolean` | Return `true` to block a calendar date.               |
 
 ## `<DatePicker>`
 
@@ -71,7 +71,7 @@ The convenience popover picker. In addition to shared options:
 | `open` / `defaultOpen`    | `boolean`                               | uncontrolled / `false`                 |
 | `onOpenChange`            | `(open: boolean) => void`               | —                                      |
 | `closeOnSelect`           | `boolean`                               | `true`                                 |
-| `placement`               | Floating UI placement                   | `"bottom-start"`                       |
+| `placement`               | Popover placement                       | `"bottom-start"`                       |
 | `offset`                  | `number`                                | `8`                                    |
 
 ### Compound components
@@ -109,13 +109,13 @@ take shared calendar options. `YearPicker` also has `pageSize` (default `12`).
 
 ## Hooks
 
-| Hook                            | Returns                                                                                     |
-| ------------------------------- | ------------------------------------------------------------------------------------------- |
-| `useCalendar(options)`          | Calendar state, navigation, selection methods, checks, grids, and prop getters.             |
-| `useDatePicker(options)`        | `useCalendar` plus popover state, Floating UI refs/styles/context, and interaction getters. |
-| `useDateInput(options)`         | `inputValue`, `setInputValue`, and `getInputProps`.                                         |
-| `useTime(options?)`             | Time value, display state, setters, and increment helpers.                                  |
-| `useControllableState(options)` | Controlled/uncontrolled state primitive.                                                    |
+| Hook                            | Returns                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------- |
+| `useCalendar(options)`          | Calendar state, navigation, selection methods, checks, grids, and prop getters. |
+| `useDatePicker(options)`        | `useCalendar` plus popover state, refs/styles, and interaction getters.         |
+| `useDateInput(options)`         | `inputValue`, `setInputValue`, and `getInputProps`.                             |
+| `useTime(options?)`             | Time value, display state, setters, and increment helpers.                      |
+| `useControllableState(options)` | Controlled/uncontrolled state primitive.                                        |
 
 ## Values and types
 
