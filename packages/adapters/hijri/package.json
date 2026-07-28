@@ -1,6 +1,6 @@
 {
   "name": "@alydev/adapter-hijri",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Hijri (Umm al-Qura / Islamic) calendar adapter for Calix, backed by the platform ICU calendar.",
   "license": "MIT",
   "type": "module",

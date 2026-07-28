@@ -1,5 +1,14 @@
 # @alydev/react
 
+## 2.0.1
+
+### Patch Changes
+
+- [`7ad4554`](https://github.com/ualiyou/calix-datepicker/commit/7ad4554e32ce177888afc40dee48b06bc5634e7c) Thanks [@ualiyou](https://github.com/ualiyou)! - Reduce published package weight and load optional playground calendars only when selected.
+
+- Updated dependencies []:
+  - @alydev/core@2.0.1
+
 ## 2.0.0
 
 ### Minor Changes
