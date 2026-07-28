@@ -6,24 +6,29 @@
 
 # Calix
 
-**A headless, accessible, multi-calendar date picker for React.**
+**An accessible React date picker—use the ready-made components or build your own UI.**
 
 Gregorian, Jalali, Hijri, and Buddhist calendars · React 18/19 · RTL/LTR · TypeScript · SSR-safe · optional CSS theme.
 
 [Documentation](https://ualiyou.github.io/calix-datepicker/) · [Packages](#packages) · [Contributing](./CONTRIBUTING.md) · [Roadmap](./ROADMAP.md)
 
-[![CI](https://github.com/calix-ui/calix-datepicker/actions/workflows/ci.yml/badge.svg)](https://github.com/calix-ui/calix-datepicker/actions/workflows/ci.yml)
+[![CI](https://github.com/ualiyou/calix-datepicker/actions/workflows/ci.yml/badge.svg)](https://github.com/ualiyou/calix-datepicker/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@alydev/datepicker.svg)](https://www.npmjs.com/package/@alydev/datepicker)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 </div>
 
-Calix separates calendar rules from the React UI. The core works with calendar-neutral
-date parts; adapters supply Gregorian or Jalali behavior; the React package supplies
-headless hooks and accessible components. This means changing calendar systems does not
-require rewriting your picker UI.
+## Start here
 
-## Features
+- **Need a ready-to-use date picker?** Follow [Quick start](#quick-start) and use `DatePicker`.
+- **Need an inline calendar?** Use `Calendar` in [Selection modes](#selection-modes).
+- **Need Persian/Jalali dates or RTL?** See [Calendars and localization](#calendars-and-localization).
+- **Need complete visual control?** Use the hooks and primitives in [Components and hooks](#components-and-hooks).
+
+Calix keeps calendar logic separate from the React UI. Use the included components for
+the fastest path, or use the headless hooks and primitives when you need your own markup.
+
+## What it handles
 
 - Single, range, and multiple-date selection.
 - Gregorian, Jalali/Persian, Hijri (Umm al-Qura), and Thai Buddhist adapters, with support for custom adapters.
