@@ -8,13 +8,8 @@ import {
   type OutputFormat,
 } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
-import { hijri } from "@alydev/adapter-hijri";
-import { jalali } from "@alydev/adapter-jalali";
-import { buddhist } from "@alydev/adapter-buddhist";
 import { CodeIcon, EyeIcon } from "@alydev/icons";
-import { internationalHolidays } from "@alydev/holidays-international";
-import { iranHolidays } from "@alydev/holidays-iran";
-import type { CalendarAdapter, SelectionMode, Weekday } from "@alydev/core";
+import type { CalendarAdapter, Holiday, SelectionMode, Weekday } from "@alydev/core";
 
 type CalendarKind = "gregorian" | "jalali" | "hijri" | "buddhist";
 type View = "datepicker" | "calendar";
@@ -23,11 +18,26 @@ type HolidaySource = "none" | "iran" | "international";
 const modes: SelectionMode[] = ["single", "multiple", "range", "week", "month", "year", "quarter"];
 type Choice = string | number;
 
-const calendarOptions: Record<CalendarKind, { adapter: CalendarAdapter; locale: string }> = {
-  gregorian: { adapter: gregorian, locale: "en-US" },
-  jalali: { adapter: jalali, locale: "fa-IR" },
-  hijri: { adapter: hijri, locale: "ar-SA" },
-  buddhist: { adapter: buddhist, locale: "th-TH" },
+const calendarLocales: Record<CalendarKind, string> = {
+  gregorian: "en-US",
+  jalali: "fa-IR",
+  hijri: "ar-SA",
+  buddhist: "th-TH",
+};
+
+const adapterLoaders: Record<CalendarKind, () => Promise<CalendarAdapter>> = {
+  gregorian: () => Promise.resolve(gregorian),
+  jalali: () => import("@alydev/adapter-jalali").then(({ jalali }) => jalali),
+  hijri: () => import("@alydev/adapter-hijri").then(({ hijri }) => hijri),
+  buddhist: () => import("@alydev/adapter-buddhist").then(({ buddhist }) => buddhist),
+};
+
+const holidayLoaders: Record<Exclude<HolidaySource, "none">, () => Promise<readonly Holiday[]>> = {
+  iran: () => import("@alydev/holidays-iran").then(({ iranHolidays }) => iranHolidays),
+  international: () =>
+    import("@alydev/holidays-international").then(
+      ({ internationalHolidays }) => internationalHolidays,
+    ),
 };
 
 function highlightTsx(code: string): ReactNode[] {
@@ -155,7 +165,7 @@ function createCode(config: Config): string {
     config.holidaySource !== "none" && (config.showHolidays || !config.holidaysSelectable);
   const props = [
     `adapter={${adapter}}`,
-    `locale="${calendarOptions[config.calendar].locale}"`,
+    `locale="${calendarLocales[config.calendar]}"`,
     config.mode !== "single" && `mode="${config.mode}"`,
     config.theme !== "dark" && `theme="light"`,
     config.numberOfMonths !== 1 && `numberOfMonths={${config.numberOfMonths}}`,
@@ -325,6 +335,10 @@ export function Playground({ builder = false }: { builder?: boolean }) {
   const [config, setConfig] = useState(initialConfig);
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [output, setOutput] = useState("");
+  const [adapter, setAdapter] = useState<CalendarAdapter>(gregorian);
+  const [loadedCalendar, setLoadedCalendar] = useState<CalendarKind>("gregorian");
+  const [holidayData, setHolidayData] = useState<readonly Holiday[]>();
+  const [loadedHolidaySource, setLoadedHolidaySource] = useState<HolidaySource>("none");
   const [selectedValue, setSelectedValue] = useState<CalixValue>(() =>
     previewValue(initialConfig.mode),
   );
@@ -334,9 +348,9 @@ export function Playground({ builder = false }: { builder?: boolean }) {
     setConfig((current) => ({ ...current, mode, withTime: mode === "single" && current.withTime }));
     setSelectedValue(previewValue(mode));
   };
-  const { adapter, locale } = calendarOptions[config.calendar];
-  const holidayData =
-    config.holidaySource === "iran" ? iranHolidays : internationalHolidays;
+  const locale = calendarLocales[config.calendar];
+  const calendarLoading = loadedCalendar !== config.calendar;
+  const activeHolidayData = loadedHolidaySource === config.holidaySource ? holidayData : undefined;
   const includesTime = config.view === "datepicker" && config.mode === "single" && config.withTime;
   const labels = config.labels
     ? {
@@ -348,6 +362,42 @@ export function Playground({ builder = false }: { builder?: boolean }) {
   const code = useMemo(() => createCode(config), [config]);
 
   useEffect(() => {
+    let cancelled = false;
+    void adapterLoaders[config.calendar]().then((next) => {
+      if (!cancelled) {
+        setAdapter(next);
+        setLoadedCalendar(config.calendar);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [config.calendar]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (config.holidaySource === "none") {
+      setHolidayData(undefined);
+      setLoadedHolidaySource("none");
+      return () => {
+        cancelled = true;
+      };
+    }
+    setHolidayData(undefined);
+    setLoadedHolidaySource("none");
+    void holidayLoaders[config.holidaySource]().then((next) => {
+      if (!cancelled) {
+        setHolidayData(next);
+        setLoadedHolidaySource(config.holidaySource);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [config.holidaySource]);
+
+  useEffect(() => {
+    if (calendarLoading) return;
     setOutput(
       previewOutput(
         selectedValue,
@@ -357,9 +407,14 @@ export function Playground({ builder = false }: { builder?: boolean }) {
         includesTime ? "yyyy-MM-dd HH:mm" : "yyyy-MM-dd",
       ),
     );
-  }, [adapter, config.outputFormat, includesTime, locale, selectedValue]);
+  }, [adapter, calendarLoading, config.outputFormat, includesTime, locale, selectedValue]);
 
-  if (!builder) return <Calendar adapter={adapter} locale={locale} mode="single" />;
+  if (!builder)
+    return calendarLoading ? (
+      <p role="status">Loading calendar…</p>
+    ) : (
+      <Calendar adapter={adapter} locale={locale} mode="single" />
+    );
 
   const previewProps = {
     adapter,
@@ -369,9 +424,11 @@ export function Playground({ builder = false }: { builder?: boolean }) {
     numberOfMonths: config.numberOfMonths,
     fixedWeeks: config.fixedWeeks,
     businessDaysOnly: config.businessDaysOnly,
-    ...(config.holidaySource !== "none" && (config.showHolidays || !config.holidaysSelectable)
+    ...(activeHolidayData &&
+    config.holidaySource !== "none" &&
+    (config.showHolidays || !config.holidaysSelectable)
       ? {
-          holidayData,
+          holidayData: activeHolidayData,
           showHolidays: config.showHolidays,
           holidaysSelectable: config.holidaysSelectable,
         }

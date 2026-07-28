@@ -26,8 +26,8 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "declarationMap": false,
+    "sourceMap": false,
 
     "paths": {
       "@alydev/core": ["./packages/core/src/index.ts"],

@@ -50,17 +50,13 @@ export function createLibConfig(options: LibOptions): UserConfig {
     ],
     build: {
       target: "es2022",
-      sourcemap: true,
+      sourcemap: false,
       lib: {
         entry: resolvedEntries,
         formats: ["es", "cjs"],
       },
       rollupOptions: {
-        external: [
-          /^node:/,
-          ...declared.map((d) => new RegExp(`^${d}(/.*)?$`)),
-          ...external,
-        ],
+        external: [/^node:/, ...declared.map((d) => new RegExp(`^${d}(/.*)?$`)), ...external],
         output: [
           {
             format: "es",
