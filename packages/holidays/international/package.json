@@ -1,6 +1,6 @@
 {
   "name": "@alydev/holidays-international",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Fixed international holiday data for Calix.",
   "license": "MIT",
   "type": "module",
