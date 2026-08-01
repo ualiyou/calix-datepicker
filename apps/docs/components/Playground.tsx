@@ -217,7 +217,7 @@ export function createCode(config: Config): string {
       `timePickerProps={{ variant: "${config.timeVariant}", hourCycle: ${config.hourCycle} }}`,
     config.outputFormat === "json" && 'outputFormat="json"',
     "onOutputChange={(output) => console.log(output)}",
-  ].filter(Boolean);
+  ].filter((prop): prop is string => Boolean(prop));
   return formatExample(
     [
       `import { ${component} } from "@alydev/datepicker";`,
