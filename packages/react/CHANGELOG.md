@@ -1,5 +1,11 @@
 # @alydev/react
 
+## 2.1.2
+
+### Patch Changes
+
+- [`d5e4797`](https://github.com/ualiyou/calix-datepicker/commit/d5e4797a0c7ccc15b4eff504b1e9b0ffefc0123a) Thanks [@ualiyou](https://github.com/ualiyou)! - Preserve the React client directive in published ESM output and stabilize keyboard focus navigation.
+
 ## 2.1.1
 
 ### Patch Changes
