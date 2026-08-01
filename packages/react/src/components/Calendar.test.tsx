@@ -683,6 +683,14 @@ describe("<Calendar>", () => {
     expect(screen.queryByRole("dialog", { name: "Time" })).not.toBeInTheDocument();
   });
 
+  it("updates its input after selecting a time", async () => {
+    render(<TimePicker defaultValue={{ hour: 9, minute: 30, second: 0, millisecond: 0 }} />);
+    const input = screen.getByRole("textbox", { name: "Time" });
+    await userEvent.click(input);
+    await userEvent.click(screen.getByRole("option", { name: "Hour 14" }));
+    expect(input).toHaveValue("14:30");
+  });
+
   it("resets the time picker from its input", async () => {
     const onChange = vi.fn();
     render(
