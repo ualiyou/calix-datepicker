@@ -1,5 +1,11 @@
 # @alydev/react
 
+## 2.1.3
+
+### Patch Changes
+
+- [`0aaf67e`](https://github.com/ualiyou/calix-datepicker/commit/0aaf67e09b91466f297df93264863478f8b61b6d) Thanks [@ualiyou](https://github.com/ualiyou)! - Close a date-time picker when its embedded time picker is confirmed, and make the default picker theme more compact.
+
 ## 2.1.2
 
 ### Patch Changes
