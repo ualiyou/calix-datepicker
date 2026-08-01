@@ -85,6 +85,7 @@ function Input({
     locale: calendar.locale,
     pattern,
     value: current ? adapter.fromDate(current) : null,
+    time: current ? toTime(current) : undefined,
     mask,
     onCommit: (cd: CalendarDate | null) => calendar.setValue(cd ? adapter.toDate(cd) : null),
   });

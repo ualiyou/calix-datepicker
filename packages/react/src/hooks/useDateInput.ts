@@ -1,4 +1,4 @@
-import { toLatinDigits, type CalendarAdapter, type CalendarDate } from "@alydev/core";
+import { toLatinDigits, type CalendarAdapter, type CalendarDate, type Time } from "@alydev/core";
 import {
   useCallback,
   useEffect,
@@ -17,6 +17,8 @@ export interface UseDateInputOptions {
   pattern?: string;
   /** Current value as calendar parts (or null). */
   value: CalendarDate | null;
+  /** Time to include when the pattern contains time tokens. */
+  time?: Time | undefined;
   /** Called with a parsed date, or null when the field is cleared. */
   onCommit: (date: CalendarDate | null) => void;
   /** Called when the text cannot be parsed. */
@@ -41,8 +43,8 @@ export function useDateInput(options: UseDateInputOptions): UseDateInputReturn {
   const { adapter, locale = adapter.defaultLocale, pattern = "yyyy/MM/dd", value } = options;
 
   const format = useCallback(
-    (date: CalendarDate | null) => (date ? adapter.format(date, pattern, locale) : ""),
-    [adapter, pattern, locale],
+    (date: CalendarDate | null) => (date ? adapter.format(date, pattern, locale, options.time) : ""),
+    [adapter, pattern, locale, options.time],
   );
 
   const [inputValue, setInputValue] = useState<string>(() => format(value));

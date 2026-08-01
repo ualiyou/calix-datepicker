@@ -572,6 +572,7 @@ describe("<Calendar>", () => {
     expect(screen.queryByRole("grid")).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole("option", { name: "Hour 14" }));
     expect(onChange).toHaveBeenLastCalledWith(new Date(2026, 6, 4, 14));
+    expect(screen.getByRole("combobox")).toHaveValue("2026/07/04 14:00");
     expect(JSON.parse(onOutputChange.mock.lastCall![0])).toMatchObject({
       dateTime: "2026-07-04 14:00:00",
       date: "2026-07-04",
