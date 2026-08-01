@@ -943,6 +943,110 @@
   cursor: not-allowed;
 }
 
+/* Soft-elevated default controls. */
+.calix-popover {
+  border-radius: calc(var(--calix-radius) + 2px);
+  box-shadow: var(--calix-shadow), 0 0 0 0.25rem color-mix(in srgb, var(--calix-accent) 3%, transparent);
+}
+.calix-date-picker-field .calix-input,
+.calix-time-picker .calix-input {
+  min-height: 3.25rem;
+  border-radius: calc(var(--calix-radius-sm) + 4px);
+  font-weight: 650;
+  box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--calix-text) 6%, transparent);
+}
+.calix-date-picker-field .calix-input {
+  padding-inline: 3rem;
+}
+
+.calix-date-picker-field[data-has-value] .calix-input {
+  padding-inline-end: 5rem;
+}
+.calix-time-picker .calix-input {
+  padding-inline-start: 3rem;
+}
+.calix-date-picker-icon,
+.calix-time-picker-icon {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  inset-inline-start: 0.875rem;
+  display: grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  place-items: center;
+  color: var(--calix-accent);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+.calix-date-picker-icon svg,
+.calix-time-picker-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.calix-date-picker-toggle {
+  inset-inline: auto 0.375rem;
+}
+
+.calix-date-picker-clear {
+  inset-inline-end: 2.75rem;
+}
+.calix-time-popover {
+  gap: 0.5rem;
+  padding: 1rem;
+}
+.calix-time-analog {
+  min-width: 15.5rem;
+  padding: 0.5rem;
+}
+.calix-clock-tabs,
+.calix-clock-tabs button {
+  border-radius: calc(var(--calix-radius-sm) - 2px);
+}
+.calix-clock-tabs {
+  background: color-mix(in srgb, var(--calix-hover) 65%, transparent);
+}
+.calix-clock-face {
+  --calix-clock-outer-radius: 5.75rem;
+  --calix-clock-inner-radius: 3.25rem;
+  width: min(15rem, 66vw);
+  box-shadow: inset 0 0 0 0.375rem color-mix(in srgb, var(--calix-surface) 72%, transparent),
+    0 0.75rem 1.75rem color-mix(in srgb, var(--calix-accent) 9%, transparent);
+}
+.calix-clock-hour-hand {
+  height: 3.25rem;
+}
+.calix-clock-minute-hand {
+  height: 4.25rem;
+}
+.calix-date-time-picker .calix-time-analog > .calix-time-picker-actions {
+  display: none;
+}
+.calix-time-picker-actions {
+  justify-content: space-between;
+  gap: 0.375rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--calix-border) 80%, transparent);
+}
+.calix-time-picker-actions button {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.875rem;
+}
+@media (max-width: 24rem) {
+  .calix-date-picker-field,
+  .calix-time-picker {
+    width: 100%;
+  }
+  .calix-date-picker-field .calix-input,
+  .calix-time-picker .calix-input {
+    width: 100%;
+    min-width: 0;
+  }
+  .calix-time-analog {
+    min-width: 0;
+  }
+}
+
 /* Respect reduced-motion preferences. */
 @media (prefers-reduced-motion: reduce) {
   .calix-calendar *,

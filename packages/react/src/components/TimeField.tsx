@@ -138,12 +138,14 @@ export function TimeField({
     const timeLabel = text.time;
     const format = (value: number) =>
       new Intl.NumberFormat(locale, { minimumIntegerDigits: 2, useGrouping: false }).format(value);
+    const outerRadius = "var(--calix-clock-outer-radius, 6.75rem)";
+    const innerRadius = "var(--calix-clock-inner-radius, 3.75rem)";
     const hours = Array.from({ length: 12 }, (_, index) =>
       hourCycle === 12
-        ? [{ value: index + 1, radius: "6.75rem" }]
+        ? [{ value: index + 1, radius: outerRadius }]
         : [
-            { value: index, radius: "3.75rem" },
-            { value: index + 12, radius: "6.75rem" },
+            { value: index, radius: innerRadius },
+            { value: index + 12, radius: outerRadius },
           ],
     ).flat();
     const minutes = Array.from({ length: 12 }, (_, index) => index * 5);
@@ -195,7 +197,7 @@ export function TimeField({
           <span className="calix-clock-center" aria-hidden="true" />
           {(analogPart === "hour" ? hours : minutes).map((item) => {
             const hour = typeof item === "number" ? item : item.value;
-            const radius = typeof item === "number" ? "6.75rem" : item.radius;
+            const radius = typeof item === "number" ? outerRadius : item.radius;
             const ring = typeof item === "number" || item.value >= 12 ? "outer" : "inner";
             const selected = analogPart === "hour" ? hour === selectedHour : hour === t.value.minute;
             return (
@@ -408,6 +410,12 @@ export function TimePicker({
 
   return (
     <div className={["calix-time-picker", className].filter(Boolean).join(" ")}>
+      <span className="calix-time-picker-icon" aria-hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <circle cx="12" cy="13" r="7" />
+          <path d="M12 9v4l2.5 1.5M9 2h6M12 2v3M4 4l1.5 1.5M20 4l-1.5 1.5" />
+        </svg>
+      </span>
       <input
         ref={refs.setReference}
         className="calix-input"
@@ -429,9 +437,8 @@ export function TimePicker({
         disabled={props.disabled}
         onClick={() => setOpen((current) => !current)}
       >
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="13" r="7" />
-          <path d="M12 9v4l2.5 1.5M9 2h6M12 2v3M4 4l1.5 1.5M20 4l-1.5 1.5" />
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="m6 9 6 6 6-6" />
         </svg>
       </button>
       <button

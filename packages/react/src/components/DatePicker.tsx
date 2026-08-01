@@ -356,6 +356,7 @@ function DateTimeContent({
             labels={{ ...calendar.labels, ...timePickerProps?.labels }}
             theme={calendar.theme}
             variant={timePickerProps?.variant ?? "wheel"}
+            showActions={false}
             value={toTime(date)}
             onChange={(time) => calendar.setValue(setTargetTime(calendar.value, date, time))}
             onAccept={(time) => {
@@ -448,6 +449,12 @@ function TriggerLabel({
       data-has-value={hasValue ? "" : undefined}
       dir={calendar.dir}
     >
+      <span className="calix-date-picker-icon" aria-hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <rect x="3" y="4" width="18" height="17" rx="2" />
+          <path d="M8 2v4M16 2v4M3 10h18" />
+        </svg>
+      </span>
       <Input
         className={["calix-input", classNames?.input].filter(Boolean).join(" ")}
         placeholder={placeholder}
@@ -465,10 +472,9 @@ function TriggerLabel({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.8"
+          strokeWidth="2"
         >
-          <rect x="3" y="4" width="18" height="17" rx="2" />
-          <path d="M8 2v4M16 2v4M3 10h18" />
+          <path d="m6 9 6 6 6-6" />
         </svg>
       </Trigger>
       <button

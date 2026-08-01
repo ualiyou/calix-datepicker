@@ -47,14 +47,14 @@
   .calix-time[data-theme="light"]
 ) {
   --calix-surface: #ffffff;
-  --calix-surface-raised: #ffffff;
+  --calix-surface-raised: #fdfcff;
   --calix-text: #1a1a22;
   --calix-muted: #6d6c78;
-  --calix-border: #e9e8ef;
-  --calix-hover: #f3f2ff;
+  --calix-border: #e8e6f1;
+  --calix-hover: #f4f1ff;
   --calix-disabled: #d4d4d8;
   --calix-holiday: #be123c;
-  --calix-shadow: 0 1.25rem 3.25rem rgb(35 33 50 / 0.12);
+  --calix-shadow: 0 1rem 2.5rem rgb(77 63 140 / 0.12);
 }
 
 /* High-contrast users get stronger borders and no translucency. */

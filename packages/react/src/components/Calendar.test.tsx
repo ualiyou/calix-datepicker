@@ -590,6 +590,7 @@ describe("<Calendar>", () => {
       day: 4,
     });
     expect(screen.getByRole("button", { name: "2026/07/04 14:00" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Confirm" })).toHaveLength(1);
     await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
@@ -611,7 +612,7 @@ describe("<Calendar>", () => {
     expect(screen.queryByRole("group", { name: "Time" })).not.toBeInTheDocument();
   });
 
-  it("closes the date picker when the embedded analog time picker confirms", async () => {
+  it("closes the date picker from the unified date-time confirmation", async () => {
     render(
       <DatePicker
         adapter={gregorian}
@@ -623,8 +624,7 @@ describe("<Calendar>", () => {
     );
     await userEvent.click(screen.getByRole("button", { name: "Select date" }));
     await userEvent.click(screen.getByRole("gridcell", { name: "Saturday 4 July 2026" }));
-    const timeField = screen.getByRole("group", { name: "Time" });
-    await userEvent.click(within(timeField).getByRole("button", { name: "Confirm" }));
+    await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
@@ -661,11 +661,11 @@ describe("<Calendar>", () => {
     });
     expect(screen.getByRole("option", { name: "Hour 00" })).toHaveStyle({
       "--calix-clock-angle": "0deg",
-      "--calix-clock-radius": "3.75rem",
+      "--calix-clock-radius": "var(--calix-clock-inner-radius, 3.75rem)",
     });
     expect(screen.getByRole("option", { name: "Hour 12" })).toHaveStyle({
       "--calix-clock-angle": "0deg",
-      "--calix-clock-radius": "6.75rem",
+      "--calix-clock-radius": "var(--calix-clock-outer-radius, 6.75rem)",
     });
     await userEvent.click(screen.getByRole("option", { name: "Hour 14" }));
     expect(onChange).toHaveBeenLastCalledWith({ hour: 14, minute: 0, second: 0, millisecond: 0 });
