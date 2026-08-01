@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createCode } from "./Playground";
+import { jalali } from "@alydev/adapter-jalali";
+import { createCode, previewOutput } from "./Playground";
 
 const base = {
   calendar: "gregorian",
@@ -41,5 +42,20 @@ describe("createCode", () => {
     expect(time).toContain('import { TimePicker } from "@alydev/datepicker";');
     expect(time).not.toContain("@alydev/adapter-");
     expect(jalali).toContain("export default function Example()");
+  });
+});
+
+describe("previewOutput", () => {
+  it("uses Latin digits in localized JSON output", () => {
+    const output = previewOutput(new Date(2026, 7, 12), jalali, "fa-IR", "json", "yyyy-MM-dd");
+
+    expect(JSON.parse(output)).toMatchObject({
+      dateTime: "1405-05-21 00:00:00",
+      date: "1405-05-21",
+      time: "00:00:00",
+      year: 1405,
+      month: 5,
+      day: 21,
+    });
   });
 });

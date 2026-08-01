@@ -5,11 +5,25 @@ import { Calendar } from "./Calendar.js";
 import { DatePicker } from "./DatePicker.js";
 import { TimeField, TimePicker } from "./TimeField.js";
 import { MonthPicker, YearPicker } from "./PickerViews.js";
+import { formatCalixValue } from "../value.js";
 import { gregorian } from "@alydev/adapter-gregorian";
 import { jalali } from "@alydev/adapter-jalali";
 import { internationalHolidays } from "@alydev/holidays-international";
 
 describe("<Calendar>", () => {
+  it("serializes localized JSON with Latin digits", () => {
+    const output = formatCalixValue(new Date(2026, 7, 12), jalali, "fa-IR", "yyyy-MM-dd", "json");
+
+    expect(JSON.parse(output)).toMatchObject({
+      dateTime: "1405-05-21 00:00:00",
+      date: "1405-05-21",
+      time: "00:00:00",
+      year: 1405,
+      month: 5,
+      day: 21,
+    });
+  });
+
   it("renders a grid with weekday headers", () => {
     render(<Calendar adapter={gregorian} locale="en-US" defaultMonth={new Date(2026, 6, 1)} />);
     expect(screen.getByRole("grid")).toBeInTheDocument();

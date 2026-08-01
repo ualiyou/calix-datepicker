@@ -10,7 +10,13 @@ import {
 } from "@alydev/datepicker";
 import { gregorian } from "@alydev/adapter-gregorian";
 import { CodeIcon, EyeIcon } from "@alydev/icons";
-import type { CalendarAdapter, Holiday, SelectionMode, Weekday } from "@alydev/core";
+import {
+  toLatinDigits,
+  type CalendarAdapter,
+  type Holiday,
+  type SelectionMode,
+  type Weekday,
+} from "@alydev/core";
 
 type CalendarKind = "gregorian" | "jalali" | "hijri" | "buddhist";
 type View = "datepicker" | "calendar" | "timepicker";
@@ -296,7 +302,7 @@ function previewValue(mode: SelectionMode): CalixValue {
   return date;
 }
 
-function previewOutput(
+export function previewOutput(
   value: CalixValue,
   adapter: CalendarAdapter,
   locale: string,
@@ -321,10 +327,12 @@ function previewOutput(
   };
   const serializeJson = (date: Date) => {
     const { calendarDate, dateText, timeText } = parts(date);
+    const latinDate = toLatinDigits(dateText);
+    const latinTime = toLatinDigits(timeText);
     return {
-      dateTime: `${dateText} ${timeText}`,
-      date: dateText,
-      time: timeText,
+      dateTime: `${latinDate} ${latinTime}`,
+      date: latinDate,
+      time: latinTime,
       year: calendarDate.year,
       month: calendarDate.month,
       day: calendarDate.day,

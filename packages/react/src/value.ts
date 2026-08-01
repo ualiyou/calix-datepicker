@@ -1,10 +1,11 @@
-import type {
-  CalendarAdapter,
-  CalendarDate,
-  DateRange,
-  SelectionMode,
-  SelectionValue,
-  Time,
+import {
+  toLatinDigits,
+  type CalendarAdapter,
+  type CalendarDate,
+  type DateRange,
+  type SelectionMode,
+  type SelectionValue,
+  type Time,
 } from "@alydev/core";
 
 /** A range of JS `Date`s at the public boundary. */
@@ -30,10 +31,12 @@ export function formatCalixValue(
     const calendarDate = adapter.fromDate(date);
     const dateText = adapter.format(calendarDate, "yyyy-MM-dd", locale);
     const timeText = adapter.format(calendarDate, "HH:mm:ss", locale, timeOf(date));
+    const latinDate = toLatinDigits(dateText);
+    const latinTime = toLatinDigits(timeText);
     return {
-      dateTime: `${dateText} ${timeText}`,
-      date: dateText,
-      time: timeText,
+      dateTime: `${latinDate} ${latinTime}`,
+      date: latinDate,
+      time: latinTime,
       year: calendarDate.year,
       month: calendarDate.month,
       day: calendarDate.day,
