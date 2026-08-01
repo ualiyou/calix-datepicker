@@ -611,6 +611,23 @@ describe("<Calendar>", () => {
     expect(screen.queryByRole("group", { name: "Time" })).not.toBeInTheDocument();
   });
 
+  it("closes the date picker when the embedded analog time picker confirms", async () => {
+    render(
+      <DatePicker
+        adapter={gregorian}
+        locale="en-US"
+        defaultMonth={new Date(2026, 6, 1)}
+        withTime
+        timePickerProps={{ variant: "analog" }}
+      />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Select date" }));
+    await userEvent.click(screen.getByRole("gridcell", { name: "Saturday 4 July 2026" }));
+    const timeField = screen.getByRole("group", { name: "Time" });
+    await userEvent.click(within(timeField).getByRole("button", { name: "Confirm" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
   it("updates time segments and meridiem", () => {
     const onChange = vi.fn();
     render(

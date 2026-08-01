@@ -358,6 +358,10 @@ function DateTimeContent({
             variant={timePickerProps?.variant ?? "wheel"}
             value={toTime(date)}
             onChange={(time) => calendar.setValue(setTargetTime(calendar.value, date, time))}
+            onAccept={(time) => {
+              timePickerProps?.onAccept?.(time);
+              setOpen(false);
+            }}
           />
           <div
             className={["calix-time-picker-actions", classNames?.timeActions]
