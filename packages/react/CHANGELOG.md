@@ -1,5 +1,11 @@
 # @alydev/react
 
+## 2.1.4
+
+### Patch Changes
+
+- [`0f95b2f`](https://github.com/ualiyou/calix-datepicker/commit/0f95b2ff05b80d5f2aaa525d9c07d32e00c47b66) Thanks [@ualiyou](https://github.com/ualiyou)! - Serialize localized JSON output with Latin digits for reliable API and console use.
+
 ## 2.1.3
 
 ### Patch Changes
