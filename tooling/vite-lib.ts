@@ -10,6 +10,8 @@ export interface LibOptions {
   entries?: Record<string, string>;
   /** Extra externals in addition to peer/deps and node builtins. */
   external?: (string | RegExp)[];
+  /** Mark generated ESM entry points as React client modules. */
+  clientDirective?: boolean;
 }
 
 /**
@@ -20,7 +22,7 @@ export interface LibOptions {
  * - All dependencies/peerDependencies externalized (never bundled).
  */
 export function createLibConfig(options: LibOptions): UserConfig {
-  const { root, entries = { index: "src/index.ts" }, external = [] } = options;
+  const { root, entries = { index: "src/index.ts" }, external = [], clientDirective = false } = options;
 
   // Read declared dependencies to externalize them automatically.
   // Use fs (not `require`): this config is bundled to ESM, where `require`
@@ -53,19 +55,21 @@ export function createLibConfig(options: LibOptions): UserConfig {
       sourcemap: false,
       lib: {
         entry: resolvedEntries,
-        formats: ["es", "cjs"],
       },
       rollupOptions: {
         external: [/^node:/, ...declared.map((d) => new RegExp(`^${d}(/.*)?$`)), ...external],
         output: [
           {
             format: "es",
+            ...(clientDirective ? { banner: '"use client";' } : {}),
+            exports: "named",
             preserveModules: true,
             preserveModulesRoot: "src",
             entryFileNames: "[name].js",
           },
           {
             format: "cjs",
+            exports: "named",
             preserveModules: true,
             preserveModulesRoot: "src",
             entryFileNames: "[name].cjs",

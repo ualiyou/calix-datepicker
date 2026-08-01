@@ -335,13 +335,21 @@ describe("<Calendar>", () => {
   });
 
   it("moves focus with arrow keys", async () => {
-    render(<Calendar adapter={gregorian} locale="en-US" defaultMonth={new Date(2026, 6, 1)} />);
+    render(
+      <Calendar
+        adapter={gregorian}
+        locale="en-US"
+        defaultMonth={new Date(2026, 6, 1)}
+        defaultValue={new Date(2026, 6, 15)}
+      />,
+    );
     const cells = screen.getAllByRole("gridcell");
     const focusable = cells.find((c) => c.getAttribute("tabindex") === "0")!;
     focusable.focus();
     await userEvent.keyboard("{ArrowRight}");
-    // Focus should have moved to a different cell.
-    expect(document.activeElement).not.toBe(focusable);
+    await waitFor(() =>
+      expect(screen.getByRole("gridcell", { name: "Thursday 16 July 2026" })).toHaveFocus(),
+    );
   });
 
   it("renders standalone month and year pickers", async () => {
@@ -584,6 +592,23 @@ describe("<Calendar>", () => {
     expect(screen.getByRole("button", { name: "2026/07/04 14:00" })).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("reopens a date-time picker on the date step", async () => {
+    render(
+      <DatePicker
+        adapter={gregorian}
+        locale="en-US"
+        defaultMonth={new Date(2026, 6, 1)}
+        withTime
+      />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Select date" }));
+    await userEvent.click(screen.getByRole("gridcell", { name: "Saturday 4 July 2026" }));
+    await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
+    await userEvent.click(screen.getByRole("button", { name: "2026/07/04 00:00" }));
+    expect(screen.getByRole("grid")).toBeInTheDocument();
+    expect(screen.queryByRole("group", { name: "Time" })).not.toBeInTheDocument();
   });
 
   it("updates time segments and meridiem", () => {

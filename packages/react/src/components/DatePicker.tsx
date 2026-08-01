@@ -1,4 +1,3 @@
-"use client";
 import type { CalendarDate, Time } from "@alydev/core";
 import {
   useEffect,
@@ -166,18 +165,23 @@ function Content({
 /* ------------------------------------------------------- default DatePicker */
 
 export interface DatePickerProps extends UseDatePickerOptions {
-  /** Placeholder shown in the trigger when no date is selected. */
+  /** Placeholder shown in the trigger when no date is selected. Default: `"Select date"`. */
   placeholder?: string;
+  /** Display and input pattern. Default: `"yyyy/MM/dd"`, with `HH:mm` when `withTime` is true. */
   pattern?: string;
+  /** CSS classes for the field, popover, calendar, and time-picker slots. */
   classNames?: DatePickerClassNames;
   /** Show a time field after selecting a date. Default: false. Single-date mode only. */
   withTime?: boolean;
-  /** Options forwarded to the optional time field. */
+  /** Options forwarded to the optional time field; value handlers are managed by DatePicker. */
   timePickerProps?: Omit<TimeFieldProps, "value" | "defaultValue" | "onChange">;
+  /** Show the Today button. Default: `true`. */
   showToday?: boolean;
+  /** Show the Clear button. Default: `false`. */
   showClear?: boolean;
   /** Show a Cancel control that closes the popover. Default: true. */
   showCancel?: boolean;
+  /** Enable swipe and wheel month navigation. Default: `false`. */
   infiniteScroll?: boolean;
   /** One-click shortcuts shown in the popover (e.g. Today, Last 7 days). */
   presets?: CalendarPreset[];
@@ -313,7 +317,7 @@ function DateTimeContent({
 }) {
   const { calendar, setOpen } = useDatePickerContext();
   const date = timeTarget(calendar.value);
-  const [step, setStep] = useState<"date" | "time">(date ? "time" : "date");
+  const [step, setStep] = useState<"date" | "time">("date");
   const lastDate = useRef(date?.getTime());
 
   useEffect(() => {

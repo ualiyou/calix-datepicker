@@ -13,6 +13,11 @@ import "@alydev/themes/default.css"; // full-featured default theme
 import "@alydev/themes/minimal.css"; // lean, structural styling only
 ```
 
+Import one file once at your application's CSS entry point—`src/main.tsx` in
+Vite, `app/layout.tsx` in Next.js App Router, or Remix's `links` export. See
+the exact snippets in [Framework setup](https://ualiyou.github.io/calix-datepicker/docs/frameworks).
+Skip both imports when styling Calix yourself.
+
 Theme by overriding variables (see `tokens.css`):
 
 ```css

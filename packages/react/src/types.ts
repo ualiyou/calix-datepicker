@@ -98,14 +98,23 @@ export function defaultPickerLabels(locale: string): Required<PickerLabels> {
 
 /** Date-based selection constraints supplied by consumers. */
 export interface CalixConstraints {
+  /** Earliest selectable date (inclusive). */
   minDate?: Date;
+  /** Latest selectable date (inclusive). */
   maxDate?: Date;
+  /** Specific dates that cannot be selected. */
   disabledDates?: Date[];
+  /** When set, dates outside this list cannot be selected. */
   enabledDates?: Date[];
+  /** Weekdays to disable: `0` is Sunday and `6` is Saturday. */
   disabledWeekdays?: Weekday[];
+  /** One-based calendar month numbers to disable. */
   disabledMonths?: number[];
+  /** Calendar years to disable. */
   disabledYears?: number[];
+  /** Block the configured weekend days. Default: `false`. */
   businessDaysOnly?: boolean;
+  /** Dates treated as disabled holidays. */
   holidays?: Date[];
   /** Named holidays to decorate without making the day unavailable. */
   holidayData?: readonly Holiday[];
@@ -119,10 +128,15 @@ export interface CalixConstraints {
 
 /** Options shared by the calendar hook and components. */
 export interface UseCalendarOptions extends CalixConstraints {
+  /** Calendar rules and conversion implementation. Required. */
   adapter: CalendarAdapter;
+  /** Selection shape. Default: `"single"`. */
   mode?: SelectionMode;
+  /** Controlled selected value; its shape must match `mode`. */
   value?: CalixValue;
+  /** Initial uncontrolled value; its shape must match `mode`. */
   defaultValue?: CalixValue;
+  /** Called whenever the selected value changes. */
   onChange?: (value: CalixValue) => void;
   /** Receives the selected value serialized as text or JSON. `onChange` always receives `Date` values. */
   onOutputChange?: (value: string) => void;
@@ -132,7 +146,9 @@ export interface UseCalendarOptions extends CalixConstraints {
   outputPattern?: string;
   /** Fired after each selection with the next value and whether it is complete. */
   onSelect?: (value: CalixValue, complete: boolean) => void;
+  /** BCP 47 display locale, e.g. `"fa-IR"`. Default: adapter locale. */
   locale?: string;
+  /** Text direction. Default: resolved from the locale. */
   dir?: Direction;
   /** Built-in control text. Weekday names still come from the adapter unless overridden. */
   labels?: PickerLabels;
@@ -144,6 +160,7 @@ export interface UseCalendarOptions extends CalixConstraints {
   defaultMonth?: Date;
   /** Number of months rendered side by side. */
   numberOfMonths?: number;
+  /** Keep every visible month grid at six weeks. Default: `true`. */
   fixedWeeks?: boolean;
   /** Max selectable dates in `multiple` mode. */
   max?: number;

@@ -153,9 +153,23 @@ function Toggle({
   );
 }
 
-function createCode(config: Config): string {
+function formatExample(imports: string[], component: string, props: string[]): string {
+  return `${imports.join("\n")}\n\nexport default function Example() {\n  return (\n    <${component}\n      ${props.join("\n      ")}\n    />\n  );\n}`;
+}
+
+export function createCode(config: Config): string {
   if (config.view === "timepicker") {
-    return `import { TimePicker } from "@alydev/datepicker";\nimport "@alydev/themes/default.css";\n\n<TimePicker\n  defaultValue={{ hour: 9, minute: 30, second: 0, millisecond: 0 }}\n  variant="${config.timeVariant}"\n  locale="${calendarLocales[config.calendar]}"\n  hourCycle={${config.hourCycle}}${config.theme !== "dark" ? '\n  theme="light"' : ""}\n/>;`;
+    return formatExample(
+      ['import { TimePicker } from "@alydev/datepicker";', 'import "@alydev/themes/default.css";'],
+      "TimePicker",
+      [
+        "defaultValue={{ hour: 9, minute: 30, second: 0, millisecond: 0 }}",
+        `variant="${config.timeVariant}"`,
+        `locale="${calendarLocales[config.calendar]}"`,
+        `hourCycle={${config.hourCycle}}`,
+        ...(config.theme !== "dark" ? ['theme="light"'] : []),
+      ],
+    );
   }
   const component = config.view === "calendar" ? "Calendar" : "DatePicker";
   const adapter = config.calendar;
@@ -204,7 +218,16 @@ function createCode(config: Config): string {
     config.outputFormat === "json" && 'outputFormat="json"',
     "onOutputChange={(output) => console.log(output)}",
   ].filter(Boolean);
-  return `import { ${component} } from "@alydev/datepicker";\nimport { ${adapter} } from "@alydev/adapter-${adapter}";${usesHolidays ? `\n${holidayImport}` : ""}\nimport "@alydev/themes/default.css";\n\n<${component}\n  ${props.join("\n  ")}\n/>;`;
+  return formatExample(
+    [
+      `import { ${component} } from "@alydev/datepicker";`,
+      `import { ${adapter} } from "@alydev/adapter-${adapter}";`,
+      ...(usesHolidays ? [holidayImport] : []),
+      'import "@alydev/themes/default.css";',
+    ],
+    component,
+    props,
+  );
 }
 
 interface Config {
@@ -518,175 +541,175 @@ export function Playground({ builder = false }: { builder?: boolean }) {
         </Field>
         {!isStandaloneTime && (
           <>
-        <Field label="Calendar">
-          <Choices
-            value={config.calendar}
-            options={[
-              { value: "gregorian", label: "Gregorian" },
-              { value: "jalali", label: "Jalali" },
-              { value: "hijri", label: "Hijri" },
-              { value: "buddhist", label: "Buddhist" },
-            ]}
-            onChange={(value) => update("calendar", value)}
-          />
-        </Field>
-        <Field label="Selection">
-          <Choices
-            value={config.mode}
-            options={modes.map((value) => ({ value, label: value }))}
-            onChange={selectMode}
-          />
-        </Field>
-        <Field label="Output">
-          <Choices
-            value={config.outputFormat}
-            options={[
-              { value: "string", label: "String" },
-              { value: "json", label: "JSON" },
-            ]}
-            onChange={(value) => update("outputFormat", value)}
-          />
-        </Field>
-        <Field label="Months">
-          <input
-            type="number"
-            min="1"
-            max="3"
-            value={config.numberOfMonths}
-            onChange={(event) => update("numberOfMonths", Number(event.target.value))}
-          />
-        </Field>
-        <Field label="Week starts on">
-          <Choices
-            value={config.weekStartsOn}
-            options={[
-              { value: "auto", label: "Locale" },
-              ...[0, 1, 2, 3, 4, 5, 6].map((value) => ({
-                value: value as Weekday,
-                label: String(value),
-              })),
-            ]}
-            onChange={(value) => update("weekStartsOn", value)}
-          />
-        </Field>
-        <Toggle
-          label="Fixed weeks"
-          checked={config.fixedWeeks}
-          onChange={(value) => update("fixedWeeks", value)}
-        />
-        <Toggle
-          label="Business days only"
-          checked={config.businessDaysOnly}
-          onChange={(value) => update("businessDaysOnly", value)}
-        />
-        <Field label="Holiday data">
-          <Choices
-            value={config.holidaySource}
-            options={[
-              { value: "none", label: "None" },
-              { value: "iran", label: "Iran" },
-              { value: "international", label: "International" },
-            ]}
-            onChange={(value) => update("holidaySource", value)}
-          />
-        </Field>
-        <Toggle
-          label="Show holidays"
-          checked={config.showHolidays}
-          onChange={(value) => update("showHolidays", value)}
-          disabled={config.holidaySource === "none"}
-        />
-        <Toggle
-          label="Holidays are selectable"
-          checked={config.holidaysSelectable}
-          onChange={(value) => update("holidaysSelectable", value)}
-          disabled={config.holidaySource === "none"}
-        />
-        <Toggle
-          label="Show Today button"
-          checked={config.showToday}
-          onChange={(value) => update("showToday", value)}
-        />
-        {config.mode === "multiple" && (
-          <Field label="Maximum selections (0 = unlimited)">
-            <input
-              type="number"
-              min="0"
-              value={config.max}
-              onChange={(event) => update("max", Number(event.target.value))}
-            />
-          </Field>
-        )}
-        {config.view === "datepicker" && (
-          <>
-            <Field label="Placeholder">
+            <Field label="Calendar">
+              <Choices
+                value={config.calendar}
+                options={[
+                  { value: "gregorian", label: "Gregorian" },
+                  { value: "jalali", label: "Jalali" },
+                  { value: "hijri", label: "Hijri" },
+                  { value: "buddhist", label: "Buddhist" },
+                ]}
+                onChange={(value) => update("calendar", value)}
+              />
+            </Field>
+            <Field label="Selection">
+              <Choices
+                value={config.mode}
+                options={modes.map((value) => ({ value, label: value }))}
+                onChange={selectMode}
+              />
+            </Field>
+            <Field label="Output">
+              <Choices
+                value={config.outputFormat}
+                options={[
+                  { value: "string", label: "String" },
+                  { value: "json", label: "JSON" },
+                ]}
+                onChange={(value) => update("outputFormat", value)}
+              />
+            </Field>
+            <Field label="Months">
               <input
-                value={config.placeholder}
-                onChange={(event) => update("placeholder", event.target.value)}
+                type="number"
+                min="1"
+                max="3"
+                value={config.numberOfMonths}
+                onChange={(event) => update("numberOfMonths", Number(event.target.value))}
+              />
+            </Field>
+            <Field label="Week starts on">
+              <Choices
+                value={config.weekStartsOn}
+                options={[
+                  { value: "auto", label: "Locale" },
+                  ...[0, 1, 2, 3, 4, 5, 6].map((value) => ({
+                    value: value as Weekday,
+                    label: String(value),
+                  })),
+                ]}
+                onChange={(value) => update("weekStartsOn", value)}
               />
             </Field>
             <Toggle
-              label="Include time"
-              checked={config.withTime}
-              onChange={(value) => {
-                if (value) selectMode("single");
-                update("withTime", value);
-              }}
+              label="Fixed weeks"
+              checked={config.fixedWeeks}
+              onChange={(value) => update("fixedWeeks", value)}
             />
-            {config.withTime && config.mode === "single" && (
+            <Toggle
+              label="Business days only"
+              checked={config.businessDaysOnly}
+              onChange={(value) => update("businessDaysOnly", value)}
+            />
+            <Field label="Holiday data">
+              <Choices
+                value={config.holidaySource}
+                options={[
+                  { value: "none", label: "None" },
+                  { value: "iran", label: "Iran" },
+                  { value: "international", label: "International" },
+                ]}
+                onChange={(value) => update("holidaySource", value)}
+              />
+            </Field>
+            <Toggle
+              label="Show holidays"
+              checked={config.showHolidays}
+              onChange={(value) => update("showHolidays", value)}
+              disabled={config.holidaySource === "none"}
+            />
+            <Toggle
+              label="Holidays are selectable"
+              checked={config.holidaysSelectable}
+              onChange={(value) => update("holidaysSelectable", value)}
+              disabled={config.holidaySource === "none"}
+            />
+            <Toggle
+              label="Show Today button"
+              checked={config.showToday}
+              onChange={(value) => update("showToday", value)}
+            />
+            {config.mode === "multiple" && (
+              <Field label="Maximum selections (0 = unlimited)">
+                <input
+                  type="number"
+                  min="0"
+                  value={config.max}
+                  onChange={(event) => update("max", Number(event.target.value))}
+                />
+              </Field>
+            )}
+            {config.view === "datepicker" && (
               <>
-                <Field label="Time style">
-                  <Choices
-                    value={config.timeVariant}
-                    options={[
-                      { value: "wheel", label: "Wheel" },
-                      { value: "field", label: "Field" },
-                      { value: "analog", label: "Analog" },
-                    ]}
-                    onChange={(value) => update("timeVariant", value)}
+                <Field label="Placeholder">
+                  <input
+                    value={config.placeholder}
+                    onChange={(event) => update("placeholder", event.target.value)}
                   />
                 </Field>
-                <Field label="Clock">
-                  <Choices
-                    value={config.hourCycle}
-                    options={[
-                      { value: 24, label: "24-hour" },
-                      { value: 12, label: "12-hour" },
-                    ]}
-                    onChange={(value) => update("hourCycle", value)}
+                <Toggle
+                  label="Include time"
+                  checked={config.withTime}
+                  onChange={(value) => {
+                    if (value) selectMode("single");
+                    update("withTime", value);
+                  }}
+                />
+                {config.withTime && config.mode === "single" && (
+                  <>
+                    <Field label="Time style">
+                      <Choices
+                        value={config.timeVariant}
+                        options={[
+                          { value: "wheel", label: "Wheel" },
+                          { value: "field", label: "Field" },
+                          { value: "analog", label: "Analog" },
+                        ]}
+                        onChange={(value) => update("timeVariant", value)}
+                      />
+                    </Field>
+                    <Field label="Clock">
+                      <Choices
+                        value={config.hourCycle}
+                        options={[
+                          { value: 24, label: "24-hour" },
+                          { value: 12, label: "12-hour" },
+                        ]}
+                        onChange={(value) => update("hourCycle", value)}
+                      />
+                    </Field>
+                  </>
+                )}
+              </>
+            )}
+            <Toggle
+              label="Custom labels"
+              checked={config.labels}
+              onChange={(value) => update("labels", value)}
+            />
+            {config.labels && (
+              <>
+                <Field label="Weekdays (comma separated)">
+                  <input
+                    value={config.weekdays}
+                    onChange={(event) => update("weekdays", event.target.value)}
+                  />
+                </Field>
+                <Field label="Previous month">
+                  <input
+                    value={config.previousMonth}
+                    onChange={(event) => update("previousMonth", event.target.value)}
+                  />
+                </Field>
+                <Field label="Next month">
+                  <input
+                    value={config.nextMonth}
+                    onChange={(event) => update("nextMonth", event.target.value)}
                   />
                 </Field>
               </>
             )}
-          </>
-        )}
-        <Toggle
-          label="Custom labels"
-          checked={config.labels}
-          onChange={(value) => update("labels", value)}
-        />
-        {config.labels && (
-          <>
-            <Field label="Weekdays (comma separated)">
-              <input
-                value={config.weekdays}
-                onChange={(event) => update("weekdays", event.target.value)}
-              />
-            </Field>
-            <Field label="Previous month">
-              <input
-                value={config.previousMonth}
-                onChange={(event) => update("previousMonth", event.target.value)}
-              />
-            </Field>
-            <Field label="Next month">
-              <input
-                value={config.nextMonth}
-                onChange={(event) => update("nextMonth", event.target.value)}
-              />
-            </Field>
-          </>
-        )}
           </>
         )}
         {isStandaloneTime && (

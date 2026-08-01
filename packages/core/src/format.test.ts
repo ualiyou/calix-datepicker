@@ -20,6 +20,15 @@ describe("formatTokens", () => {
     expect(formatTokens(date, undefined, "yyyy/MM/dd", ctx)).toBe("2026/07/03");
     expect(formatTokens(date, undefined, "d/M/yy", ctx)).toBe("3/7/26");
   });
+  it("formats every supported time and fallback token", () => {
+    const t = { hour: 0, minute: 5, second: 9, millisecond: 0 };
+    expect(formatTokens(date, t, "yy M MM d dd EEE EE H HH h hh m mm s ss a aa X", ctx)).toBe(
+      "26 7 07 3 03 Fri Fri 0 00 12 12 5 05 9 09 AM AM X",
+    );
+    expect(
+      formatTokens(date, { ...t, hour: 12 }, "a", { ...ctx, meridiem: ["morning", "afternoon"] }),
+    ).toBe("afternoon");
+  });
   it("formats named months and weekdays", () => {
     expect(formatTokens(date, undefined, "EEEE, d MMMM yyyy", ctx)).toBe("Friday, 3 July 2026");
     expect(formatTokens(date, undefined, "EEE d MMM", ctx)).toBe("Fri 3 Jul");
@@ -54,6 +63,12 @@ describe("parseTokens", () => {
     expect(parseTokens("not-a-date", "yyyy/MM/dd", ctx)).toBeNull();
     expect(parseTokens("2026-07-03", "yyyy/MM/dd", ctx)).toBeNull();
   });
+  it("parses short years and rejects invalid or unknown dates", () => {
+    expect(parseTokens("03/07/26", "dd/MM/yy", ctx)).toEqual({ year: 2026, month: 7, day: 3 });
+    expect(parseTokens("3 Nope 2026", "d MMM  yyyy", ctx)).toBeNull();
+    expect(parseTokens("2026/14/01", "yyyy/MM/dd", ctx)).toBeNull();
+    expect(parseTokens("2026/07/00", "yyyy/MM/dd", ctx)).toBeNull();
+  });
 });
 
 describe("locale helpers", () => {
@@ -61,6 +76,11 @@ describe("locale helpers", () => {
     expect(toLocaleDigits("2026", "fa-IR")).toBe("۲۰۲۶");
     expect(toLatinDigits("۲۰۲۶")).toBe("2026");
     expect(toLocaleDigits("2026", "en-US")).toBe("2026");
+  });
+  it("handles Arabic digits and unknown digit locales", () => {
+    expect(toLocaleDigits("2026", "ar-SA")).toBe("٢٠٢٦");
+    expect(toLatinDigits("٢٠٢٦")).toBe("2026");
+    expect(toLatinDigits("plain")).toBe("plain");
   });
   it("detects direction", () => {
     expect(directionForLocale("fa-IR")).toBe("rtl");

@@ -1,14 +1,26 @@
 ---
-title: Introduction
-description: A headless, accessible, multi-calendar date picker for React.
+title: Start here
+description: Choose the right Calix entry point, then install and render it.
 ---
 
-**Calix** is a React date picker whose calendar rules are independent of its UI.
-It stores the selection as ordinary JavaScript `Date` values at the public API,
-while adapters handle calendar-specific arithmetic, names, parsing, and layout.
+Calix is an accessible React date picker with separate calendar adapters. Pick
+the UI you need, add one adapter, then choose either the included CSS theme or
+your own styles.
 
-That separation lets the same component render Gregorian or Jalali dates without
-a second picker, duplicated styling, or locale-specific UI branches.
+## Choose your starting point
+
+| You need | Start here |
+| --- | --- |
+| A date input with a popup calendar | [Install Calix](/docs/installation), then [render a `DatePicker`](/docs/getting-started) |
+| A calendar that is always visible | [Install Calix](/docs/installation), then [render a `Calendar`](/docs/getting-started#inline-calendar) |
+| A custom design-system UI | [Set up styles](/docs/frameworks#styles-or-no-styles), then [use hooks or compound parts](/docs/hooks) |
+
+New to Calix? Follow this order without skipping ahead:
+
+1. [Install the React package and one adapter](/docs/installation).
+2. [Put the optional CSS import in the right framework file](/docs/frameworks).
+3. [Copy the first picker](/docs/getting-started).
+4. Choose a guide for [another calendar](/docs/calendars), [selection and output](/docs/picker-modes), [constraints](/docs/holidays), or [custom styling](/docs/theming).
 
 ## What you get
 
@@ -25,17 +37,6 @@ a second picker, duplicated styling, or locale-specific UI branches.
 
 <Playground />
 
-## Choose an entry point
-
-| Need                                  | Start with                                                      |
-| ------------------------------------- | --------------------------------------------------------------- |
-| A standard trigger and popup calendar | [`<DatePicker>`](/docs/getting-started)                         |
-| An always-visible calendar            | [`<Calendar>`](/docs/getting-started#an-inline-calendar)        |
-| Custom popup layout or trigger        | [Compound `DatePicker` parts](/docs/hooks#compound-date-picker) |
-| Your own calendar markup              | [`useCalendar`](/docs/hooks#usecalendar)                        |
-| A date text field                     | [`useDateInput`](/docs/hooks#usedateinput)                      |
-| A standalone clock-time field         | [`TimeField`](/docs/picker-modes#time)                          |
-
 ## Packages
 
 | Package                     | Purpose                                                                        |
@@ -51,5 +52,5 @@ a second picker, duplicated styling, or locale-specific UI branches.
 | `@alydev/themes`            | Optional default and minimal CSS themes.                                       |
 | `@alydev/icons`             | Tree-shakeable SVG icons.                                                      |
 
-Continue with [Installation](/docs/installation), then build your first picker in
-[Getting Started](/docs/getting-started).
+The React package needs one adapter. Themes are optional; they never load by
+default. Continue with [Installation](/docs/installation).

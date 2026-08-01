@@ -1,7 +1,12 @@
 ---
-title: Calendar systems
-description: Built-in calendars and the contract for custom adapters.
+title: Choose a calendar
+description: Pick a built-in calendar adapter, then set its display locale.
 ---
+
+Use this page after [your first picker](/docs/getting-started) when you need
+Gregorian, Jalali/Persian, Hijri, or Thai Buddhist dates. Import one exported
+adapter and pass it to a component; then use `locale` for language, digits, and
+direction.
 
 Calix keeps calendar behavior behind `CalendarAdapter`. Components never need to
 know how a month rolls over, which digits a locale uses, or how to parse a
@@ -39,6 +44,10 @@ adapter can therefore serve `en-US`, `en-GB`, and `fr-FR` at the same time.
 The Hijri adapter uses the platform ICU `islamic-umalqura` calendar, so it ships
 without date tables. The Thai Buddhist adapter uses Gregorian month/day rules and
 represents years in Buddhist Era (`BE = CE + 543`).
+
+For week starts, custom labels, RTL, and runtime locale changes, continue to
+[Localization](/docs/localization). Only implement a custom adapter when none
+of these built-ins fits your calendar system.
 
 ## Adapter responsibilities
 

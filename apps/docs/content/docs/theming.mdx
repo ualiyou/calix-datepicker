@@ -51,6 +51,61 @@ For component states and layout, use `--calix-focus-ring`,
 `--calix-selected-shadow`, `--calix-calendar-padding`, and
 `--calix-popover-z-index`.
 
+`--calix-font` is inherited by `Calendar`, a `DatePicker` popover (including
+its time-selection step), and standalone `TimeField`. Load the font in your app
+as usual, then set this token.
+
+## Common recipes
+
+Set tokens globally in `:root` to theme every picker. To theme one picker,
+attach the same class to its rendered root: use `classNames.root` for
+`Calendar`, `classNames.popover` for `DatePicker`, and `className` for
+`TimeField`. A `DatePicker` popover is portalled, so styling the input wrapper
+alone will not affect it.
+
+```tsx
+<Calendar adapter={gregorian} classNames={{ root: "brand-picker" }} />
+
+<DatePicker
+  adapter={gregorian}
+  withTime
+  classNames={{ popover: "brand-picker" }}
+/>
+
+<TimeField className="brand-picker" />
+```
+
+```css
+.brand-picker {
+  --calix-accent: #2563eb;
+  --calix-on-accent: white;
+  --calix-surface: white;
+  --calix-surface-raised: white;
+  --calix-text: #172554;
+  --calix-muted: #64748b;
+  --calix-border: #bfdbfe;
+  --calix-hover: #eff6ff;
+  --calix-radius: 8px;
+  --calix-radius-sm: 6px;
+  --calix-cell-size: 2.75rem;
+  --calix-gap: 4px;
+  --calix-calendar-padding: 1.25rem;
+  --calix-font: "Vazirmatn", system-ui, sans-serif;
+  --calix-transition: 120ms ease-out;
+}
+
+.brand-picker .calix-day[data-today] {
+  outline-color: #f59e0b;
+}
+
+.brand-picker .calix-day[data-weekend]:not([data-selected]) {
+  color: #dc2626;
+}
+```
+
+Keep focus indicators visible when overriding `--calix-focus-ring`, and let
+the built-in `prefers-reduced-motion` rule disable non-essential motion.
+
 ## State contract
 
 Day buttons carry the following attributes when their state is active:
@@ -72,6 +127,22 @@ The default theme marks holidays and shows their name on hover. Target these
 attributes to replace that presentation; see [Holidays](/docs/holidays) for
 the data contract.
 
+```css
+.brand-picker .calix-day[data-disabled] {
+  opacity: 0.35;
+  text-decoration: none;
+}
+
+.brand-picker .calix-day[data-in-range] {
+  background: #dbeafe;
+}
+
+.brand-picker .calix-day[data-range-start],
+.brand-picker .calix-day[data-range-end] {
+  border-radius: 6px;
+}
+```
+
 ## Slot class names
 
 Pass `classNames` to `Calendar` or `DatePicker` to add classes to every
@@ -86,7 +157,28 @@ also exposes `popover`, `field`, `input`, `toggle`, `clear`, `dateTime`,
   adapter={gregorian}
   classNames={{
     root: "calendar-shell",
-    day: "rounded-md data-[selected]:bg-violet-600 data-[disabled]:opacity-40",
+    heading: "calendar-heading",
+    navButton: "calendar-nav-button",
+    day: "calendar-day",
+    footerButton: "calendar-footer-button",
+  }}
+/>
+```
+
+Use `DatePicker`'s extra slots to target the field and time flow without
+replacing their markup:
+
+```tsx
+<DatePicker
+  adapter={gregorian}
+  withTime
+  classNames={{
+    field: "booking-field",
+    input: "booking-input",
+    toggle: "booking-toggle",
+    popover: "booking-popover",
+    timeStep: "booking-time-step",
+    timeActions: "booking-time-actions",
   }}
 />
 ```

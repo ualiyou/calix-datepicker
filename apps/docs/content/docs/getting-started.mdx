@@ -1,13 +1,16 @@
 ---
-title: Getting Started
-description: Render your first Calix date picker.
+title: Your first picker
+description: Copy a working popup picker or inline calendar after installation.
 ---
 
-## A single-date popup
+Before this page, [install Calix](/docs/installation) and, if you want the
+included appearance, [add one stylesheet in the correct framework file](/docs/frameworks).
+
+## Popup date picker
 
 The `DatePicker` component owns the trigger, popover positioning, calendar, and
-focus behavior. Pass an adapter and, when parent state needs the value, use
-`value` with `onChange`.
+focus behavior. This complete client component keeps the selected date in React
+state so you can display or submit it elsewhere.
 
 ```tsx
 "use client";
@@ -35,7 +38,12 @@ export function Example() {
 
 <Playground />
 
-## An inline calendar
+If you use Next.js App Router, keep `"use client"` in this component. For Vite
+or Remix, it is not needed. The `theme="light"` prop selects the light variant
+only after you have imported a Calix theme; without one it is safe but has no
+visual effect.
+
+## Inline calendar
 
 Use `Calendar` when the calendar should always be visible. It shares the same
 selection, localization, and constraint props as `DatePicker`.

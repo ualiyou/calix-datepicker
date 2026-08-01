@@ -38,10 +38,13 @@ export type DatePickerPlacement =
 export interface UseDatePickerOptions extends UseCalendarOptions {
   /** Controlled open state. */
   open?: boolean;
+  /** Initial uncontrolled open state. Default: `false`. */
   defaultOpen?: boolean;
+  /** Called after the popover requests an open-state change. */
   onOpenChange?: (open: boolean) => void;
   /** Close the popover after a (complete) selection. Default: true. */
   closeOnSelect?: boolean;
+  /** Floating UI placement. Default: `"bottom-start"`. */
   placement?: DatePickerPlacement;
   /** Popover offset from the trigger, in px. Default: 8. */
   offset?: number;

@@ -24,7 +24,16 @@ pnpm add @alydev/datepicker @alydev/adapter-jalali
 Hijri and Thai Buddhist adapters are available as `@alydev/adapter-hijri` and
 `@alydev/adapter-buddhist`.
 
+Before rendering a picker, choose the theme route: import `default.css` or
+`minimal.css` once, or import neither and use your own CSS. The exact location
+depends on your framework—see [Framework setup](https://ualiyou.github.io/calix-datepicker/docs/frameworks)
+for Vite, Next.js App Router, and Remix.
+
 ## Quick start
+
+In Next.js App Router, import the theme in `app/layout.tsx`; this component must
+remain a client component. For the complete setup sequence, see [Your first
+picker](https://ualiyou.github.io/calix-datepicker/docs/getting-started).
 
 ```tsx
 "use client";

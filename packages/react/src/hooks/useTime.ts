@@ -3,8 +3,11 @@ import { useCallback, useMemo } from "react";
 import { useControllableState } from "../utils/useControllableState.js";
 
 export interface UseTimeOptions {
+  /** Controlled clock value. */
   value?: Time | undefined;
+  /** Initial uncontrolled clock value. Default: midnight. */
   defaultValue?: Time;
+  /** Called whenever the clock value changes. */
   onChange?: (value: Time) => void;
   /** 12- or 24-hour clock. Default: 24. */
   hourCycle?: 12 | 24;

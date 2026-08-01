@@ -1,0 +1,58 @@
+---
+title: Framework setup
+description: Load Calix styles in Vite, Next.js App Router, or Remix.
+---
+
+Use this page after [installation](/docs/installation), before copying a picker.
+Choose one style route: the default theme, the minimal theme, or no Calix theme.
+Do not import both CSS files.
+
+## Vite
+
+Put one theme import in your application entry file, commonly `src/main.tsx`:
+
+```tsx
+import "@alydev/themes/default.css";
+import { createRoot } from "react-dom/client";
+```
+
+Use `@alydev/themes/minimal.css` instead for structural styles only. Omit this
+line entirely if your application supplies the styles.
+
+## Next.js App Router
+
+Import one theme in `app/layout.tsx`, so it is loaded once for the application:
+
+```tsx
+import "@alydev/themes/default.css";
+import type { ReactNode } from "react";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return <html lang="en"><body>{children}</body></html>;
+}
+```
+
+The component that renders `DatePicker`, `Calendar`, or a Calix hook needs a
+`"use client"` directive. Your root layout does not.
+
+## Remix
+
+Import the CSS URL and expose it from `app/root.tsx` through Remix links:
+
+```tsx
+import type { LinksFunction } from "@remix-run/node";
+import calixTheme from "@alydev/themes/default.css?url";
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: calixTheme }];
+```
+
+Replace `default.css` with `minimal.css` for the structural theme. Omit both the
+import and `links` export when styling Calix yourself.
+
+## Styles or no styles
+
+The theme package is optional. It provides CSS only—no provider, setup function,
+or JavaScript runtime is required. If you skip it, use [Theming](/docs/theming)
+to target stable class names and `data-*` state attributes.
+
+Next: [copy your first picker](/docs/getting-started).

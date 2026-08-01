@@ -58,5 +58,4 @@ semantic versioning, final polish.
 Additional calendars — Hijri ✅ (`@alydev/adapter-hijri`); Hebrew, Buddhist,
 Japanese planned. Presets/shortcuts panel ✅. Regional weekends ✅ (`weekendDays`).
 Range length limits ✅ (`minRange`/`maxRange`). Month/focus callbacks ✅.
-Still planned: timezone-aware values (`@date-fns/tz`), `@alydev/vue` and
-`@alydev/solid` bindings, Tempo/Temporal support.
+Still planned: timezone-aware values (`@date-fns/tz`) and Tempo/Temporal support.

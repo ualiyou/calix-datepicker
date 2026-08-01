@@ -1,4 +1,3 @@
-"use client";
 import type { Time } from "@alydev/core";
 import { autoUpdate, flip, offset, shift, useFloating } from "@floating-ui/react-dom";
 import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type KeyboardEvent } from "react";
@@ -10,6 +9,7 @@ import { useControllableState } from "../utils/useControllableState.js";
 export interface TimeFieldProps extends UseTimeOptions {
   /** Presentation style. Default: "field". */
   variant?: "field" | "wheel" | "analog";
+  /** Replacements for built-in time-control labels. */
   labels?: PickerLabels;
   /** Locale used for labels and numeric clock values. Default: "en-US". */
   locale?: string;
@@ -23,8 +23,11 @@ export interface TimeFieldProps extends UseTimeOptions {
   showActions?: boolean;
   /** Color scheme for the standalone field. Default: "dark". */
   theme?: ColorTheme;
+  /** Class applied to the outer time-field element. */
   className?: string;
+  /** Prevent time changes. Default: `false`. */
   disabled?: boolean | undefined;
+  /** Accessible name. Default: localized `"Time"`. */
   "aria-label"?: string;
 }
 
@@ -196,31 +199,31 @@ export function TimeField({
             const ring = typeof item === "number" || item.value >= 12 ? "outer" : "inner";
             const selected = analogPart === "hour" ? hour === selectedHour : hour === t.value.minute;
             return (
-            <button
-              key={`${analogPart}-${hour}`}
-              type="button"
-              role="option"
-              aria-label={`${activeLabel} ${format(hour)}`}
-              aria-selected={selected}
-              data-ring={ring}
-              disabled={disabled}
-              style={
-                {
-                  "--calix-clock-angle": `${analogPart === "minute" ? hour * 6 : (hour % 12) * 30}deg`,
-                  "--calix-clock-radius": radius,
-                } as CSSProperties
-              }
-              onClick={() => {
-                if (analogPart === "hour") {
-                  t.setHour(hourCycle === 12 ? to24(hour, t.meridiem) : hour);
-                  setAnalogPart("minute");
-                } else {
-                  t.setMinute(hour);
+              <button
+                key={`${analogPart}-${hour}`}
+                type="button"
+                role="option"
+                aria-label={`${activeLabel} ${format(hour)}`}
+                aria-selected={selected}
+                data-ring={ring}
+                disabled={disabled}
+                style={
+                  {
+                    "--calix-clock-angle": `${analogPart === "minute" ? hour * 6 : (hour % 12) * 30}deg`,
+                    "--calix-clock-radius": radius,
+                  } as CSSProperties
                 }
-              }}
-            >
-              {format(hour)}
-            </button>
+                onClick={() => {
+                  if (analogPart === "hour") {
+                    t.setHour(hourCycle === 12 ? to24(hour, t.meridiem) : hour);
+                    setAnalogPart("minute");
+                  } else {
+                    t.setMinute(hour);
+                  }
+                }}
+              >
+                {format(hour)}
+              </button>
             );
           })}
         </div>

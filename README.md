@@ -20,13 +20,15 @@ Gregorian, Jalali, Hijri, and Buddhist calendars · React 18/19 · RTL/LTR · Ty
 
 ## Start here
 
-- **Need a ready-to-use date picker?** Follow [Quick start](#quick-start) and use `DatePicker`.
-- **Need an inline calendar?** Use `Calendar` in [Selection modes](#selection-modes).
-- **Need Persian/Jalali dates or RTL?** See [Calendars and localization](#calendars-and-localization).
-- **Need complete visual control?** Use the hooks and primitives in [Components and hooks](#components-and-hooks).
+- **Need a ready-to-use date picker?** Follow the [first-picker guide](https://ualiyou.github.io/calix-datepicker/docs/getting-started).
+- **Need an inline calendar?** Start with [`Calendar`](https://ualiyou.github.io/calix-datepicker/docs/getting-started#inline-calendar).
+- **Need the CSS to load correctly?** Use the [framework setup guide](https://ualiyou.github.io/calix-datepicker/docs/frameworks) for Vite, Next.js, or Remix.
+- **Need Persian/Jalali, ranges, forms, or custom UI?** Choose the next guide from the [documentation start page](https://ualiyou.github.io/calix-datepicker/docs).
 
 Calix keeps calendar logic separate from the React UI. Use the included components for
 the fastest path, or use the headless hooks and primitives when you need your own markup.
+The documentation site is the canonical guide; this README keeps one complete
+example and links to the focused guides.
 
 ## What it handles
 
@@ -59,6 +61,10 @@ pnpm add @alydev/datepicker @alydev/adapter-jalali
 ```
 
 ## Quick start
+
+For Next.js App Router, import the stylesheet in `app/layout.tsx` and keep
+`"use client"` in the component below. For Vite or Remix, see the exact import
+location in [Framework setup](https://ualiyou.github.io/calix-datepicker/docs/frameworks).
 
 ```tsx
 "use client";
@@ -226,8 +232,16 @@ Override CSS variables to match your design system:
   --calix-accent: #6d28d9;
   --calix-radius: 10px;
   --calix-cell-size: 2.5rem;
+  --calix-font: "Vazirmatn", system-ui, sans-serif;
 }
 ```
+
+`--calix-font` applies to both `Calendar` and the time picker inside
+`DatePicker` (including its popover). Load the font in your app as usual, then
+override this one token globally or on an individual picker.
+
+For per-component tokens, state selectors, and `classNames` recipes, see
+[Theming and customization](https://ualiyou.github.io/calix-datepicker/docs/theming).
 
 Every day button exposes state attributes such as `data-selected`, `data-today`, `data-disabled`, `data-outside-month`, `data-range-start`, `data-range-end`, `data-in-range`, `data-focused`, and `data-weekend`.
 

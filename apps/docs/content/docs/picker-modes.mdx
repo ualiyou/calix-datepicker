@@ -1,9 +1,11 @@
 ---
-title: Picker modes
-description: Select dates, ranges, recurring spans, and time.
+title: Selection, time, and output
+description: Choose the selected value shape, add time, and serialize it for an API.
 ---
 
-Set `mode` on `Calendar` or `DatePicker`. The default is `"single"`.
+Use this page after [your first picker](/docs/getting-started) when the default
+single `Date` value is not enough. Set `mode` on `Calendar` or `DatePicker`; it
+defaults to `"single"`.
 
 | Mode       | Public value     | Behavior                                                |
 | ---------- | ---------------- | ------------------------------------------------------- |
@@ -95,6 +97,25 @@ then-time flow:
 <DatePicker adapter={gregorian} withTime timePickerProps={{ hourCycle: 12, variant: "wheel" }} />
 ```
 
+## Send a value to a form or API
+
+Use `onChange` when your React code needs a `Date`, date array, or range. Add
+`onOutputChange` only when another system needs a formatted string or JSON.
+
+```tsx
+import { DatePicker } from "@alydev/datepicker";
+import { gregorian } from "@alydev/adapter-gregorian";
+
+<DatePicker
+  adapter={gregorian}
+  outputPattern="yyyy-MM-dd"
+  onOutputChange={(value) => fetch("/api/booking", { method: "POST", body: value })}
+/>;
+```
+
+Set `outputFormat="json"` when the receiver expects JSON. Do not format the
+value yourself unless that system requires a different convention.
+
 ## Constraints apply to every mode
 
 All modes accept the same constraints. For example, allow only future weekdays:
@@ -103,4 +124,5 @@ All modes accept the same constraints. For example, allow only future weekdays:
 <Calendar adapter={gregorian} minDate={new Date()} disabledWeekdays={[0, 6]} businessDaysOnly />
 ```
 
-Read [API Reference](/docs/api-reference) for the full prop list.
+Next: [constrain available dates and add holidays](/docs/holidays), or read the
+[API Reference](/docs/api-reference) for the full prop list.

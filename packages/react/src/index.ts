@@ -1,4 +1,3 @@
-"use client";
 /**
  * @alydev/datepicker — headless hooks and compound components for building date
  * pickers on top of `@alydev/core`.

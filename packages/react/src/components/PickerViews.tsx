@@ -1,4 +1,3 @@
-"use client";
 import type { CalendarDate } from "@alydev/core";
 import { useMemo, useState } from "react";
 import { useCalendar } from "../hooks/useCalendar.js";

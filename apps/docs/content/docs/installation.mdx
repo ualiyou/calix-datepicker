@@ -3,8 +3,9 @@ title: Installation
 description: Install Calix, a calendar adapter, and optional styles.
 ---
 
-Calix needs the React package and **one calendar adapter**. The theme package is
-optional: the components work unstyled.
+Calix needs the React package and **one calendar adapter**. Install the theme
+package only if you want its ready-made CSS; components otherwise render
+unstyled and remain fully usable.
 
 <Tabs items={["pnpm", "npm", "yarn"]}>
 
@@ -54,22 +55,16 @@ pnpm add @alydev/holidays-international
 
 See [Holidays](/docs/holidays) for usage.
 
-## Optional styles
+## Choose styles now
 
-Import one theme once from your application entry point or client layout:
+Do one of the following before copying the first picker:
 
-```ts
-import "@alydev/themes/default.css"; // complete default appearance
-// import "@alydev/themes/minimal.css"; // structural styles only
-```
+- **Ready-made theme:** import `@alydev/themes/default.css` once.
+- **Structural base:** import `@alydev/themes/minimal.css` once.
+- **Your own CSS:** import neither file and style Calix via its class and state
+  contract.
 
-The theme has no JavaScript runtime. To style manually, skip this import and use
-the class-name and state-attribute contract in [Theming](/docs/theming).
+The import location changes by framework. See [framework setup](/docs/frameworks)
+for exact Vite, Next.js, and Remix files. The theme has no JavaScript runtime.
 
-## Next.js note
-
-`@alydev/datepicker` is a client package. Keep picker components below a client
-boundary; the adapter can be imported normally. No provider or global calendar
-configuration is required.
-
-Next: [Getting Started](/docs/getting-started).
+Next: [framework setup](/docs/frameworks), then [your first picker](/docs/getting-started).

@@ -1,4 +1,3 @@
-"use client";
 import { createContext, useContext } from "react";
 import type { UseDatePickerReturn } from "../hooks/useDatePicker.js";
 

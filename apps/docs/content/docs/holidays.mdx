@@ -1,7 +1,33 @@
 ---
-title: Holidays
-description: Display named holidays or prevent their selection.
+title: Constraints and holidays
+description: Limit selectable dates, then optionally add named holiday data.
 ---
+
+Use this page after [choosing a selection mode](/docs/picker-modes) when some
+dates must be unavailable or need a visible name.
+
+## Limit available dates
+
+Use built-in props for common availability rules. They work on both `Calendar`
+and `DatePicker` and can be combined:
+
+```tsx
+import { DatePicker } from "@alydev/datepicker";
+import { gregorian } from "@alydev/adapter-gregorian";
+
+<DatePicker
+  adapter={gregorian}
+  minDate={new Date(2026, 0, 1)}
+  maxDate={new Date(2026, 11, 31)}
+  disabledWeekdays={[0, 6]}
+  businessDaysOnly
+/>;
+```
+
+Use `disabledDates`, `enabledDates`, `disabledMonths`, `disabledYears`, or
+`isDateDisabled` for rules that do not fit those common cases.
+
+## Add holiday names
 
 Use `holidayData` to attach a name to a local JavaScript date. Set
 `showHolidays` to expose a marker and tooltip; set `holidaysSelectable={false}`
@@ -49,3 +75,5 @@ const holidays = [
 
 `holidays` is separate from `holidayData`: it only blocks plain `Date` values
 and does not provide a label or marker.
+
+Next: [style those states](/docs/theming), or see the [API reference](/docs/api-reference#constraints).
